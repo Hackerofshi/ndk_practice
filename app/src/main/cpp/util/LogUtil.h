@@ -9,8 +9,9 @@
 #ifndef BYTEFLOW_LOGUTIL_H
 #define BYTEFLOW_LOGUTIL_H
 
-#include"../../../../../../../Library/Android/sdk/ndk/21.3.6528147/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/android/log.h"
-#include "../../../../../../../Library/Android/sdk/ndk/21.3.6528147/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/sys/time.h"
+//sdk  log路径
+#include "C:\user\sdk\ndk\21.3.6528147\toolchains\llvm\prebuilt\windows-x86_64\sysroot\usr\include\android\log.h"
+#include "time.h"
 
 #define  LOG_TAG "ByteFlow"
 

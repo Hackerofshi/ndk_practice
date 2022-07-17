@@ -21,6 +21,8 @@ public class NativeSimpleRenderer implements GLSurfaceView.Renderer {
 
     public native void onDrawFrame();
 
+    public native String test();
+
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         surfaceCreated();

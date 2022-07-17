@@ -19,7 +19,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".SimpleActivity"
-            android:exported="true">
+            android:exported="false">
 
         </activity>
     </application>

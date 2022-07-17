@@ -6,24 +6,21 @@
 #include "util/GLUtils.h"
 #include "util/LogUtil.h"
 
-TriangleSample::TriangleSample()
-{
+TriangleSample::TriangleSample() {
 
 }
 
-TriangleSample::~TriangleSample()
-{
-    if (m_ProgramObj)
-    {
+TriangleSample::~TriangleSample() {
+    if (m_ProgramObj) {
         glDeleteProgram(m_ProgramObj);
     }
 
 }
 
-void TriangleSample::Init()
-{
+void TriangleSample::Init() {
     LOGCATE("TriangleSample::Draw");
 
+    //脚本
     char vShaderStr[] =
             "#version 300 es                          \n"
             "layout(location = 0) in vec4 vPosition;  \n"
@@ -46,26 +43,26 @@ void TriangleSample::Init()
 
 }
 
-void TriangleSample::OnDraw()
-{
+void TriangleSample::OnDraw() {
     LOGCATE("TriangleSample::Draw");
+    //三角形坐标
     GLfloat vVertices[] = {
-            0.0f,  0.5f, 0.0f,
+            0.0f, 0.5f, 0.0f,
             -0.5f, -0.5f, 0.0f,
             0.5f, -0.5f, 0.0f,
     };
 
-    if(m_ProgramObj == 0)
+    if (m_ProgramObj == 0)
         return;
 
     // Use the program object
-    glUseProgram (m_ProgramObj);
+    glUseProgram(m_ProgramObj);
 
     // Load the vertex data
-    glVertexAttribPointer (0, 3, GL_FLOAT, GL_FALSE, 0, vVertices );
-    glEnableVertexAttribArray (0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, vVertices);
+    glEnableVertexAttribArray(0);
 
-    glDrawArrays (GL_TRIANGLES, 0, 3);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
 
 }
 
