@@ -5,6 +5,20 @@
 #include <jni.h>
 #include <stdlib.h>
 
+
+#ifdef ANDROID
+
+#include <android/log.h>
+
+#define LOG_TAG    "TEST"
+#define LOGE(format, ...)  __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, format, ##__VA_ARGS__)
+#define LOGI(format, ...)  __android_log_print(ANDROID_LOG_INFO,  LOG_TAG, format, ##__VA_ARGS__)
+#else
+#define LOGE(format, ...)  printf(LOG_TAG format "\n", ##__VA_ARGS__)
+#define LOGI(format, ...)  printf(LOG_TAG format "\n", ##__VA_ARGS__)
+#endif
+
+
 int compare(const jint *number1, const jint *number2) {
     return *number1 - *number2;
 }
@@ -145,4 +159,31 @@ Java_com_shixin_ndk_1practice_practicec_TestArray_exeception(JNIEnv *env, jclass
     jstring name = (*env)->NewStringUTF(env, "Darren");
     (*env)->SetStaticObjectField(env, clazz, f_id, name);
 }
+
+void print(int *arr, int length) {
+    for (int i = 0; i < length; ++i) {
+        LOGI("%d  ", arr[i]);
+    }
+}
+
+void testArr() {
+    int a;//告诉c和c++编译器开辟一块连续大小4字节的内存空间
+    int arr[] = {1, 2, 3, 4, 5, 6};
+    //求数组的大小
+    int size = sizeof(arr) / sizeof(int);
+
+    LOGI("size = %d\n", size);
+    print(arr, size);
+}
+
+void testArr1() {
+    int a;//告诉c和c++编译器开辟一块连续大小4字节的内存空间
+    int arr[] = {1, 2, 3, 4, 5, 6}; // arr 数据类型的内存大小空间 24
+
+    a = 10;
+    // 12 , 16 , 12 , 36   36？
+    LOGI("%d, %d, %d ,%d", arr, arr + 1, &arr, &arr + 1);
+
+}
+
 

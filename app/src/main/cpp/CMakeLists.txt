@@ -40,6 +40,9 @@ add_library( # Sets the name of the library.
         native-arr.c
         natvie-pointer.c
         native-memory.c
+        native-struct.c
+        testcpp/TestClass.cpp
+        testcpp/TestClass1.cpp
         )
 
 # Searches for a specified prebuilt library and stores the path as a
