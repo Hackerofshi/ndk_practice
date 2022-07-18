@@ -4,7 +4,7 @@
 
 #include "jni.h"
 #include "util/LogUtil.h"
-#include "MyGLRenderContext.h"
+#include "render/MyGLRenderContext.h"
 
 #define NATIVE_RENDER_CLASS_NAME  "com/shixin/ndk_practice/opengl/MyNativeRender"
 #define NATIVE_LIB_CLASS_NAME     "com/shixin/ndk_practice/opengl/NativeSimpleRenderer"

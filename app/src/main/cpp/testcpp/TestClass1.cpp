@@ -8,21 +8,21 @@ using namespace std;
 
 
 class Line {
-    int a; //在类里面不写是什么类型，默认是 private 的。
+    // int a; //在类里面不写是什么类型，默认是 private 的。
 public:
     double length;
 
-    void setLength(double len);
+    void setLength1(double len);
 
-    double getLength(void);
+    double getLength1();
 };
 
 // 成员函数定义
-double Line::getLength(void) {
+double Line::getLength1() {
     return length;
 }
 
-void Line::setLength(double len) {
+void Line::setLength1(double len) {
     length = len;
 }
 
@@ -95,12 +95,12 @@ public:
 };
 
 // 程序的主函数
-int main() {
+int main0() {
     Line line;
 
     // 设置长度
-    line.setLength(6.0);
-    cout << "Length of line : " << line.getLength() << endl;
+    line.setLength1(6.0);
+    cout << "Length of line : " << line.getLength1() << endl;
 
     // 不使用成员函数设置长度
     line.length = 10.0; // OK: 因为 length 是公有的
@@ -123,7 +123,7 @@ void displayPoint(const Point &p) {
          << p.y << ")" << endl;
 }
 
-int main1() {
+void main1() {
     displayPoint(Point(1));
     Point p(1);
 

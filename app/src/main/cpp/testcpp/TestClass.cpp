@@ -28,7 +28,7 @@ void Box::set(double len, double bre, double hei) {
 }
 
 void Test() {
-    Box Box1{};        // 声明 Box1，类型为 Box
+    Box Box1{};        // 声明 BoxTest，类型为 Box
     Box Box2{};        // 声明 Box2，类型为 Box
     Box Box3{};        // 声明 Box3，类型为 Box
     double volume = 0.0;     // 用于存储体积
@@ -45,7 +45,7 @@ void Test() {
 
     // box 1 的体积
     volume = Box1.height * Box1.length * Box1.breadth;
-    std::cout << "Box1 的体积：" << volume << std::endl;
+    std::cout << "BoxTest 的体积：" << volume << std::endl;
 
     // box 2 的体积
     volume = Box2.height * Box2.length * Box2.breadth;

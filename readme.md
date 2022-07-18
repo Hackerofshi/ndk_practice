@@ -54,5 +54,7 @@ public final long nativeObj;
  1 处理方式一般两种，一种补救，
 2第二种就是抛出异常对象给java
 
+## cpp文件中类不能重复定义
+
 
 

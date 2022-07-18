@@ -6,8 +6,8 @@
 #define ANDROID_PRACTICE_TRIANGLESAMPLE_H
 
 
-#include "util/ImageDef.h"
-#include "sample/GLSampleBase.h"
+#include "../util/ImageDef.h"
+#include "GLSampleBase.h"
 
 class TriangleSample : public GLSampleBase {
 public:

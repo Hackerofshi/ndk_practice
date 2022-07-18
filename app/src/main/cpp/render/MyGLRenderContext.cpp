@@ -3,9 +3,9 @@
 //
 
 #include "MyGLRenderContext.h"
-#include "util/LogUtil.h"
-#include "util/ImageDef.h"
-#include "TriangleSample.h"
+#include "../util/LogUtil.h"
+#include "../util/ImageDef.h"
+#include "../sample/TriangleSample.h"
 
 
 MyGLRenderContext *MyGLRenderContext::m_pContext = nullptr;
@@ -15,9 +15,7 @@ MyGLRenderContext::MyGLRenderContext() {
 };
 
 
-MyGLRenderContext::~MyGLRenderContext() {
-
-};
+MyGLRenderContext::~MyGLRenderContext() = default;;
 
 void MyGLRenderContext::SetImageData(int format, int width, int height, uint8_t *pData) {
    // LOGCATE("MyGLRenderContext::SetImageData format=%d, width=%d, height=%d, pData=%p", format,

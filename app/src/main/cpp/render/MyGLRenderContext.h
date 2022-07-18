@@ -7,7 +7,7 @@
 
 #include <cstdint>
 #include "GLES3/gl3.h"
-#include "sample/GLSampleBase.h"
+#include "../sample/GLSampleBase.h"
 
 class MyGLRenderContext {
     MyGLRenderContext();
@@ -39,6 +39,11 @@ public:
 private:
     static MyGLRenderContext *m_pContext;
     GLSampleBase *m_Sample;
+
+    GLSampleBase *m_pBeforeSample;
+    GLSampleBase *m_pCurSample;
+    int m_ScreenW;
+    int m_ScreenH;
 
 };
 

@@ -31,18 +31,20 @@ add_library( # Sets the name of the library.
         SHARED
 
         # Provides a relative path to your source file(s).
-        native-lib.cpp
+        demo/native-lib.cpp
         util/GLUtils.cpp
-        MyGLRenderContext.cpp
-        TriangleSample.cpp
-        native-lib1.c
-        native-parcel.cpp
-        native-arr.c
-        natvie-pointer.c
-        native-memory.c
-        native-struct.c
+        render/MyGLRenderContext.cpp
+        sample/TriangleSample.cpp
+        demo/native-lib1.c
+        demo/native-parcel.cpp
+        demo/native-arr.c
+        demo/natvie-pointer.c
+        demo/native-memory.c
+        demo/native-struct.c
         testcpp/TestClass.cpp
         testcpp/TestClass1.cpp
+        testcpp/TestClass2.cpp
+        testcpp/TestClass3.cpp
         )
 
 # Searches for a specified prebuilt library and stores the path as a

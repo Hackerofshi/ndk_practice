@@ -3,8 +3,8 @@
 //
 
 #include "TriangleSample.h"
-#include "util/GLUtils.h"
-#include "util/LogUtil.h"
+#include "../util/GLUtils.h"
+#include "../util/LogUtil.h"
 
 TriangleSample::TriangleSample() {
 
