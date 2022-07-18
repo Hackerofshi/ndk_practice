@@ -41,10 +41,10 @@ add_library( # Sets the name of the library.
         demo/natvie-pointer.c
         demo/native-memory.c
         demo/native-struct.c
-        testcpp/TestClass.cpp
-        testcpp/TestClass1.cpp
-        testcpp/TestClass2.cpp
-        testcpp/TestClass3.cpp
+        demo/testcpp/TestClass.cpp
+        demo/testcpp/TestClass1.cpp
+        demo/testcpp/TestClass2.cpp
+        demo/testcpp/TestClass3.cpp
         )
 
 # Searches for a specified prebuilt library and stores the path as a
