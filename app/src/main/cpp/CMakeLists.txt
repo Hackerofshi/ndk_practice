@@ -35,8 +35,11 @@ add_library( # Sets the name of the library.
         util/GLUtils.cpp
         MyGLRenderContext.cpp
         TriangleSample.cpp
-        native_lib1.c
+        native-lib1.c
         native-parcel.cpp
+        native-arr.c
+        natvie-pointer.c
+        native-memory.c
         )
 
 # Searches for a specified prebuilt library and stores the path as a

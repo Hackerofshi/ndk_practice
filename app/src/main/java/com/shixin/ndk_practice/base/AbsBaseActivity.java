@@ -1,4 +1,4 @@
-package com.shixin.ndk_practice;
+package com.shixin.ndk_practice.base;
 
 
 import androidx.appcompat.app.AppCompatActivity;

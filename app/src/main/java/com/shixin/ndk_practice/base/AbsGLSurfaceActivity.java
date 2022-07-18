@@ -1,4 +1,4 @@
-package com.shixin.ndk_practice;
+package com.shixin.ndk_practice.base;
 
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;

@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:orientation="vertical"
+    tools:context=".ui.MainActivity">
 
     <Button
         android:id="@+id/btn1"
@@ -11,8 +12,12 @@
         android:layout_height="wrap_content"
         android:text="test" />
 
-    <com.shixin.ndk_practice.opengl.MySurfaceView
+    <Button
+        android:id="@+id/btn2"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content"
+        android:text="测试共享内存" />
+
+
 
 </androidx.appcompat.widget.LinearLayoutCompat>

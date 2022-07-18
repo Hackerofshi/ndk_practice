@@ -50,4 +50,9 @@ public final long nativeObj;
 2 Parcel为了实现共享内存
 
 
+## native 层出错了，没办法在java层try
+ 1 处理方式一般两种，一种补救，
+2第二种就是抛出异常对象给java
+
+
 

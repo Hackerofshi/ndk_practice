@@ -9,18 +9,19 @@
 #include "util/ImageDef.h"
 #include "sample/GLSampleBase.h"
 
-class TriangleSample : public GLSampleBase
-{
+class TriangleSample : public GLSampleBase {
 public:
     TriangleSample();
+
     virtual ~TriangleSample();
 
     virtual void LoadImage(NativeImage *pImage);
 
     virtual void Init();
 
-   virtual void Draw(int screenW, int screenH);
-//
+    virtual void Draw(int screenW, int screenH);
+
+    //
     virtual void Destroy();
 
     virtual void OnDraw();

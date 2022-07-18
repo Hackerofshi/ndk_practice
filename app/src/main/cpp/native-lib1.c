@@ -1,5 +1,5 @@
 #include <jni.h>
-
+#include <stdlib.h>
 //
 // Created by shixin on 2022/7/17.
 //
@@ -118,3 +118,6 @@ Java_com_shixin_ndk_1practice_practicec_Test1_createPoint(JNIEnv *env, jclass cl
 
     return obj;
 }
+
+
+

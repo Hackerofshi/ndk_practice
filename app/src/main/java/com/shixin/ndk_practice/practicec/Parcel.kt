@@ -1,9 +1,8 @@
 package com.shixin.ndk_practice.practicec
 
-import android.os.Parcel
-
 
 public class Parcel {
+    //新建cpp对象的首地址，传回cpp可以继续操作对象
     private var mNativePtr: Long = 0
 
     init {
@@ -20,8 +19,9 @@ public class Parcel {
     }
 
     fun setDataPosition(pos: Int) {
-       nativeSetDataPosition(mNativePtr, pos)
+        nativeSetDataPosition(mNativePtr, pos)
     }
+
     fun readInt(): Int {
         return nativeReadInt(mNativePtr)
     }
