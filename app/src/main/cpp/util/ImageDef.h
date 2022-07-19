@@ -31,233 +31,216 @@
 #define IMAGE_FORMAT_YUYV_EXT       "YUYV"
 #define IMAGE_FORMAT_GRAY_EXT       "GRAY"
 
-typedef struct NativeRectF
-{
-	float left;
-	float top;
-	float right;
-	float bottom;
-	NativeRectF()
-	{
-		left = top = right = bottom = 0.0f;
-	}
+typedef struct NativeRectF {
+    float left;
+    float top;
+    float right;
+    float bottom;
+
+    NativeRectF() {
+        left = top = right = bottom = 0.0f;
+    }
 } RectF;
 
 struct SizeF {
-	float width;
-	float height;
-	SizeF() {
-		width = height = 0;
-	}
+    float width;
+    float height;
+
+    SizeF() {
+        width = height = 0;
+    }
 };
 
-struct NativeImage
-{
-	int width;
-	int height;
-	int format;
-	uint8_t *ppPlane[3];
+struct NativeImage {
+    int width;
+    int height;
+    int format;
+    uint8_t *ppPlane[3];
 
-	NativeImage()
-	{
-		width = 0;
-		height = 0;
-		format = 0;
-		ppPlane[0] = nullptr;
-		ppPlane[1] = nullptr;
-		ppPlane[2] = nullptr;
-	}
+    NativeImage() {
+        width = 0;
+        height = 0;
+        format = 0;
+        ppPlane[0] = nullptr;
+        ppPlane[1] = nullptr;
+        ppPlane[2] = nullptr;
+    }
 };
 
-class NativeImageUtil
-{
+class NativeImageUtil {
 public:
-	static void AllocNativeImage(NativeImage *pImage)
-	{
-		if (pImage->height == 0 || pImage->width == 0) return;
+    static void AllocNativeImage(NativeImage *pImage) {
+        if (pImage->height == 0 || pImage->width == 0) return;
 
-		switch (pImage->format)
-		{
-			case IMAGE_FORMAT_RGBA:
-			{
-				pImage->ppPlane[0] = static_cast<uint8_t *>(malloc(pImage->width * pImage->height * 4));
-			}
-				break;
-			case IMAGE_FORMAT_YUYV:
-			{
-				pImage->ppPlane[0] = static_cast<uint8_t *>(malloc(pImage->width * pImage->height * 2));
-			}
-				break;
-			case IMAGE_FORMAT_NV12:
-			case IMAGE_FORMAT_NV21:
-			{
-				pImage->ppPlane[0] = static_cast<uint8_t *>(malloc(pImage->width * pImage->height * 1.5));
-				pImage->ppPlane[1] = pImage->ppPlane[0] + pImage->width * pImage->height;
-			}
-				break;
-			case IMAGE_FORMAT_I420:
-			{
-				pImage->ppPlane[0] = static_cast<uint8_t *>(malloc(pImage->width * pImage->height * 1.5));
-				pImage->ppPlane[1] = pImage->ppPlane[0] + pImage->width * pImage->height;
-				pImage->ppPlane[2] = pImage->ppPlane[1] + pImage->width * (pImage->height >> 2);
-			}
-				break;
-			case IMAGE_FORMAT_GRAY:
-			{
-				pImage->ppPlane[0] = static_cast<uint8_t *>(malloc(pImage->width * pImage->height));
-			}
-				break;
-			default:
-				//LOGCATE("NativeImageUtil::AllocNativeImage do not support the format. Format = %d", pImage->format);
-				break;
-		}
-	}
+        switch (pImage->format) {
+            case IMAGE_FORMAT_RGBA: {
+                pImage->ppPlane[0] = static_cast<uint8_t *>(malloc(
+                        pImage->width * pImage->height * 4));
+            }
+                break;
+            case IMAGE_FORMAT_YUYV: {
+                pImage->ppPlane[0] = static_cast<uint8_t *>(malloc(
+                        pImage->width * pImage->height * 2));
+            }
+                break;
+            case IMAGE_FORMAT_NV12:
+            case IMAGE_FORMAT_NV21: {
+                pImage->ppPlane[0] = static_cast<uint8_t *>(malloc(
+                        pImage->width * pImage->height * 1.5));
+                pImage->ppPlane[1] = pImage->ppPlane[0] + pImage->width * pImage->height;
+            }
+                break;
+            case IMAGE_FORMAT_I420: {
+                pImage->ppPlane[0] = static_cast<uint8_t *>(malloc(
+                        pImage->width * pImage->height * 1.5));
+                pImage->ppPlane[1] = pImage->ppPlane[0] + pImage->width * pImage->height;
+                pImage->ppPlane[2] = pImage->ppPlane[1] + pImage->width * (pImage->height >> 2);
+            }
+                break;
+            case IMAGE_FORMAT_GRAY: {
+                pImage->ppPlane[0] = static_cast<uint8_t *>(malloc(pImage->width * pImage->height));
+            }
+                break;
+            default:
+                //LOGCATE("NativeImageUtil::AllocNativeImage do not support the format. Format = %d", pImage->format);
+                break;
+        }
+    }
 
-	static void FreeNativeImage(NativeImage *pImage)
-	{
-		if (pImage == nullptr || pImage->ppPlane[0] == nullptr) return;
+    static void FreeNativeImage(NativeImage *pImage) {
+        if (pImage == nullptr || pImage->ppPlane[0] == nullptr) return;
 
-		free(pImage->ppPlane[0]);
-		pImage->ppPlane[0] = nullptr;
-		pImage->ppPlane[1] = nullptr;
-		pImage->ppPlane[2] = nullptr;
-	}
+        free(pImage->ppPlane[0]);
+        pImage->ppPlane[0] = nullptr;
+        pImage->ppPlane[1] = nullptr;
+        pImage->ppPlane[2] = nullptr;
+    }
 
-	static void CopyNativeImage(NativeImage *pSrcImg, NativeImage *pDstImg)
-	{
-		if(pSrcImg == nullptr || pSrcImg->ppPlane[0] == nullptr) return;
+    static void CopyNativeImage(NativeImage *pSrcImg, NativeImage *pDstImg) {
+        if (pSrcImg == nullptr || pSrcImg->ppPlane[0] == nullptr) return;
 
-		if(pSrcImg->format != pDstImg->format ||
-		   pSrcImg->width != pDstImg->width ||
-		   pSrcImg->height != pDstImg->height) return;
+        if (pSrcImg->format != pDstImg->format ||
+            pSrcImg->width != pDstImg->width ||
+            pSrcImg->height != pDstImg->height)
+            return;
 
-		if(pDstImg->ppPlane[0] == nullptr) AllocNativeImage(pDstImg);
+        if (pDstImg->ppPlane[0] == nullptr) AllocNativeImage(pDstImg);
 
-		switch (pSrcImg->format)
-		{
-			case IMAGE_FORMAT_I420:
-			case IMAGE_FORMAT_NV21:
-			case IMAGE_FORMAT_NV12:
-			{
-				memcpy(pDstImg->ppPlane[0], pSrcImg->ppPlane[0], pSrcImg->width * pSrcImg->height * 1.5);
-			}
-				break;
-			case IMAGE_FORMAT_YUYV:
-			{
-				memcpy(pDstImg->ppPlane[0], pSrcImg->ppPlane[0], pSrcImg->width * pSrcImg->height * 2);
-			}
-				break;
-			case IMAGE_FORMAT_RGBA:
-			{
-				memcpy(pDstImg->ppPlane[0], pSrcImg->ppPlane[0], pSrcImg->width * pSrcImg->height * 4);
-			}
-				break;
-			case IMAGE_FORMAT_GRAY:
-			{
-				memcpy(pDstImg->ppPlane[0], pSrcImg->ppPlane[0], pSrcImg->width * pSrcImg->height);
-			}
-				break;
-			default:
-			{
-				//LOGCATE("NativeImageUtil::CopyNativeImage do not support the format. Format = %d", pSrcImg->format);
-			}
-				break;
-		}
+        switch (pSrcImg->format) {
+            case IMAGE_FORMAT_I420:
+            case IMAGE_FORMAT_NV21:
+            case IMAGE_FORMAT_NV12: {
+                memcpy(pDstImg->ppPlane[0], pSrcImg->ppPlane[0],
+                       pSrcImg->width * pSrcImg->height * 1.5);
+            }
+                break;
+            case IMAGE_FORMAT_YUYV: {
+                memcpy(pDstImg->ppPlane[0], pSrcImg->ppPlane[0],
+                       pSrcImg->width * pSrcImg->height * 2);
+            }
+                break;
+            case IMAGE_FORMAT_RGBA: {
+                memcpy(pDstImg->ppPlane[0], pSrcImg->ppPlane[0],
+                       pSrcImg->width * pSrcImg->height * 4);
+            }
+                break;
+            case IMAGE_FORMAT_GRAY: {
+                memcpy(pDstImg->ppPlane[0], pSrcImg->ppPlane[0], pSrcImg->width * pSrcImg->height);
+            }
+                break;
+            default: {
+                //LOGCATE("NativeImageUtil::CopyNativeImage do not support the format. Format = %d", pSrcImg->format);
+            }
+                break;
+        }
 
-	}
+    }
 
-	static void DumpNativeImage(NativeImage *pSrcImg, const char *pPath, const char *pFileName)
-	{
-		if (pSrcImg == nullptr || pPath == nullptr || pFileName == nullptr) return;
+    static void DumpNativeImage(NativeImage *pSrcImg, const char *pPath, const char *pFileName) {
+        if (pSrcImg == nullptr || pPath == nullptr || pFileName == nullptr) return;
 
-		if(access(pPath, 0) == -1)
-		{
-			mkdir(pPath, 0666);
-		}
+        if (access(pPath, 0) == -1) {
+            mkdir(pPath, 0666);
+        }
 
-		char imgPath[256] = {0};
-		const char *pExt = nullptr;
-		switch (pSrcImg->format)
-		{
-			case IMAGE_FORMAT_I420:
-				pExt = IMAGE_FORMAT_I420_EXT;
-				break;
-			case IMAGE_FORMAT_NV12:
-				pExt = IMAGE_FORMAT_NV12_EXT;
-				break;
-			case IMAGE_FORMAT_NV21:
-				pExt = IMAGE_FORMAT_NV21_EXT;
-				break;
-			case IMAGE_FORMAT_RGBA:
-				pExt = IMAGE_FORMAT_RGBA_EXT;
-				break;
-			case IMAGE_FORMAT_YUYV:
-				pExt = IMAGE_FORMAT_YUYV_EXT;
-				break;
-			case IMAGE_FORMAT_GRAY:
-				pExt = IMAGE_FORMAT_GRAY_EXT;
-				break;
-			default:
-				pExt = "Default";
-				break;
-		}
+        char imgPath[256] = {0};
+        const char *pExt = nullptr;
+        switch (pSrcImg->format) {
+            case IMAGE_FORMAT_I420:
+                pExt = IMAGE_FORMAT_I420_EXT;
+                break;
+            case IMAGE_FORMAT_NV12:
+                pExt = IMAGE_FORMAT_NV12_EXT;
+                break;
+            case IMAGE_FORMAT_NV21:
+                pExt = IMAGE_FORMAT_NV21_EXT;
+                break;
+            case IMAGE_FORMAT_RGBA:
+                pExt = IMAGE_FORMAT_RGBA_EXT;
+                break;
+            case IMAGE_FORMAT_YUYV:
+                pExt = IMAGE_FORMAT_YUYV_EXT;
+                break;
+            case IMAGE_FORMAT_GRAY:
+                pExt = IMAGE_FORMAT_GRAY_EXT;
+                break;
+            default:
+                pExt = "Default";
+                break;
+        }
 
-		sprintf(imgPath, "%s/IMG_%dx%d_%s.%s", pPath, pSrcImg->width, pSrcImg->height, pFileName, pExt);
+        sprintf(imgPath, "%s/IMG_%dx%d_%s.%s", pPath, pSrcImg->width, pSrcImg->height, pFileName,
+                pExt);
 
-		FILE *fp = fopen(imgPath, "wb");
+        FILE *fp = fopen(imgPath, "wb");
 
-		//LOGCATE("DumpNativeImage fp=%p, file=%s", fp, imgPath);
+        //LOGCATE("DumpNativeImage fp=%p, file=%s", fp, imgPath);
 
-		if(fp)
-		{
-			switch (pSrcImg->format)
-			{
-				case IMAGE_FORMAT_I420:
-				{
-					fwrite(pSrcImg->ppPlane[0],
-						   static_cast<size_t>(pSrcImg->width * pSrcImg->height), 1, fp);
-					fwrite(pSrcImg->ppPlane[1],
-						   static_cast<size_t>((pSrcImg->width >> 1) * (pSrcImg->height >> 1)), 1, fp);
-					fwrite(pSrcImg->ppPlane[2],
-							static_cast<size_t>((pSrcImg->width >> 1) * (pSrcImg->height >> 1)),1,fp);
-					break;
-				}
-				case IMAGE_FORMAT_NV21:
-				case IMAGE_FORMAT_NV12:
-				{
-					fwrite(pSrcImg->ppPlane[0],
-						   static_cast<size_t>(pSrcImg->width * pSrcImg->height), 1, fp);
-					fwrite(pSrcImg->ppPlane[1],
-						   static_cast<size_t>(pSrcImg->width * (pSrcImg->height >> 1)), 1, fp);
-					break;
-				}
-				case IMAGE_FORMAT_RGBA:
-				{
-					fwrite(pSrcImg->ppPlane[0],
-						   static_cast<size_t>(pSrcImg->width * pSrcImg->height * 4), 1, fp);
-					break;
-				}
-				case IMAGE_FORMAT_YUYV:
-				{
-					fwrite(pSrcImg->ppPlane[0],
-						   static_cast<size_t>(pSrcImg->width * pSrcImg->height * 2), 1, fp);
-					break;
-				}
-				default:
-				{
-					fwrite(pSrcImg->ppPlane[0],
-						   static_cast<size_t>(pSrcImg->width * pSrcImg->height), 1, fp);
-					//LOGCATE("DumpNativeImage default");
-					break;
-				}
-			}
+        if (fp) {
+            switch (pSrcImg->format) {
+                case IMAGE_FORMAT_I420: {
+                    fwrite(pSrcImg->ppPlane[0],
+                           static_cast<size_t>(pSrcImg->width * pSrcImg->height), 1, fp);
+                    fwrite(pSrcImg->ppPlane[1],
+                           static_cast<size_t>((pSrcImg->width >> 1) * (pSrcImg->height >> 1)), 1,
+                           fp);
+                    fwrite(pSrcImg->ppPlane[2],
+                           static_cast<size_t>((pSrcImg->width >> 1) * (pSrcImg->height >> 1)), 1,
+                           fp);
+                    break;
+                }
+                case IMAGE_FORMAT_NV21:
+                case IMAGE_FORMAT_NV12: {
+                    fwrite(pSrcImg->ppPlane[0],
+                           static_cast<size_t>(pSrcImg->width * pSrcImg->height), 1, fp);
+                    fwrite(pSrcImg->ppPlane[1],
+                           static_cast<size_t>(pSrcImg->width * (pSrcImg->height >> 1)), 1, fp);
+                    break;
+                }
+                case IMAGE_FORMAT_RGBA: {
+                    fwrite(pSrcImg->ppPlane[0],
+                           static_cast<size_t>(pSrcImg->width * pSrcImg->height * 4), 1, fp);
+                    break;
+                }
+                case IMAGE_FORMAT_YUYV: {
+                    fwrite(pSrcImg->ppPlane[0],
+                           static_cast<size_t>(pSrcImg->width * pSrcImg->height * 2), 1, fp);
+                    break;
+                }
+                default: {
+                    fwrite(pSrcImg->ppPlane[0],
+                           static_cast<size_t>(pSrcImg->width * pSrcImg->height), 1, fp);
+                    //LOGCATE("DumpNativeImage default");
+                    break;
+                }
+            }
 
-			fclose(fp);
-			fp = NULL;
-		}
+            fclose(fp);
+            fp = NULL;
+        }
 
 
-	}
+    }
 };
 
 

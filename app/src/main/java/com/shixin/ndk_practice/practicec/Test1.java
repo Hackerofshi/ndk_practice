@@ -37,6 +37,8 @@ public class Test1 {
 
     public native static Point createPoint();
 
+    public native void nativeArr(int[] arr);
+
     static {
         System.loadLibrary("ndk_practice");
     }

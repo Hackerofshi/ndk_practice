@@ -35,6 +35,7 @@ add_library( # Sets the name of the library.
         util/GLUtils.cpp
         render/MyGLRenderContext.cpp
         sample/TriangleSample.cpp
+        sample/TextureMapSample.cpp
         demo/native-lib1.c
         demo/native-parcel.cpp
         demo/native-arr.c

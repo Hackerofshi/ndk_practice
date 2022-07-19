@@ -1,5 +1,6 @@
 #include <jni.h>
 #include <stdlib.h>
+#include <string.h>
 //
 // Created by shixin on 2022/7/17.
 //
@@ -120,4 +121,20 @@ Java_com_shixin_ndk_1practice_practicec_Test1_createPoint(JNIEnv *env, jclass cl
 }
 
 
+JNIEXPORT void JNICALL
+Java_com_shixin_ndk_1practice_practicec_Test1_nativeArr(JNIEnv *env, jobject thiz, jintArray arr) {
 
+    //GetArrayElements 和ReleaseArrayElements成对使用
+    jint *data = (*env)->GetIntArrayElements(env, arr, NULL);
+    jint buffer[10];
+    if (data != NULL) {
+        memcpy(buffer, data, sizeof(arr) / sizeof(int));
+        (*env)->ReleaseIntArrayElements(env, arr, data, JNI_ABORT);
+    }
+
+    //GetArrayRegion
+    //GetArrayRegion单独使用，
+    //
+    //表示事先在C/C++中创建一个缓存区，然后将Java中的原始数组拷贝到缓冲区中去
+    (*env)->GetIntArrayRegion(env, arr, 0, sizeof(arr) / sizeof(int), buffer);
+}

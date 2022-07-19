@@ -1,5 +1,6 @@
 package com.shixin.ndk_practice.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -54,21 +55,25 @@ class MainActivity : AppCompatActivity() {
             val arr = arrayOf(1, 2)
 
             TestArray.sort(arr.toIntArray())
-          //  TestArray.localRef()
-          //  TestArray.globalRef("str")
-          //  TestArray.getGlobalRef()
+            //  TestArray.localRef()
+            //  TestArray.globalRef("str")
+            //  TestArray.getGlobalRef()
 
             //初始化缓存
-          //  TestArray.initStaticCache()
+            //  TestArray.initStaticCache()
 
-          //  TestArray.staticLocalCache("leo")
+            //  TestArray.staticLocalCache("leo")
 
-           // TestArray.exeception()
+            // TestArray.exeception()
 
 
             TestPoniter.test1()
             TestPoniter.test2()
 
+        }
+
+        binding.btn3.setOnClickListener {
+            startActivity(Intent(this, SurfaceViewActivity::class.java))
         }
     }
 
