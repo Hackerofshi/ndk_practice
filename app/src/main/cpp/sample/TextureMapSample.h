@@ -14,7 +14,7 @@ public:
 
     virtual ~TextureMapSample();
 
-    void loadImage(NativeImage *pImage);
+    void LoadImage(NativeImage *pImage);
 
     virtual void Init();
 

@@ -87,3 +87,33 @@ Java_com_shixin_ndk_1practice_practicec_TestMemory_test1(JNIEnv *env, jclass cla
 
 }
 
+char *getStr1() {
+    char *str = "12345";
+    return str;
+}
+
+char *getStr2() {
+    char *str = "12345";
+    return str;
+}
+
+char *getStr3() {
+    char buff[128];
+    strcpy(buff, "12345");
+    return buff;
+}
+
+char *getStr4() {
+    char *buff = malloc(128);
+    strcpy(buff, "12345");
+    return buff;
+}
+
+//void test() {
+//    char *str = getStr1();
+//    char *str1 = getStr2();
+//    char *str3 = getStr3();
+//    LOGI("%s", str3);
+//}
+
+

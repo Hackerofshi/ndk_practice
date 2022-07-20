@@ -238,8 +238,6 @@ public:
             fclose(fp);
             fp = NULL;
         }
-
-
     }
 };
 

@@ -1,9 +1,14 @@
 package com.shixin.ndk_practice.opengl
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.opengl.GLSurfaceView
 import android.util.AttributeSet
 import android.util.Log
+import com.shixin.ndk_practice.R
+import java.io.IOException
+import java.nio.ByteBuffer
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
@@ -19,11 +24,21 @@ class MySurfaceView @JvmOverloads constructor(context: Context?, attrs: Attribut
         setEGLContextClientVersion(3)
         nativeRender = MyNativeRender()
         mGLRender = MyGLRender(nativeRender)
+        //loadRGBAImage(R.drawable.dzzz)
         setRenderer(mGLRender)
         renderMode = RENDERMODE_CONTINUOUSLY
     }
 
     class MyGLRender internal constructor(private val mNativeRender: MyNativeRender) : Renderer {
+
+        fun init() {
+            mNativeRender.native_OnInit()
+        }
+
+        fun unInit() {
+            mNativeRender.native_OnUnInit()
+        }
+
         override fun onSurfaceCreated(gl: GL10, config: EGLConfig) {
             Log.d(
                 TAG,
@@ -51,6 +66,10 @@ class MySurfaceView @JvmOverloads constructor(context: Context?, attrs: Attribut
             )
             mNativeRender.native_OnDrawFrame()
         }
+
+        fun setImageData(format: Int, width: Int, height: Int, bytes: ByteArray?) {
+            mNativeRender.native_SetImageData(format, width, height, bytes)
+        }
     }
 
     companion object {
@@ -59,6 +78,29 @@ class MySurfaceView @JvmOverloads constructor(context: Context?, attrs: Attribut
         const val IMAGE_FORMAT_NV21 = 0x02
         const val IMAGE_FORMAT_NV12 = 0x03
         const val IMAGE_FORMAT_I420 = 0x04
+    }
+
+
+    private fun loadRGBAImage(resId: Int): Bitmap? {
+        val `is` = this.resources.openRawResource(resId)
+        val bitmap: Bitmap?
+        try {
+            bitmap = BitmapFactory.decodeStream(`is`)
+            if (bitmap != null) {
+                val bytes = bitmap.byteCount
+                val buf = ByteBuffer.allocate(bytes)
+                bitmap.copyPixelsToBuffer(buf)
+                val byteArray = buf.array()
+                mGLRender.setImageData(IMAGE_FORMAT_RGBA, bitmap.width, bitmap.height, byteArray)
+            }
+        } finally {
+            try {
+                `is`.close()
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }
+        return bitmap
     }
 }
 

@@ -9,6 +9,7 @@
 #ifdef ANDROID
 
 #include <android/log.h>
+#include <string.h>
 
 #define LOG_TAG    "TEST"
 #define LOGE(format, ...)  __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, format, ##__VA_ARGS__)
@@ -160,6 +161,8 @@ Java_com_shixin_ndk_1practice_practicec_TestArray_exeception(JNIEnv *env, jclass
     (*env)->SetStaticObjectField(env, clazz, f_id, name);
 }
 
+//--------------------------------------------------------------------------------------------------
+//数组内存，传递数组其实为传递的首地址
 void print(int *arr, int length) {
     for (int i = 0; i < length; ++i) {
         LOGI("%d  ", arr[i]);
@@ -176,14 +179,40 @@ void testArr() {
     print(arr, size);
 }
 
+
 void testArr1() {
     int a;//告诉c和c++编译器开辟一块连续大小4字节的内存空间
     int arr[] = {1, 2, 3, 4, 5, 6}; // arr 数据类型的内存大小空间 24
 
     a = 10;
-    // 12 , 16 , 12 , 36   36？
-    LOGI("%d, %d, %d ,%d", arr, arr + 1, &arr, &arr + 1);
+    // 12 , 16 数组的地址往后挪一位就是 4个字节
+    LOGI("%d, %d", arr, arr + 1);
+    //12 , 36   数组的长度为24，地址+1，移动到指针内存末尾
+    LOGI("%d, %d", &arr, &arr + 1);
 
 }
+//--------------------------------------------------------------------------------------------------
+//从 java数组到c数组
+JNIEXPORT void JNICALL
+Java_com_shixin_ndk_1practice_practicec_Test1_nativeArr(JNIEnv *env, jobject thiz, jintArray arr) {
 
+    //GetArrayElements 和ReleaseArrayElements成对使用
+    jint *data = (*env)->GetIntArrayElements(env, arr, NULL);
+    jint buffer[10];
+    if (data != NULL) {
+        memcpy(buffer, data, sizeof(arr) / sizeof(int));
+        (*env)->ReleaseIntArrayElements(env, arr, data, JNI_ABORT);
+    }
 
+    //GetArrayRegion
+    //GetArrayRegion单独使用，
+    //
+    //表示事先在C/C++中创建一个缓存区，然后将Java中的原始数组拷贝到缓冲区中去
+    (*env)->GetIntArrayRegion(env, arr, 0, sizeof(arr) / sizeof(int), buffer);
+
+    //只需要一个JNI调用而不是两个, 减少开销.
+    //不需要对原始数据进行限制或者额外的拷贝数据
+    //减少开发者的风险(不会有在某些出错后忘记释放的风险)
+}
+
+//--------------------------------------------------------------------------------------------------

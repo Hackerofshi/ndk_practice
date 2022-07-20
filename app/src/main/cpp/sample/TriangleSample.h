@@ -24,7 +24,7 @@ public:
     //
     virtual void Destroy();
 
-    virtual void OnDraw();
+   // virtual void OnDraw();
 };
 
 

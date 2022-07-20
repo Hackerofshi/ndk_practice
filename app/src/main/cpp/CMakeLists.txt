@@ -38,7 +38,8 @@ add_library( # Sets the name of the library.
         sample/TextureMapSample.cpp
         demo/native-lib1.c
         demo/native-parcel.cpp
-        demo/native-arr.c
+        demo/native-arr-err.c
+        demo/native-str.c
         demo/natvie-pointer.c
         demo/native-memory.c
         demo/native-struct.c

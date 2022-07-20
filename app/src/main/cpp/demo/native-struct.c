@@ -39,4 +39,11 @@ void testStruct() {
 
 }
 
+typedef struct MyStruct1{
+    int a;
+} MyStruct1;
 
+
+struct MyStruct2{
+    int a;
+} value;

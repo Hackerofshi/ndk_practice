@@ -43,11 +43,11 @@ void TriangleSample::Init() {
 
 }
 
-void TriangleSample::OnDraw() {
+void TriangleSample::Draw(int screenW, int screenH) {
     LOGCATE("TriangleSample::Draw");
     //三角形坐标
     GLfloat vVertices[] = {
-            0.0f, 0.5f, 0.0f,
+            0.0f, 0.2f, 0.0f,
             -0.5f, -0.5f, 0.0f,
             0.5f, -0.5f, 0.0f,
     };
@@ -70,9 +70,7 @@ void TriangleSample::LoadImage(NativeImage *pImage) {
 
 }
 
-void TriangleSample::Draw(int screenW, int screenH) {
 
-}
 
 void TriangleSample::Destroy() {
 

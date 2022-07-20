@@ -49,12 +49,12 @@ JNIEXPORT void JNICALL native_UnInit(JNIEnv *env, jobject instance) {
 
 
 JNIEXPORT void JNICALL native_SetImageData(
-        JNIEnv *env, jobject instance, jint format, jint width, jint weight, jbyteArray imageData
+        JNIEnv *env, jobject instance, jint format, jint width, jint height, jbyteArray imageData
 ) {
     int len = env->GetArrayLength(imageData);
     uint8_t *buf = new uint8_t[len];
     env->GetByteArrayRegion(imageData, 0, len, reinterpret_cast<jbyte *>(buf));
-
+    MyGLRenderContext::GetInstance()->SetImageData(format, width, height, buf);
     delete[] buf;
     env->DeleteLocalRef(imageData);
 }
@@ -331,7 +331,7 @@ Java_com_anyemonitor_jni_NDKBridge_floatToInt(JNIEnv *env, jobject thiz, jfloat 
     for (j = 0; j < 4; j++) {
         buff[j] = s1.num_c[j];
     }
-    (env)->SetIntArrayRegion( array, 0, 4, buff);
+    (env)->SetIntArrayRegion(array, 0, 4, buff);
     return array;
 }
 
@@ -341,7 +341,7 @@ JNIEXPORT jstring JNICALL
 Java_com_shixin_ndk_1practice_opengl_NativeSimpleRenderer_test(JNIEnv *env, jobject thiz) {
 
 #if defined(__arm__)
-    #if defined(__ARM_ARCH_7A__)
+#if defined(__ARM_ARCH_7A__)
 #if defined(__ARM_NEON__)
 #if defined(__ARM_PCS_VFP)
 #define ABI "armeabi-v7a/NEON (hard-float)"

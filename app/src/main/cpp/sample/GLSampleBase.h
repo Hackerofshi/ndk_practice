@@ -107,8 +107,6 @@ public:
 
 	virtual void Draw(int screenW, int screenH) = 0;
 
-	virtual void OnDraw() = 0;
-
 	virtual void Destroy() = 0;
 
 protected:

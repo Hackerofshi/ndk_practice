@@ -158,3 +158,45 @@ Java_com_shixin_ndk_1practice_practicec_TestPoniter_test3(JNIEnv *env, jclass cl
 
 
 }
+
+
+//值传递
+void change(int num) {
+    num = 300;
+    LOGI("%p\n", &num);
+}
+
+//引用传递
+void change1(int *num1) {
+    *num1 = 300;
+}
+
+void test1() {
+    int a = 100;
+    //修改a的值
+    a = 200;
+
+    change(a); //a=200 a 变量的值赋值给了num 变量，num在另一个函数中，
+    // num是一个新的变量
+
+    change1(&a); //a = 300 把a的地址传给了num1，改变地址的指向就改变了值
+}
+
+
+
+//指针间接赋值的意义
+void test(){
+    int a = 100;
+    //修改a的值,同个方法里直接赋值
+    a = 200;
+
+    //通过指针，其实就是为了在其他方法中间接赋值
+    //开发何种，指针出现的意义，一，通过方法是修改值
+    change1(&a);
+
+    //c和java方法不同所在，c可以在传对象的地址在方法里面去赋值，java是返回一个对象，返回值
+
+
+
+}
+
