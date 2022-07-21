@@ -179,6 +179,8 @@ void TextureMapSample::Draw(int screenW, int screenH) {
     //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, indices)
 
 
+
+
 }
 
 

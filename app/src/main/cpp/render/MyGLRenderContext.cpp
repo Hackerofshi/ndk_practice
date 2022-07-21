@@ -58,6 +58,7 @@ void MyGLRenderContext::OnSurfaceCreated() {
 void MyGLRenderContext::OnSurfaceChanged(int width, int height) {
     LOGCATE("MyGLRenderContext::OnSurfaceChanged [w, h] = [%d, %d]", width, height);
     glViewport(0, 0, width, height);
+    //glm::mat4 Projection = glm::ortho(-10.0f,10.0f,-10.0f,10.0f,0.0f,100.0f); // In world coordinates
     m_ScreenW = width;
     m_ScreenH = height;
 }
