@@ -13,6 +13,8 @@
 #include <GLES3/gl3.h>
 #include "../util/ImageDef.h"
 #include "../util/ByteFlowLock.h"
+#include "../glm/detail/type_mat.hpp"
+#include "../glm/detail/type_mat4x4.hpp"
 
 //For PI define
 #define MATH_PI 3.1415926535897932384626433832802
@@ -97,6 +99,8 @@ public:
 	virtual void UpdateTransformMatrix(float rotateX, float rotateY, float scaleX, float scaleY)
 	{}
 
+    virtual void UpdateTransformMatrix(glm::mat4 &mvpMatrix){};
+
 	virtual void SetTouchLocation(float x, float y)
 	{}
 
@@ -116,6 +120,9 @@ protected:
 	MySyncLock m_Lock;
 	int m_SurfaceWidth;
 	int m_SurfaceHeight;
+
+    GLint m_MVPMatLoc;
+    glm::mat4 m_MVPMatrix;
 };
 
 

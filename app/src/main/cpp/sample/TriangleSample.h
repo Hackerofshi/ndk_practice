@@ -24,7 +24,11 @@ public:
     //
     virtual void Destroy();
 
-   // virtual void OnDraw();
+    virtual void UpdateTransformMatrix(glm::mat4 &mvpMatrix);
+
+
+
+    // virtual void OnDraw();
 };
 
 
