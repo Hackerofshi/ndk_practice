@@ -7,13 +7,14 @@
 #include "../util/ImageDef.h"
 #include "../sample/TriangleSample.h"
 #include "../sample/TextureMapSample.h"
+#include "../sample/Square.h"
 
 
 MyGLRenderContext *MyGLRenderContext::m_pContext = nullptr;
 
 MyGLRenderContext::MyGLRenderContext() {
     // m_Sample = new TextureMapSample();
-    m_Sample = new TriangleSample();
+    m_Sample = new Square();
 };
 
 

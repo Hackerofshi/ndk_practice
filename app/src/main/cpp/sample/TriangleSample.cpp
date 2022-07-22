@@ -10,7 +10,6 @@
 
 
 TriangleSample::TriangleSample() {
-
 }
 
 TriangleSample::~TriangleSample() {
