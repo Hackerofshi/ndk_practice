@@ -99,7 +99,7 @@ public:
 	virtual void UpdateTransformMatrix(float rotateX, float rotateY, float scaleX, float scaleY)
 	{}
 
-    virtual void UpdateTransformMatrix(glm::mat4 &mvpMatrix){};
+    virtual void UpdateTransformMatrix(glm::mat4 &mvpMatrix,int screenW, int screenH){};
 
 	virtual void SetTouchLocation(float x, float y)
 	{}

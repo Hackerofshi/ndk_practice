@@ -19,13 +19,22 @@ void testStr1() {
     char buff[100] = {'a', 'b', 'c', 'd'}; //5-99 都是默认值 0
 
     // len =5
-    //int len = strlen(buff); // 碰到\0 就结束了
+    int len = strlen(buff); // 碰到\0 就结束了  size 4
 
     //size 100
     //int size = sizeof(buff);
 
     //内容  buff[120]没有越界
     //LOGI("%d,%d,%d,%d", buff[0], buff[66], buff[77], buff[120]);
+
+    char buff1[100] = {0}; //数组初始化为0
+
+    char buff2[100] = {}; //数据都是默认值
+
+    char buff3[] = "123456";  //len 6  size是7 末尾是\0
+
+    char * buff4 = "123456";
+
 
 }
 

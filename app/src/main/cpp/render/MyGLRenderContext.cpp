@@ -17,7 +17,7 @@ MyGLRenderContext::MyGLRenderContext() {
 };
 
 
-MyGLRenderContext::~MyGLRenderContext() = default;;
+MyGLRenderContext::~MyGLRenderContext() = default;
 
 void MyGLRenderContext::SetImageData(int format, int width, int height, uint8_t *pData) {
     // LOGCATE("MyGLRenderContext::SetImageData format=%d, width=%d, height=%d, pData=%p", format,
