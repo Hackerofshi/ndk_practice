@@ -8,13 +8,14 @@
 #include "../sample/TriangleSample.h"
 #include "../sample/TextureMapSample.h"
 #include "../sample/Square.h"
+#include "../sample/Cube.h"
 
 
 MyGLRenderContext *MyGLRenderContext::m_pContext = nullptr;
 
 MyGLRenderContext::MyGLRenderContext() {
     // m_Sample = new TextureMapSample();
-    m_Sample = new Square();
+    m_Sample = new Cube();
 };
 
 

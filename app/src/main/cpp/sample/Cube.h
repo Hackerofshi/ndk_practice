@@ -1,19 +1,18 @@
 //
-// Created by shixin on 2022/7/21.
+// Created by shixin on 2022/7/22.
 //
 
-#ifndef NDK_PRACTICE_SQUARE_H
-#define NDK_PRACTICE_SQUARE_H
+#ifndef NDK_PRACTICE_CUBE_H
+#define NDK_PRACTICE_CUBE_H
+
 
 #include "GLSampleBase.h"
 
-
-//正方形
-class Square : public GLSampleBase {
+class Cube : public GLSampleBase{
 public:
-    Square();
+    Cube();
 
-    virtual ~Square();
+    virtual ~Cube();
 
     virtual void LoadImage(NativeImage *pImage);
 
@@ -28,4 +27,4 @@ public:
 };
 
 
-#endif //NDK_PRACTICE_SQUARE_H
+#endif //NDK_PRACTICE_CUBE_H

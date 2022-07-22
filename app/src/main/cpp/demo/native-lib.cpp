@@ -282,8 +282,8 @@ JNIEXPORT void JNICALL onDrawFrame(JNIEnv *env, jobject obj) {
     glEnableVertexAttribArray(0);
 
     //绘制三角形颜色
-    glEnableVertexAttribArray(1);
     glVertexAttribPointer(1, 4, GL_FLOAT, false, 0, color);
+    glEnableVertexAttribArray(1);
 
     //绘制
     glDrawArrays(GL_TRIANGLES, 0, 3);

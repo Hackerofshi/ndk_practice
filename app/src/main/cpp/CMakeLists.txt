@@ -36,6 +36,7 @@ add_library( # Sets the name of the library.
         sample/TriangleSample.cpp
         sample/Square.cpp
         sample/TextureMapSample.cpp
+        sample/Cube.cpp
         demo/native-lib1.c
         demo/native-parcel.cpp
         demo/native-arr-err.c

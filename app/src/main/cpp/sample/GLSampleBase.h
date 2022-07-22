@@ -122,6 +122,7 @@ protected:
 	int m_SurfaceHeight;
 
     GLint m_MVPMatLoc;
+    GLint aColor;
     glm::mat4 m_MVPMatrix;
 };
 
