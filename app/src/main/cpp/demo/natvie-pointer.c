@@ -146,7 +146,7 @@ int getNextRandomValue(void) {
 void testFun() {
     int myarr[10];
     populate_array(myarr, 10, getNextRandomValue);
-    for(int i = 0; i < 10; i++) {
+    for (int i = 0; i < 10; i++) {
         LOGI("%d ", myarr[i]);
     }
     printf("\n");
@@ -183,9 +183,8 @@ void test1() {
 }
 
 
-
 //指针间接赋值的意义
-void test(){
+void test() {
     int a = 100;
     //修改a的值,同个方法里直接赋值
     a = 200;
@@ -196,7 +195,155 @@ void test(){
 
     //c和java方法不同所在，c可以在传对象的地址在方法里面去赋值，java是返回一个对象，返回值
 
-
-
 }
 
+
+//1.一般不要修改指针的地址
+void test_point1() {
+    char *name = "test11";
+    char *tempName = name;
+    for (int i = 0; i < 6; ++i) {
+        LOGI("%c", *name);
+        //name++; //错误操作
+        tempName++; //指针++
+    }
+
+    //name++ 后
+    LOGI("%s", name); //此时操作就会报错
+}
+
+void set(char **str) {
+    *str = "test";
+    //指针变量的赋值改变的指针的指向；
+}
+
+void test_point2() {
+    char *name = NULL;
+    set(&name);  //此时可以操作，&name 是取出地址，地址不是null
+    //强调一个概念，指针变量和指针所指向的变量是两个不同的概念
+
+
+    LOGI("%s", name);
+
+    char name1 = NULL;
+    char *p = &name1;
+
+    int *name2 = NULL;
+    int **p1 = &name2;
+}
+
+//const 关键字 c和c++会有区别
+//const 在c里面其实还是可以修改，
+void test_point3() {
+    //常量，通过指针还可以赋值
+    const int number = 100;
+
+    //常量指针
+    int *const num1 = &number;
+    *num1 = 2000;  //值可以改
+
+    const int *const numerP = &number; //d都不能改
+}
+
+typedef struct FILE {
+    char *fileName;
+    int len;
+} File;
+
+//二级指针的内存模式
+//指针数组：数组指针指向的是数组元素的首地址
+void test_point4() {
+    char *name = "test11";
+    //二级指针，可以看出二维数组
+    char **nameP = &name;
+
+    //定义一个File* 数组
+    File *file[2] = {{"int.mp4"},
+                     {"int1.mp4"}};
+    File **file1 = file; //另外一种定义方式，（指针数组）（二级指针），结果相同
+}
+
+void prints(char **strs, int len) {
+    for (int i = 0; i < len; ++i) {
+        LOGI("%s", strs[i]); // []也相当于挪动指针
+        // LOGI("%s", *(strs+1)); 相当于这样
+    }
+}
+
+void prints1(char strs[][10], int len) {
+    for (int i = 0; i < len; ++i) {
+        LOGI("%s", strs[i]); // []也相当于挪动指针
+        // LOGI("%s", *(strs+1)); 相当于这样
+    }
+}
+
+void test_point5() {
+    char *name[10] = {"test1", "test1", "test1"}; //静态常量区
+
+    //打印一下
+    LOGI("%s", name[0]);
+    LOGI("%s", name[1]);
+    LOGI("%s", name[2]);
+
+    char **nameP = name;
+
+    prints(name, 10);
+
+    //第二种定义方式
+    char name1[10][10] = {"test1", "test2", "test2"}; //从静态常量区，copy到栈buffer里面
+
+    //报错，
+    //指针的步长不一样
+    //prints(name1, 10);
+
+    prints1(name1, 10);
+
+
+    //第三种方式，最常见的一种方式，动态开辟内存
+    int number = 3;
+    char **params = malloc(sizeof(char *) * number);
+    //开辟一维数组
+    for (int i = 0; i < number; ++i) {
+        params[i] = malloc(sizeof(char) * 100);
+        //写一些数据
+        sprintf(params[i], "i = %d", i);
+    }
+
+    prints(params, number);
+
+    //开辟后要释放
+    for (int i = 0; i < number; ++i) {
+        //先释放一维数组
+        if (params[i] != NULL)
+            free(params[i]);
+    }
+
+    //然后再释放params 二维数组（也可以看成一维数组，
+    // 里面放的是一级指针）
+    if (params != NULL) {
+        free(params);
+        params = NULL;
+    }
+}
+
+void initParams(char ***params) { //三级指针，一般就用到二级指针
+    //开辟内存去赋值
+    int number = 3;
+    char **tempParams = malloc(sizeof(char *) * number);
+    //开辟一维数组
+    for (int i = 0; i < number; ++i) {
+        tempParams[i] = malloc(sizeof(char) * 100);
+        sprintf(tempParams[i], "i = %d", i); //赋值
+    }
+    *params = tempParams;
+}
+
+
+//多级指针的用法，
+void test_point6() {
+    //我想给字符串数组开辟内存，开辟内存写到另一个方法
+    char **params = NULL;
+    initParams(&params);
+
+    //初始化后会报错
+}
