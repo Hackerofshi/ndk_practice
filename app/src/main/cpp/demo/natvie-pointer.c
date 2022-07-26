@@ -160,13 +160,13 @@ Java_com_shixin_ndk_1practice_practicec_TestPoniter_test3(JNIEnv *env, jclass cl
 }
 
 
-//值传递
+//值传递,无法修改值
 void change(int num) {
     num = 300;
     LOGI("%p\n", &num);
 }
 
-//引用传递
+//引用传递,修改指针指向的地址
 void change1(int *num1) {
     *num1 = 300;
 }
@@ -184,7 +184,7 @@ void test1() {
 
 
 //指针间接赋值的意义
-void test() {
+void testPoint() {
     int a = 100;
     //修改a的值,同个方法里直接赋值
     a = 200;

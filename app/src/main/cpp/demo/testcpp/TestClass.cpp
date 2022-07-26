@@ -96,7 +96,7 @@ public:
        //  this->age = student.age;
        // this->name = student.name; //浅拷贝,指针指向同一片内存。
 
-        //动态开辟内存一定要采用深拷贝
+        //动态开辟内存一定要采用深拷贝，浅拷贝一旦释放源对象，拷贝的也会释放。
         this->name = (char *) malloc(sizeof(char) * 100);
         strcpy(this->name, student.name);
     }
