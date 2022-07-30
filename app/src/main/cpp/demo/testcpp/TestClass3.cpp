@@ -136,3 +136,260 @@ int main8() {
 
     return 0;
 }
+
+
+class Person {
+protected:
+    char *name;
+    int age;
+public:
+    Person(char *name, int age) {
+        this->name = name;
+        this->age = age;
+    }
+
+    ~Person(){
+        cout << "Person 的析构函数" << endl;
+    }
+};
+
+class Course {
+private:// java String
+    string name;
+public:
+    Course(string name) {
+        this->name = name;
+    }
+
+public:
+    string _name() {
+        return this->name;
+    }
+};
+
+class Student : public Person {
+private:
+// char* courseName;
+    Course course; //属性
+public:
+    Student(char *name, int age, string courseName) : Person(name, age),    // 初始化父类的属性
+            //属性的初始化
+                                                      course(courseName) {
+
+        // this->courseName = courseName;
+        // 字符串转成指针打印
+        //cout << name << "," << age << "," << course._name().c_str() << endl;
+
+    }
+    ~Student(){
+        cout << "Student 的析构函数" << endl;
+    }
+
+}
+
+// 构造函数和析构函数
+void constructor(){
+    // 构造函数：先父类 -> 再子类
+    // 析构函数：先子类 -> 再父类
+    Student *stu = new Student("Darren",24);
+    delete stu;
+
+}
+
+
+
+class A {
+public:
+    char *name;
+};
+
+class B : A {
+    int name; //这样也会有二义性
+};
+
+class C : A {
+
+};
+
+
+//这里就会出现二义性
+class D : B, C {
+
+};
+
+//所以要用虚继承
+// 2.2 虚继承 （二义性）
+//class A{
+//public:
+//    char* name;
+//};
+//
+//class B : virtual public A{ // 确保继承过来的相同属性或者函数，只存在一份拷贝
+//
+//};
+//
+//class C :virtual public A{
+//
+//};
+//
+//class D : public B ,public C
+//{
+//
+//};
+
+class Activity{
+public:
+    // 支持多态，虚函数,加上关键字才支持多态
+    virtual void onCreate(){
+        cout << "Activity 中的 onCreate" << endl;
+    }
+};
+
+class MainActivity : public Activity
+{
+public:
+    void onCreate(){
+        cout << "MainActivity 中的 onCreate" << endl;
+    }
+};
+
+class WelcomeActivity : public Activity
+{
+public:
+    void onCreate(){
+        cout << "WelcomeActivity 中的 onCreate" << endl;
+    }
+};
+
+//静态多态，编译时就确定
+int add(int number1, int number2){
+    return number1 + number2;
+}
+
+double add(double number1, double number2){
+    return number1 + number2;
+}
+
+float add(float number1, float number2){
+    return number1 + number2;
+}
+
+void testactivity(){
+    Activity *activity1 = new MainActivity();// 父类 = new 子类对象
+    Activity *activity2 = new WelcomeActivity();
+
+    // activity->onCreate();
+    // c++ 中的多态是怎样的，默认情况下不存在
+    // 父类指向子类的引用，重写 ，里氏替换原则
+    // 程序在编译期间并不知晓运行的状态（我需要运行那个函数），
+    //只要在真正运行的过程中才会去找需要运行的方法
+    // 解释一下 java 中的多态 20K
+    startActivity(activity1);
+    startActivity(activity2);
+
+    // c++ 多态：动态多态(子父类)，
+    //静态多态（函数的重载）（编译过程确定性的区别）
+    add(1,2);
+    add(0.0,0.0);
+
+}
+
+// java 中类似的 抽象类，接口 纯虚函数
+class BaseActivity {
+public:
+    void OnCreate(){
+
+    }
+    // 子类必须要实现
+    virtual void initData() = 0;// 虚函数，没有实现的，类似于 java 中的抽象方法，如果子类不实现会报错
+
+    virtual void initView() = 0;
+
+};
+// 如果不实现父类的纯虚函数，
+// 那么 MainActivity 也会变成抽象类，抽象类不允许实例化
+class MainActivity : public BaseActivity
+{
+public:
+    void initData(){
+        cout << "initData" << endl;
+    }
+
+    void initView(){
+        cout << "initView" << endl;
+    }
+};
+
+void testVirtual1(){
+
+    BaseActivity *m_a = new MainActivity();
+
+    m_a->initView();
+    m_a->onCreate();
+}
+
+
+// 所有的函数都是虚函数，那么就可以认为是接口
+class ClickListener {
+public:
+    virtual void click() = 0;
+};
+
+//子类必须实现
+class ImageClicklistener:public ClickListener{
+public :
+    void click(){
+        cout << "图片点击" << endl;
+    }
+};
+
+
+void click(ClickListener *listener){
+    listener->click();
+}
+
+
+// 函数指针作为参数传递  返回值(函数名)(参数),
+// 相当于一个回调函数
+void click(void(*c)){
+    // 压缩开始
+    c();// 输出压缩进度
+    // 压缩结束
+}
+
+void testClick(){
+    // 函数指针的时候：回调可以用 指针函数作为回调，纯虚函数类进行回调（接口）
+    // ClickListener *listener = new ImageClickListener();
+
+    // listener->click();
+    // click(listener);
+
+    // 自己再去了解加深一下
+    click(click);
+
+
+    getchar();
+}
+
+//模板函数  java中的泛型
+
+template <typename T>// 模板函数的定义
+T add(T number1,T number2{
+    return number1 + number2;
+}
+
+
+void tesTemplate(){
+
+    int sum1 = add(1,2);
+
+    cout << sum1 << endl;
+
+    int sum2 = add(1.0, 2.0);
+
+    cout << sum2 << endl;
+
+    int sum3 = add(1.0f, 2.0f);
+
+    cout << sum3 << endl;
+}

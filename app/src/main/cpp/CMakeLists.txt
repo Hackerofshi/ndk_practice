@@ -30,7 +30,7 @@ add_library( # Sets the name of the library.
         SHARED
 
         # Provides a relative path to your source file(s).
-        demo/native-lib.cpp
+        native-lib.cpp
         util/GLUtils.cpp
         render/MyGLRenderContext.cpp
         sample/TriangleSample.cpp
@@ -48,6 +48,8 @@ add_library( # Sets the name of the library.
         demo/testcpp/TestClass1.cpp
         demo/testcpp/TestClass2.cpp
         demo/testcpp/TestClass3.cpp
+        demo/testcpp/TestClass_static_friend.cpp
+        demo/testcpp/TestClassOperator_override.cpp.cpp
         )
 
 # Searches for a specified prebuilt library and stores the path as a

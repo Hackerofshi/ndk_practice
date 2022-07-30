@@ -143,6 +143,8 @@ void testClass2() {
     stu.setName("asdf");
 
 
+
+
 }
 
 // 3. malloc free new delete 都是开辟释放内存

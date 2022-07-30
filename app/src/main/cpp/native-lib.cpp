@@ -1,7 +1,7 @@
 #include <jni.h>
 #include <string>
-#include "native-lib.h"
-#include "../render/MyGLRenderContext.h"
+#include "demo/native-lib.h"
+#include "render/MyGLRenderContext.h"
 #include <EGL/egl.h>
 #include <GLES3/gl3.h>
 
