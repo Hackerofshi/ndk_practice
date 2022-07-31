@@ -75,4 +75,17 @@ env->GetByteArrayRegion(array, 0, len, buffer); 1 优点
 
 
 
+# c++类型转换
+https://www.cnblogs.com/Allen-rg/p/6999360.html
+
+1.1 static_cast 静态转换  用于基本数据类型之间的转换，如把int转换成char
+1.2 const_cast 常量转换 用于修改常量的值
+1.3 reinterpret_cat 强制类型转换 ，用于转换任意类型
+1.4 dynamic_cast 动态转换 ，更安全，转换成功返回类型，失败返回空 ，
+必须要包含多态类型和 static_cast 很类似，但是更安全
+
+
+
+2. 异常处理
+   https://www.cnblogs.com/QG-whz/p/5136883.html
 

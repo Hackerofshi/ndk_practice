@@ -37,4 +37,6 @@ public class NativeSimpleRenderer implements GLSurfaceView.Renderer {
     public void onDrawFrame(GL10 gl) {
         onDrawFrame();
     }
+
+
 }

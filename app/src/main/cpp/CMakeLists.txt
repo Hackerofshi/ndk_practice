@@ -49,7 +49,10 @@ add_library( # Sets the name of the library.
         demo/testcpp/TestClass2.cpp
         demo/testcpp/TestClass3.cpp
         demo/testcpp/TestClass_static_friend.cpp
-        demo/testcpp/TestClassOperator_override.cpp.cpp
+        demo/testcpp/TestClassOperator_override.cpp
+        demo/testcpp/Test_str.cpp
+        demo/testcpp/TestClass_algorithm.cpp
+        demo/native-arr-copy.cpp
         )
 
 # Searches for a specified prebuilt library and stores the path as a

@@ -27,4 +27,10 @@ public class TestArray {
     public static native void initStaticCache();
 
     public static native void exeception() throws NoSuchFieldException;
+
+
+    public static native void arraycopy(Object src,  int  srcPos,
+                                        Object dest, int destPos,
+                                        int length);
+
 }
