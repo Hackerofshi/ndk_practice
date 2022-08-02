@@ -21,6 +21,12 @@ public class Test1 {
         return i;
     }
 
+    public static int add1(int i1, int i2) {
+        int i = i1 + i2;
+        Log.i("TAG", "add: " + i);
+        return i;
+    }
+
     public static String getUUID() {
         String s = UUID.randomUUID().toString();
         Log.i("UUID", "add: " + s);

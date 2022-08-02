@@ -1,6 +1,21 @@
 #include <jni.h>
 #include <stdlib.h>
 #include <string.h>
+
+#ifdef ANDROID
+
+
+#include <android/log.h>
+
+#define LOG_TAG    "TEST"
+#define LOGE(format, ...)  __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, format, ##__VA_ARGS__)
+#define LOGI(format, ...)  __android_log_print(ANDROID_LOG_INFO,  LOG_TAG, format, ##__VA_ARGS__)
+#else
+#define LOGE(format, ...)  printf(LOG_TAG format "\n", ##__VA_ARGS__)
+#define LOGI(format, ...)  printf(LOG_TAG format "\n", ##__VA_ARGS__)
+#endif
+
+
 //
 // Created by shixin on 2022/7/17.
 //
@@ -53,7 +68,13 @@ Java_com_shixin_ndk_1practice_practicec_Test1_callAddMethod(JNIEnv *env, jobject
     //获取methodid
     jmethodID j_mid = (*env)->GetMethodID(env, j_clz, "add", "(II)I");
 
+    jmethodID j_mid1 = (*env)->GetStaticMethodID(env, j_clz, "add1", "(II)I");
+
     jint sum = (*env)->CallIntMethod(env, thiz, j_mid, 2, 3);
+
+    //调用静态方法
+    jint sum1 = (*env)->CallStaticIntMethod(env, j_clz, j_mid1, 2, 3);
+
 
 }
 
@@ -95,6 +116,8 @@ Java_com_shixin_ndk_1practice_practicec_Test1_testConst(JNIEnv *env, jobject thi
 
     // n_p2 = &number1; 不可以被修改
 
+    jstring str = (*env)->NewStringUTF(env, "123456");
+    LOGI("%s", str);
 }
 
 
