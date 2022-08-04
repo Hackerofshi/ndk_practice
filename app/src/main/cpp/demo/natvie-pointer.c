@@ -115,12 +115,12 @@ void judge() {
 }
 
 
-int max(int x, int y) {
+int max1(int x, int y) {
     return x > y ? x : y;
 }
 
 void testMax() {
-    int (*p)(int, int) = &max;
+    int (*p)(int, int) = &max1;
     int a = 3;
     int b = 4;
     int c = 5;
@@ -132,20 +132,20 @@ void testMax() {
 }
 
 // 回调函数
-void populate_array(int *array, size_t arraySize, int (*getNextValue)(void)) {
+void populate_array1(int *array, size_t arraySize, int (*getNextValue)(void)) {
     for (size_t i = 0; i < arraySize; i++)
         array[i] = getNextValue();
 }
 
 // 获取随机值
-int getNextRandomValue(void) {
+int getNextRandomValue1(void) {
     return rand();
 }
 
 
 void testFun() {
     int myarr[10];
-    populate_array(myarr, 10, getNextRandomValue);
+    populate_array1(myarr, 10, getNextRandomValue1);
     for (int i = 0; i < 10; i++) {
         LOGI("%d ", myarr[i]);
     }
