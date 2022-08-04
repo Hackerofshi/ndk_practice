@@ -37,7 +37,7 @@ void testStruct() {
     // 获取 Bitmap ，锁定画布 void**
     // void number;// 错误
 
-    // memcpy();// 拷贝内存，什么用 void*
+    // memcpy();// 拷贝内存，为什么用 void*
 
 }
 
@@ -71,12 +71,16 @@ void copyTo(MyStudent *from, MyStudent *to) {
     //开辟一块内存，然后再进行赋值
     to->className = (char *) malloc(100);
     strcpy(to->className, from->className);
+
+
 }
 
 void testStruct1() {
     MyStudent stu1 = {"test", 12};
     MyStudent stu2;
     stu2 = stu1; // = 是内容赋值操作，是吧stu1的值，赋值给stu2
+
+    stu1.age = 20;
 
 
     strcpy(stu2.name, stu1.name); //赋值的操作

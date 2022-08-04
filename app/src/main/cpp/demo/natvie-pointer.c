@@ -18,6 +18,8 @@
 #define LOGI(format, ...)  printf(LOG_TAG format "\n", ##__VA_ARGS__)
 #endif
 
+typedef unsigned int GLuint1;
+
 JNIEXPORT void JNICALL
 Java_com_shixin_ndk_1practice_practicec_TestPoniter_test1(JNIEnv *env, jclass clazz) {
     int var_runoob = 10;
@@ -201,10 +203,13 @@ void testPoint() {
 //1.一般不要修改指针的地址
 void test_point1() {
     char *name = "test11";
-    char *tempName = name;
+    char *tempName = name; //赋值给临时变量进行操作
     for (int i = 0; i < 6; ++i) {
         LOGI("%c", *name);
         //name++; //错误操作
+
+
+
         tempName++; //指针++
     }
 
