@@ -1,15 +1,21 @@
 package com.shixin.ndk_practice.ui
 
+import android.Manifest
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.os.Environment
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.shixin.ndk_practice.R
 import com.shixin.ndk_practice.databinding.ActivityMainBinding
-import com.shixin.ndk_practice.practicec.Parcel
-import com.shixin.ndk_practice.practicec.Test1
-import com.shixin.ndk_practice.practicec.TestArray
-import com.shixin.ndk_practice.practicec.TestPoniter
+import com.shixin.ndk_practice.practicec.*
+import permissions.dispatcher.NeedsPermission
+import permissions.dispatcher.RuntimePermissions
 
+
+@RuntimePermissions
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
@@ -19,6 +25,12 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        initLocationWithPermissionCheck()
+
+        initevent()
+    }
+
+    private fun initevent() {
         //测试jni方法
         binding.btn1.setOnClickListener {
             val test = Test1()
@@ -75,6 +87,30 @@ class MainActivity : AppCompatActivity() {
         binding.btn3.setOnClickListener {
             startActivity(Intent(this, SurfaceViewActivity::class.java))
         }
+
+        binding.btn4.setOnClickListener {
+            Log.i("TAG", "onCreate: " + Environment.getExternalStorageDirectory())
+            val bitmap = BitmapFactory.decodeResource(resources, R.drawable.normal)
+            val Compressor = Compressor()
+            val bitmapWip = Bitmap.createBitmap(
+                bitmap.getWidth(),
+                bitmap.getHeight(), Bitmap.Config.ARGB_8888
+            );
+            Compressor.convertBmp(
+                bitmap,
+                bitmapWip,
+            )
+        }
     }
 
+    @NeedsPermission(
+        Manifest.permission.ACCESS_COARSE_LOCATION,
+        Manifest.permission.ACCESS_FINE_LOCATION,
+        Manifest.permission.CAMERA,
+        Manifest.permission.RECORD_AUDIO,
+        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        Manifest.permission.BLUETOOTH,
+    )
+    fun initLocation() {
+    }
 }

@@ -18,10 +18,10 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -fno-rtti -fno-exceptions -Wa
 add_definitions("-DDYNAMIC_ES3")
 set(OPENGL_LIB GLESv3)
 
+
 include_directories(
         glm
 )
-
 
 add_library( # Sets the name of the library.
         ndk_practice
@@ -54,7 +54,9 @@ add_library( # Sets the name of the library.
         demo/testcpp/TestClass_algorithm.cpp
         demo/testc/JNIEnv_test.c
         demo/native-arr-copy.cpp
+        libjpg/jpeg-compress.cpp
         )
+
 
 # Searches for a specified prebuilt library and stores the path as a
 # variable. Because CMake includes system libraries in the search path by
@@ -75,6 +77,8 @@ find_library( # Sets the name of the path variable.
 
 target_link_libraries( # Specifies the target library.
         ndk_practice
+
+        jnigraphics #JNI层,添加bitmap支持
 
         # Links the target library to the log library
         # included in the NDK.
