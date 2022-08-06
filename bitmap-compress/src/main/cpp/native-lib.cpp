@@ -32,12 +32,12 @@ METHODDEF(void) my_error_exit(j_common_ptr cinfo) {
 int write_JPEG_file(BYTE *data, int w, int h, int quality,
                     const char *outFilename, jboolean optimize) {
     //jpeg的结构体，保存的比如宽、高、位深、图片格式等信息
-    struct jpeg_compress_struct cinfo;
+    struct jpeg_compress_struct cinfo{};
 
     /* Step 1: allocate and initialize JPEG compression object */
 
     /* We set up the normal JPEG error routines, then override error_exit. */
-    struct my_error_mgr jem;
+    struct my_error_mgr jem{};
     cinfo.err = jpeg_std_error(&jem.pub);
     jem.pub.error_exit = my_error_exit;
     /* Establish the setjmp return context for my_error_exit to use. */
@@ -66,7 +66,8 @@ int write_JPEG_file(BYTE *data, int w, int h, int quality,
     cinfo.in_color_space = JCS_RGB;       /* colorspace of input image */
 
     /*  源码地址：
-      [http://androidos.net.cn/androidossearch?query=SkImageDecoder_libjpeg.cpp](http://androidos.net.cn/androidossearch?query=SkImageDecoder_libjpeg.cpp)
+      [http://androidos.net.cn/androidossearch?query=SkImageDecoder_libjpeg.cpp]
+      (http://androidos.net.cn/androidossearch?query=SkImageDecoder_libjpeg.cpp)
 
       >=android 7.0 后的源码已经设置为true了
       ...省略其它代码

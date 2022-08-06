@@ -89,3 +89,12 @@ https://www.cnblogs.com/Allen-rg/p/6999360.html
 2. 异常处理
    https://www.cnblogs.com/QG-whz/p/5136883.html
 
+## 相关学习项目
+https://github.com/yangkun19921001/AVEditor
+https://github.com/yangkun19921001/AVSample
+
+## jni 
+https://blog.csdn.net/tkwxty/article/details/103539392 
+
+##  __attribute__ 机制
+https://blog.csdn.net/weaiken/article/details/88085360
