@@ -10,3 +10,4 @@ rootProject.name = "ndk_practice"
 include ':app'
 include ':jpeg-pratice'
 include ':bitmap-compress'
+include ':pratice_opencv'
