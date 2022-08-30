@@ -24,6 +24,7 @@ add_library( # Sets the name of the library.
         native-lib.cpp
         BitmapMatUtils.cpp
         cardocr.cpp
+        bank-card-ocr.cpp
         )
 
 find_library( # Sets the name of the path variable.

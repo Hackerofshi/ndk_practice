@@ -76,7 +76,7 @@ int co1::find_card_numbers(const Mat &mat, std::vector<Mat> numbers) {
     // THRESH_OTSU THRESH_TRIANGLE自己去找合适的值 ，这一步非常关键
     Mat binary;
     threshold(gray, binary, 39, 255, THRESH_BINARY);
-    //imwrite("/storage/emulated/0/ocr/card_number_binary_n.jpg", binary);
+    imwrite("/storage/emulated/0/ocr/card_number_binary_n.jpg", binary);
 
     // 降噪过滤
     Mat kernel = getStructuringElement(MORPH_RECT, Size(3, 3));
@@ -103,7 +103,7 @@ int co1::find_card_numbers(const Mat &mat, std::vector<Mat> numbers) {
         }
     }
 
-    //imwrite("/storage/emulated/0/ocr/card_number_binary_noise_n.jpg", binary);
+    imwrite("/storage/emulated/0/ocr/card_number_binary_noise_n.jpg", binary);
 
     // 截取每个数字的轮廓 binary(没噪音) 不行，binary_not(有噪音)
     binary.copyTo(binary_not);
@@ -124,7 +124,7 @@ int co1::find_card_numbers(const Mat &mat, std::vector<Mat> numbers) {
     }
 
 
-    //imwrite("/storage/emulated/0/ocr/card_number_contours_mat_n.jpg", contours_mat);
+    imwrite("/storage/emulated/0/ocr/card_number_contours_mat_n.jpg", contours_mat);
 
     // 进行排序 冒泡（最简单） 自己搞些数据做演示，在自己图板多画画
     for (int i = 0; i < contours.size() - 1; ++i) {
@@ -154,7 +154,7 @@ int co1::find_card_numbers(const Mat &mat, std::vector<Mat> numbers) {
             // 保存数字图片
             char name[50];
             sprintf(name, "/storage/emulated/0/ocr/card_number_%d.jpg", i);
-           // imwrite(name, number);
+            imwrite(name, number);
         }
     }
 
