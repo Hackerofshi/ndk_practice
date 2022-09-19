@@ -2,7 +2,7 @@
 // Created by hcDarren on 2018/7/28.
 //
 
-#include "BitmapMatUtils.h"
+#include "../BitmapMatUtils.h"
 #include <android/bitmap.h>
 
 int BitmapMatUtils::bitmap2mat(JNIEnv *env, jobject bitmap, Mat &mat) {

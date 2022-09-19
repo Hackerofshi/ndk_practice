@@ -4,9 +4,9 @@
 
 #include <jni.h>
 #include <string>
-#include "BitmapMatUtils.h"
+#include "../BitmapMatUtils.h"
 #include <android/log.h>
-#include "cardocr.h"
+#include "../cardocr.h"
 #include <vector>
 #include <jni.h>
 

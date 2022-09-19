@@ -2,7 +2,7 @@
 // Created by hcDarren on 2018/7/28.
 //
 
-#include "cardocr.h"
+#include "../cardocr.h"
 #include <vector>
 #include <android/log.h>
 

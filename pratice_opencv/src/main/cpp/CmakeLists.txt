@@ -1,30 +1,51 @@
+
+# Sets the minimum version of CMake required to build the native library.
+# 指定cmake最低编译版本
 cmake_minimum_required(VERSION 3.10.2)
 
+# 需要引入我们头文件,以这个配置的目录为基准，可以是多个
 include_directories(${PROJECT_SOURCE_DIR}/include)
+# include_directories(src/main/jniLibs/other)
 
+#添加共享库搜索路径
 link_directories(./libs/${ANDROID_ABI})
 
 # 日志输出在.cxx/cmake/debug//armeabi-v7a/build_output.txt
 message("PROJECT_SOURCE_DIR=${PROJECT_SOURCE_DIR}")
 message("ANDROID_ABI=${ANDROID_ABI}")
+message("CMAKE_SOURCE_DIR=${CMAKE_SOURCE_DIR}")
 message("CMAKE_ANDROID_ARCH_ABI=${CMAKE_ANDROID_ARCH_ABI}")
 message("CMAKE_CURRENT_SOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR}")
 
 
-add_library(libopencv_java4 SHARED IMPORTED)
+# 指定源文件目录
+AUX_SOURCE_DIRECTORY(${CMAKE_SOURCE_DIR}/source SRC_LIST)
+
+
+#生成可执行文件
+# ADD_EXECUTABLE(hello hello.cpp)
+
+
+# 指定生成版本号，VERSION指代动态库版本，SOVERSION指代API版本
 set_target_properties(libopencv_java4 PROPERTIES IMPORTED_LOCATION
         ${CMAKE_SOURCE_DIR}/libs/${ANDROID_ABI}/libopencv_java4.so)
 
 
+# 指定生成动态库
+add_library(libopencv_java4 SHARED IMPORTED)
+
+# set 用于指定变量 set(key value) ，这里表示 CMAKE_CXX_STANDARD 变量为 17
+# set(CMAKE_CXX_STANDARD 17)
+
+# 指定生成动态库
 add_library( # Sets the name of the library.
         native-lib             # Sets the library as a shared library.
 
         SHARED             # Provides a relative path to your source file(s).
 
-        native-lib.cpp
-        BitmapMatUtils.cpp
-        cardocr.cpp
-        bank-card-ocr.cpp
+        # Provides a relative path to your source file(s).
+        # src/main/cpp/native-lib.cpp
+        ${SRC_LIST}
         )
 
 find_library( # Sets the name of the path variable.
