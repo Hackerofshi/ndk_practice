@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory
 import android.opengl.GLSurfaceView
 import android.util.AttributeSet
 import android.util.Log
-import com.shixin.ndk_practice.R
 import java.io.IOException
 import java.nio.ByteBuffer
 import javax.microedition.khronos.egl.EGLConfig
@@ -82,10 +81,10 @@ class MySurfaceView @JvmOverloads constructor(context: Context?, attrs: Attribut
 
 
     private fun loadRGBAImage(resId: Int): Bitmap? {
-        val `is` = this.resources.openRawResource(resId)
+        val image = this.resources.openRawResource(resId)
         val bitmap: Bitmap?
         try {
-            bitmap = BitmapFactory.decodeStream(`is`)
+            bitmap = BitmapFactory.decodeStream(image)
             if (bitmap != null) {
                 val bytes = bitmap.byteCount
                 val buf = ByteBuffer.allocate(bytes)
@@ -95,7 +94,7 @@ class MySurfaceView @JvmOverloads constructor(context: Context?, attrs: Attribut
             }
         } finally {
             try {
-                `is`.close()
+                image.close()
             } catch (e: IOException) {
                 e.printStackTrace()
             }

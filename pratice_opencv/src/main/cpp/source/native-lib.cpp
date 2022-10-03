@@ -97,7 +97,7 @@ void mat2Bitmap(JNIEnv *env, Mat mat, jobject bitmap) {
 }
 
 CascadeClassifier cascadeClassifier;
-JNIEXPORT void JNICALL
+extern "C" JNIEXPORT void JNICALL
 Java_com_shixin_pratice_1opencv_FaceDetection_loadCascade(JNIEnv *env, jobject instance,
                                                     jstring filePath_) {
     const char *filePath = env->GetStringUTFChars(filePath_, 0);
@@ -106,7 +106,7 @@ Java_com_shixin_pratice_1opencv_FaceDetection_loadCascade(JNIEnv *env, jobject i
     env->ReleaseStringUTFChars(filePath_, filePath);
 }
 
-JNIEXPORT jint JNICALL
+extern "C" JNIEXPORT jint JNICALL
 Java_com_shixin_pratice_1opencv_FaceDetection_faceDetectionSaveInfo(JNIEnv *env, jobject instance,
                                                               jobject bitmap) {
     // 检测人脸  , opencv 有一个非常关键的类是 Mat ，opencv 是 C 和 C++ 写的，只会处理 Mat , android里面是Bitmap

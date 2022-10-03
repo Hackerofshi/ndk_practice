@@ -8,6 +8,8 @@
 #include "GLSampleBase.h"
 #include "../util/ImageDef.h"
 
+
+
 class TextureMapSample : public GLSampleBase {
 public:
     TextureMapSample();

@@ -6,6 +6,10 @@
 using namespace std;
 using namespace cv;
 
+void test(){
+
+}
+
 /*
 #define MAX(a,b) a>b ? a:b
 // inline 内联函数，类似于 define 函数，做到编译时替换
@@ -119,92 +123,92 @@ inline int max(int a, int b){
 
 // 4.3 中值滤波   降噪
 // 4.4 双边模糊   美图
-int main(){
-
-    Mat src = imread("C:/Users/hcDarren/Desktop/android/test.png");
-
-    // 判断读取是否正确，文件不存在
-    if (src.empty()){
-        cout << " src imread error " << endl;
-        return -1;
-    }
-
-    /*
-    //生成一个和源图像大小相等类型相同的全0矩阵
-    Mat dest = Mat::zeros(src.size(), src.type());
-
-    //获取图像的列数,一定不要忘记图像的通道数，需要rgb值
-    int cols = (src.cols - 1) * src.channels();
-    int rows = src.rows;//获取图像的行数
-
-     // 通道数
-    int offsetx = src.channels();
-
-    for (int row = 1; row < rows - 1; row++){
-        // 上一行
-        uchar* previous = src.ptr<uchar>(row - 1);
-        // 当前行
-        uchar* current = src.ptr<uchar>(row);
-        // 下一行
-        uchar* next = src.ptr<uchar>(row + 1);
-        // 输出
-        uchar* output = dest.ptr<uchar>(row);
-        for (int col = offsetx; col < cols; col++){
-            //  5 * current[col] 自己
-            // (current[col - offsetx]  左侧  偏移量是通道数，横向的rgb，rgb排列
-            // current[col + offsetx]  右侧
-            // previous[col] 上一行
-            // next[col]  下一行
-            output[col] = saturate_cast<uchar>(
-                5 * current[col] - (current[col - offsetx] + current[col + offsetx] + previous[col] + next[col]));
-        }
-    }
-    */
-
-    // 再去查查
-    Mat dest;
-    // src depth 下周再讲，Point(-1, -1) 中心点
-    Mat kernel = (Mat_<char>(3,3)<< 0, -1, 0, -1, 5, -1, 0, -1, 0);
-    // filter2D(src, dest, src.depth(), kernel);
-
-    // 调用filter2D，高斯模糊,定义一个掩膜
-    filter2D(src, dest, src.depth(), kernel);
-
-    imshow("src", dest);
-   // line(src, Point(100, 100), Point(200, 200),Scalar(255,0,0), 2, LINE_8);
-
-    //fillPoly()
-    waitKey(0);
-    return 0;
-}
+//int mainx(){
+//
+//    Mat src = imread("C:/Users/hcDarren/Desktop/android/test.png");
+//
+//    // 判断读取是否正确，文件不存在
+//    if (src.empty()){
+//        cout << " src imread error " << endl;
+//        return -1;
+//    }
+//
+//    /*
+//    //生成一个和源图像大小相等类型相同的全0矩阵
+//    Mat dest = Mat::zeros(src.size(), src.type());
+//
+//    //获取图像的列数,一定不要忘记图像的通道数，需要rgb值
+//    int cols = (src.cols - 1) * src.channels();
+//    int rows = src.rows;//获取图像的行数
+//
+//     // 通道数
+//    int offsetx = src.channels();
+//
+//    for (int row = 1; row < rows - 1; row++){
+//        // 上一行
+//        uchar* previous = src.ptr<uchar>(row - 1);
+//        // 当前行
+//        uchar* current = src.ptr<uchar>(row);
+//        // 下一行
+//        uchar* next = src.ptr<uchar>(row + 1);
+//        // 输出
+//        uchar* output = dest.ptr<uchar>(row);
+//        for (int col = offsetx; col < cols; col++){
+//            //  5 * current[col] 自己
+//            // (current[col - offsetx]  左侧  偏移量是通道数，横向的rgb，rgb排列
+//            // current[col + offsetx]  右侧
+//            // previous[col] 上一行
+//            // next[col]  下一行
+//            output[col] = saturate_cast<uchar>(
+//                5 * current[col] - (current[col - offsetx] + current[col + offsetx] + previous[col] + next[col]));
+//        }
+//    }
+//    */
+//
+//    // 再去查查
+//    Mat dest;
+//    // src depth 下周再讲，Point(-1, -1) 中心点
+//    Mat kernel = (Mat_<char>(3,3)<< 0, -1, 0, -1, 5, -1, 0, -1, 0);
+//    // filter2D(src, dest, src.depth(), kernel);
+//
+//    // 调用filter2D，高斯模糊,定义一个掩膜
+//    filter2D(src, dest, src.depth(), kernel);
+//
+//    imshow("src", dest);
+//   // line(src, Point(100, 100), Point(200, 200),Scalar(255,0,0), 2, LINE_8);
+//
+//    //fillPoly()
+//    waitKey(0);
+//    return 0;
+//}
 
 
 //均值模糊，和高斯模糊
-int main1(){
-
-    Mat src = imread("C:/Users/hcDarren/Desktop/android/test.png");
-
-    if (!src.data){
-        printf("imread error!");
-        return -1;
-    }
-
-    imshow("src", src);
-
-    // 均值模糊
-    Mat dst;
-    // Size(w,h) 只能是奇数，这样才能找到中心点，+模糊核的大小
-    blur(src, dst, Size(151, 151), Point(-1,-1));
-    imshow("blur", dst);
-
-    // sigmaX sigmaY 代表 作用
-    // sigmaY 不传代表和 sigmaX 一样
-    // 如果 sigmaX >= 0 ,自己会计算 0.3*((ksize-1)*0.5 - 1) + 0.8
-    // 自己传得怎么传？有什么意义 1 ，
-    Mat gaussian;
-    GaussianBlur(src, gaussian, Size(151, 151),0);
-    imshow("gaussian", gaussian);
-
-    waitKey(0);
-    return 0;
-}
+//int main1(){
+//
+//    Mat src = imread("C:/Users/hcDarren/Desktop/android/test.png");
+//
+//    if (!src.data){
+//        printf("imread error!");
+//        return -1;
+//    }
+//
+//    imshow("src", src);
+//
+//    // 均值模糊
+//    Mat dst;
+//    // Size(w,h) 只能是奇数，这样才能找到中心点，+模糊核的大小
+//    blur(src, dst, Size(151, 151), Point(-1,-1));
+//    imshow("blur", dst);
+//
+//    // sigmaX sigmaY 代表 作用
+//    // sigmaY 不传代表和 sigmaX 一样
+//    // 如果 sigmaX >= 0 ,自己会计算 0.3*((ksize-1)*0.5 - 1) + 0.8
+//    // 自己传得怎么传？有什么意义 1 ，
+//    Mat gaussian;
+//    GaussianBlur(src, gaussian, Size(151, 151),0);
+//    imshow("gaussian", gaussian);
+//
+//    waitKey(0);
+//    return 0;
+//}
