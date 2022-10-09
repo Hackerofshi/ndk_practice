@@ -45,7 +45,12 @@ add_library( # Sets the name of the library.
 
         # Provides a relative path to your source file(s).
         # src/main/cpp/native-lib.cpp
-        ${SRC_LIST}
+        source/native-lib.cpp
+        source/bank-card-ocr.cpp
+        source/bitmap.cpp
+        source/BitmapMatUtils.cpp
+        source/cardocr.cpp
+        source/cv_helper.cpp
         )
 
 find_library( # Sets the name of the path variable.

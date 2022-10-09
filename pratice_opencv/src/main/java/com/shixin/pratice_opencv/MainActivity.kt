@@ -39,17 +39,17 @@ class MainActivity : AppCompatActivity() {
     private fun copyCascadeFile() {
         try {
             // load cascade file from application resources
-            val `is`: InputStream = resources.openRawResource(R.raw.lbpcascade_frontalface)
+            val stream: InputStream = resources.openRawResource(R.raw.lbpcascade_frontalface)
             val cascadeDir = getDir("cascade", Context.MODE_PRIVATE)
             mCascadeFile = File(cascadeDir, "lbpcascade_frontalface.xml")
             if (mCascadeFile?.exists() == true) return
             val os = FileOutputStream(mCascadeFile)
             val buffer = ByteArray(4096)
             var bytesRead: Int
-            while (`is`.read(buffer).also { bytesRead = it } != -1) {
+            while (stream.read(buffer).also { bytesRead = it } != -1) {
                 os.write(buffer, 0, bytesRead)
             }
-            `is`.close()
+            stream.close()
             os.close()
         } catch (e: IOException) {
             e.printStackTrace()
