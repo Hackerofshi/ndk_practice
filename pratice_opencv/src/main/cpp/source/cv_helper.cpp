@@ -71,16 +71,20 @@ int cv_helper::mat2bitmap(JNIEnv *env, cv::Mat &src, jobject &bitmap) {
 jobject cv_helper::createBitMap(JNIEnv *env, jint width, jint height, int type) {
     const char *bitmap_config_class_name = "android/graphics/Bitmap$Config";
     jclass bitmap_config_class = env->FindClass(bitmap_config_class_name);
-    jmethodID bitmap_config_mid = env->GetStaticMethodID(bitmap_config_class,"valueOf","(Ljava/lang/String;)Landroid/graphics/Bitmap$Config;");
+    jmethodID bitmap_config_mid = env->GetStaticMethodID(bitmap_config_class, "valueOf",
+                                                         "(Ljava/lang/String;)Landroid/graphics/Bitmap$Config;");
     jstring configName = env->NewStringUTF("ARGB_8888");
-    jobject bitmap_config = env->CallStaticObjectMethod(bitmap_config_class,bitmap_config_mid,configName);
+    jobject bitmap_config = env->CallStaticObjectMethod(bitmap_config_class, bitmap_config_mid,
+                                                        configName);
 
     //bitmap correlation
     const char *bitmap_class_name = "android/graphics/Bitmap";
     jclass bitmap_class = env->FindClass(bitmap_class_name);
     const char *create_bitmap_sig = "(IILandroid/graphics/Bitmap$Config;)Landroid/graphics/Bitmap;";
-    jmethodID create_bitmap_mid = env->GetStaticMethodID(bitmap_class,"createBitmap",create_bitmap_sig);
-    jobject bitmap = env->CallStaticObjectMethod(bitmap_class,create_bitmap_mid,width,height,bitmap_config);
+    jmethodID create_bitmap_mid = env->GetStaticMethodID(bitmap_class, "createBitmap",
+                                                         create_bitmap_sig);
+    jobject bitmap = env->CallStaticObjectMethod(bitmap_class, create_bitmap_mid, width, height,
+                                                 bitmap_config);
 
     return bitmap;
 }

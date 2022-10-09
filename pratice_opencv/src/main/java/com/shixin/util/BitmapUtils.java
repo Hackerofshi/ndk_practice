@@ -7,6 +7,11 @@ import android.graphics.Bitmap;
  */
 
 public class BitmapUtils {
+    // Used to load the 'native-lib' library on application startup.
+    static {
+        System.loadLibrary("native-lib");
+    }
+
     public static native int gary(Bitmap src);
 
 

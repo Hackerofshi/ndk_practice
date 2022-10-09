@@ -23,6 +23,10 @@ void TriangleSample::Init() {
     LOGCATE("TriangleSample::Draw");
 
     //脚本
+
+    // layout (location = 0) in vec4 aPosition;
+    // layout(qualifier1, qualifier2 = value, ...) variable definition
+    // 其中qualifier表示具体的修饰符，最常见的就是代码中的“location”，可以理解为变量的位置。
     char vShaderStr[] =
             "#version 300 es                                          \n"
             "layout(location = 0) in vec4 a_position;                \n"

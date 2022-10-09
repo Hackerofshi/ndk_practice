@@ -32,8 +32,6 @@ set_target_properties(libopencv_java4 PROPERTIES IMPORTED_LOCATION
         ${CMAKE_SOURCE_DIR}/libs/${ANDROID_ABI}/libopencv_java4.so)
 
 
-
-
 # set 用于指定变量 set(key value) ，这里表示 CMAKE_CXX_STANDARD 变量为 17
 # set(CMAKE_CXX_STANDARD 17)
 
@@ -45,10 +43,12 @@ add_library( # Sets the name of the library.
 
         # Provides a relative path to your source file(s).
         # src/main/cpp/native-lib.cpp
+        #-------------------------------------------------------------------
+        #  ${SRC_LIST}  这种方式可以导入所有源文件，但是不能有 .h 文件在里面  |
+        #-------------------------------------------------------------------
         source/native-lib.cpp
         source/bank-card-ocr.cpp
         source/bitmap.cpp
-        source/BitmapMatUtils.cpp
         source/cardocr.cpp
         source/cv_helper.cpp
         )
@@ -56,7 +56,7 @@ add_library( # Sets the name of the library.
 find_library( # Sets the name of the path variable.
         log-lib              # Specifies the name of the NDK library that
         # you want CMake to locate.
-        log )
+        log)
 
 target_link_libraries( # Specifies the target library.
         native-lib
@@ -66,4 +66,4 @@ target_link_libraries( # Specifies the target library.
         #加入该依赖库
         jnigraphics
         # included in the NDK.
-        ${log-lib} )
+        ${log-lib})
