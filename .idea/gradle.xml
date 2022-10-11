@@ -14,6 +14,8 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/bitmap-compress" />
             <option value="$PROJECT_DIR$/jpeg-pratice" />
+            <option value="$PROJECT_DIR$/pratice_audio" />
+            <option value="$PROJECT_DIR$/pratice_ffmpeg" />
             <option value="$PROJECT_DIR$/pratice_opencv" />
           </set>
         </option>
