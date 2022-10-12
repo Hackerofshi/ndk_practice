@@ -33,55 +33,76 @@ set(ffmpeg_head_dir ${CMAKE_SOURCE_DIR}/ffmpeg)
 include_directories(${ffmpeg_head_dir}/include)
 
 # 3. 添加ffmpeg相关的so库
-add_library( avutil
-        SHARED
-        IMPORTED )
-set_target_properties( avutil
-        PROPERTIES IMPORTED_LOCATION
-        ${ffmpeg_lib_dir}/libavutil.so )
-
-add_library( swresample
-        SHARED
-        IMPORTED )
-set_target_properties( swresample
-        PROPERTIES IMPORTED_LOCATION
-        ${ffmpeg_lib_dir}/libswresample.so )
-
-add_library( avcodec
-        SHARED
-        IMPORTED )
-set_target_properties( avcodec
-        PROPERTIES IMPORTED_LOCATION
-        ${ffmpeg_lib_dir}/libavcodec.so )
-
-add_library( avfilter
+add_library(avutil
         SHARED
         IMPORTED)
-set_target_properties( avfilter
+set_target_properties(avutil
         PROPERTIES IMPORTED_LOCATION
-        ${ffmpeg_lib_dir}/libavfilter.so )
+        ${ffmpeg_lib_dir}/libavutil.so)
 
-add_library( swscale
+add_library(swresample
         SHARED
         IMPORTED)
-set_target_properties( swscale
+set_target_properties(swresample
         PROPERTIES IMPORTED_LOCATION
-        ${ffmpeg_lib_dir}/libswscale.so )
+        ${ffmpeg_lib_dir}/libswresample.so)
 
-add_library( avformat
+add_library(avcodec
         SHARED
         IMPORTED)
-set_target_properties( avformat
+set_target_properties(avcodec
         PROPERTIES IMPORTED_LOCATION
-        ${ffmpeg_lib_dir}/libavformat.so )
+        ${ffmpeg_lib_dir}/libavcodec.so)
 
-add_library( avdevice
+add_library(avfilter
         SHARED
         IMPORTED)
-set_target_properties( avdevice
+set_target_properties(avfilter
         PROPERTIES IMPORTED_LOCATION
-        ${ffmpeg_lib_dir}/libavdevice.so )
+        ${ffmpeg_lib_dir}/libavfilter.so)
 
+add_library(swscale
+        SHARED
+        IMPORTED)
+set_target_properties(swscale
+        PROPERTIES IMPORTED_LOCATION
+        ${ffmpeg_lib_dir}/libswscale.so)
+
+add_library(avformat
+        SHARED
+        IMPORTED)
+set_target_properties(avformat
+        PROPERTIES IMPORTED_LOCATION
+        ${ffmpeg_lib_dir}/libavformat.so)
+
+add_library(avdevice
+        SHARED
+        IMPORTED)
+
+
+set_target_properties(avdevice
+        PROPERTIES IMPORTED_LOCATION
+        ${ffmpeg_lib_dir}/libavdevice.so)
+
+
+add_library(h264
+        SHARED
+        IMPORTED)
+
+
+set_target_properties(h264
+        PROPERTIES IMPORTED_LOCATION
+        ${ffmpeg_lib_dir}/libh264.so)
+
+
+add_library(postproc
+        SHARED
+        IMPORTED)
+
+
+set_target_properties(postproc
+        PROPERTIES IMPORTED_LOCATION
+        ${ffmpeg_lib_dir}/libpostproc.so)
 
 
 #生成可执行文件
@@ -102,7 +123,11 @@ add_library( # Sets the name of the library.
         #-------------------------------------------------------------------
         #  ${SRC_LIST}  这种方式可以导入所有源文件，但是不能有 .h 文件在里面  |
         #-------------------------------------------------------------------
-        native-lib.cpp
+        ff-native-lib.cpp
+        source/base_decoder.cpp
+        source/v_decoder.cpp
+        render/video/native_render.cpp
+        media/player.cpp
         )
 
 find_library( # Sets the name of the path variable.
@@ -121,11 +146,13 @@ target_link_libraries( # Specifies the target library.
         swscale
         avformat
         avdevice
+        h264
+        postproc
 
         #音频播放
-        OpenSLES
+        #OpenSLES
         android
         #加入该依赖库
-        jnigraphics
+        #jnigraphics
         # included in the NDK.
         ${log-lib})
