@@ -78,10 +78,10 @@ bool OpenSLAudioPlay::init() {
     SLDataSink audioSink = {&locOutputMix, nullptr};
 
     /*
- * create audio player:
- *     fast audio does not support when SL_IID_EFFECTSEND is required, skip it
- *     for fast audio case
- */
+     * create audio player:
+     *     fast audio does not support when SL_IID_EFFECTSEND is required, skip it
+     *     for fast audio case
+     */
     //需要的接口操作队列的接口
     //创建录制的对象，并且指定开放SL_IID_ANDROIDSIMPLEBUFFERQUEUE这个接口
     const SLInterfaceID ids[3] = {SL_IID_BUFFERQUEUE, SL_IID_VOLUME, SL_IID_EFFECTSEND};

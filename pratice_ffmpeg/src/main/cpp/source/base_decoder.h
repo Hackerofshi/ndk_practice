@@ -95,9 +95,9 @@ public:
 
 
     /**
- * 视频宽度
- * @return
- */
+     * 视频宽度
+     * @return
+     */
     int width() {
         return m_codec_ctx->width;
     }
