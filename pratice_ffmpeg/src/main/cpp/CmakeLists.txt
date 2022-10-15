@@ -126,8 +126,11 @@ add_library( # Sets the name of the library.
         ff-native-lib.cpp
         source/base_decoder.cpp
         source/v_decoder.cpp
+        source/audio_decoder.cpp
         render/video/native_render.cpp
         media/player.cpp
+        render/audio/opensl_render.cpp
+
         )
 
 find_library( # Sets the name of the path variable.
@@ -151,6 +154,10 @@ target_link_libraries( # Specifies the target library.
 
         #音频播放
         #OpenSLES
+        OpenSLES
+        -lEGL
+        -lGLESv2
+
         android
         #加入该依赖库
         #jnigraphics

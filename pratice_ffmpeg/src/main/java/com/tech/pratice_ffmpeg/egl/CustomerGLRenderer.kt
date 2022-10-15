@@ -186,7 +186,7 @@ class CustomerGLRenderer : SurfaceHolder.Callback {
             if (!mHaveBindEGLContext) {
                 mHaveBindEGLContext = true
                 createEGLSurface()
-                if (mHaveBindEGLContext) {
+                if (mNeverCreateEglContext) {
                     mNeverCreateEglContext = false
                     GLES20.glClearColor(0f, 0f, 0f, 0f)
                     //开始混合，季半透明

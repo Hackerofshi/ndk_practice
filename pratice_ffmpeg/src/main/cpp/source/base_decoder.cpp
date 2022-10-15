@@ -13,10 +13,10 @@ BaseDecoder::BaseDecoder(JNIEnv *env, jstring path, bool for_synthesizer)
 
 
 BaseDecoder::~BaseDecoder() {
-    if (m_format_ctx != nullptr) delete m_format_ctx;
-    if (m_codec_ctx != NULL) delete m_codec_ctx;
-    if (m_frame != NULL) delete m_frame;
-    if (m_packet != NULL) delete m_packet;
+    delete m_format_ctx;
+    delete m_codec_ctx;
+    delete m_frame;
+    delete m_packet;
 }
 
 
@@ -43,49 +43,52 @@ void BaseDecoder::CreateDecodeThread() {
     //
     //std::thread t(静态方法, 静态方法参数);
     //t.detach();
-
     std::thread t(Decode, that);
     t.detach();
 }
 
-void BaseDecoder::Decode(std::shared_ptr<BaseDecoder> that) {
+void BaseDecoder::Decode(const std::shared_ptr<BaseDecoder> &that) {
     JNIEnv *env;
-    if (that->m_jvm_for_thread->AttachCurrentThread(&env, NULL) != JNI_OK) {
-        LOGE("Fail to Init decode thread");
+    if (that->m_jvm_for_thread->AttachCurrentThread(&env, nullptr) != JNI_OK) {
+        LOGE("Fail to Init decode thread")
         return;
     }
-
+    LOGI("------------------create")
     //初始化解码器
-    that->InitFFMpegDecoder(env);
-    //分配解码桢数据内存
-    that->AllocFrameBuffer();
-    //回调子类方法，通知子类解码器初始化完毕
-    that->Prepare(env);
-    //进入解码循环
-    that->loopDecode();
-    //退出解码
-    that->DoneDecode(env);
+    bool init = that->InitFFMpegDecoder(env);
+    if (init) {
+        LOGI("------------------进入解码")
+        //分配解码桢数据内存
+        that->AllocFrameBuffer();
+        //回调子类方法，通知子类解码器初始化完毕
+        that->Prepare(env);
+        //进入解码循环
+        that->loopDecode();
+        //退出解码
+        that->DoneDecode(env);
 
-    //解码线程和jvm关联
-    that->m_jvm_for_thread->DetachCurrentThread();
+        //解码线程和jvm关联
+        that->m_jvm_for_thread->DetachCurrentThread();
+    }
+
 }
 
-void BaseDecoder::InitFFMpegDecoder(JNIEnv *env) {
+bool BaseDecoder::InitFFMpegDecoder(JNIEnv *env) {
     //初始化上下文
     m_format_ctx = avformat_alloc_context();
 
     //打开文件
     if (avformat_open_input(&m_format_ctx, m_path, nullptr, nullptr) != 0) {
-        LOGE("Fail to open file [%s]", m_path);
+        LOGE("Fail to open file [%s]", m_path)
         DoneDecode(env);
-        return;
+        return false;
     }
 
     //获取音视频流信息
     if (avformat_find_stream_info(m_format_ctx, nullptr) < 0) {
         LOGE("fail to find stream info");
         DoneDecode(env);
-        return;
+        return false;
     }
 
     //4查找编解码器
@@ -98,10 +101,12 @@ void BaseDecoder::InitFFMpegDecoder(JNIEnv *env) {
         }
     }
 
+    LOGI("------------------%d", vIdx)
+
     if (vIdx == -1) {
-        LOGE("fail to find stream index");
+        LOGE("fail to find stream index")
         DoneDecode(env);
-        return;
+        return false;
     }
 
     m_stream_index = vIdx;
@@ -116,21 +121,22 @@ void BaseDecoder::InitFFMpegDecoder(JNIEnv *env) {
     m_codec_ctx = avcodec_alloc_context3(m_codec);
 
     if (avcodec_parameters_to_context(m_codec_ctx, codecPar) != 0) {
-        LOGE("fail to obtain av codec context");
+        LOGE("fail to obtain av codec context")
         DoneDecode(env);
-        return;
+        return false;
     }
 
     //打开解码器
     if (avcodec_open2(m_codec_ctx, m_codec, nullptr) < 0) {
-        LOGE("fail to open av codec");
+        LOGE("fail to open av codec")
         DoneDecode(env);
-        return;
+        return false;
     }
 
     m_duration = (long) ((float) m_format_ctx->duration / AV_TIME_BASE * 1000);
 
-    LOGI(TAG, "Decoder init success");
+    LOGI(TAG, "Decoder init success")
+    return true;
 }
 
 
@@ -146,8 +152,8 @@ void BaseDecoder::loopDecode() {
     if (STOP == m_state) {
         m_state = START;
     }
-    LOGI(TAG, "Start loop decode");
-    while (1) {
+    LOGI(TAG, "Start loop decode")
+    while (true) {
         if (m_state != DECODING && m_state != START && m_state != STOP) {
             Wait();
             //恢复同步起始时间，去除等待流失时间
@@ -159,14 +165,14 @@ void BaseDecoder::loopDecode() {
         if (-1 == m_started_t) {
             m_started_t = GetCurMsTime();
         }
-        if (DecodeOneFrame() != NULL) {
+        if (DecodeOneFrame() != nullptr) {
             SyncRender();
             Render(m_frame);
             if (m_state == START) {
                 m_state = PAUSE;
             }
         } else {
-            LOGI("m_state = %d", m_state);
+            LOGI("m_state = %d", m_state)
             if (ForSynthesizer()) {
                 m_state = STOP;
             } else {
@@ -184,17 +190,17 @@ AVFrame *BaseDecoder::DecodeOneFrame() {
             switch (avcodec_send_packet(m_codec_ctx, m_packet)) {
                 case AVERROR_EOF: {
                     av_packet_unref(m_packet);
-                    LOGE("Decode error: %s", av_err2str(AVERROR_EOF));
-                    return NULL;//解码结束
+                    LOGE("Decode error: %s", av_err2str(AVERROR_EOF))
+                    return nullptr;//解码结束
                 }
                 case AVERROR(EAGAIN):
-                    LOGE("Decode error: %s", av_err2str(EAGAIN));
+                    LOGE("Decode error: %s", av_err2str(EAGAIN))
                     break;
                 case AVERROR(EINVAL):
-                    LOGE("Decode error: %s", av_err2str(EINVAL));
+                    LOGE("Decode error: %s", av_err2str(EINVAL))
                     break;
                 case AVERROR(ENOMEM):
-                    LOGE("Decode error: %s", av_err2str(ENOMEM));
+                    LOGE("Decode error: %s", av_err2str(ENOMEM))
                     break;
                 default:
                     break;
@@ -205,7 +211,7 @@ AVFrame *BaseDecoder::DecodeOneFrame() {
                 av_packet_unref(m_packet);
                 return m_frame;
             } else {
-                LOGI("Receive frame error result: %s", av_err2str(AVERROR(result)));
+                LOGI("Receive frame error result: %s", av_err2str(AVERROR(result)))
             }
         }
         //释放packet
@@ -214,7 +220,7 @@ AVFrame *BaseDecoder::DecodeOneFrame() {
     }
 
     av_packet_unref(m_packet);
-    LOGI("ret = %d", ret);
+    LOGI("ret = %d", ret)
     return nullptr;
 }
 
@@ -244,7 +250,7 @@ void BaseDecoder::SyncRender() {
 }
 
 void BaseDecoder::DoneDecode(JNIEnv *env) {
-    LOGI("Decode done and decoder release");
+    LOGI("Decode done and decoder release")
     //释放缓存
     if (m_packet != nullptr) {
         av_packet_free(&m_packet);

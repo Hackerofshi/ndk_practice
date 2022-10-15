@@ -375,3 +375,78 @@ Java_com_shixin_ndk_1practice_opengl_NativeSimpleRenderer_test(JNIEnv *env, jobj
 
     return (*env).NewStringUTF("Hello from JNI !  Compiled with ABI " ABI ".");
 }
+
+
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_shixin_ndk_1practice_util_NDKUtils_read(JNIEnv *env, jobject thiz, jstring path) {
+    const char *path_ = env->GetStringUTFChars(path, 0);
+
+    //打开
+    FILE *fp = fopen(path_, "r");
+    if (fp == nullptr) {
+        printf("文件打开失败...");
+        return;
+    }
+
+    //读取
+    char buff[50];//缓冲
+    while (fgets(buff, 50, fp)) {
+        LOGI("%s", buff);
+    }
+
+    //关闭
+    fclose(fp);
+    env->ReleaseStringUTFChars(path, path_);
+}
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_shixin_ndk_1practice_util_NDKUtils_write(JNIEnv *env, jobject thiz, jstring path) {
+
+    const char *path_ = env->GetStringUTFChars(path, 0);
+
+
+    //打开
+    FILE *fp = fopen(path_, "w");
+    char *text = "今天天气不错\n出去玩吧!";
+    fputs(text, fp);
+
+    //关闭
+    fclose(fp);
+
+    //size_t fread ( void * ptr, size_t size, size_t count, FILE * stream );
+    //ptr：指向保存结果的指针；
+    //size：每个数据类型的大小；
+    //count：数据的个数；
+    //stream：文件指针
+
+    //size_t fwrite ( const void * ptr, size_t size, size_t count, FILE * stream );
+
+    //，ptr：指向保存数据的指针；
+    // size：每个数据类型的大小；
+    // count：数据的个数；
+    // stream：文件指针
+    //函数返回写入数据的个数。
+
+
+    /*char *read_path = "D:\BaiduNetdiskDownload\ndk\2016_08_08_C_联合体_枚举_IO\files\girl.png";
+    char *write_path = "D:\BaiduNetdiskDownload\ndk\2016_08_08_C_联合体_枚举_IO\files\girl_new.png";
+    //b字符表示操作二进制文件binary
+    FILE *read_fp  = fopen(read_path, "rb");
+    //写的文件
+    FILE *write_fp = fopen(write_path,"wb");
+
+    //复制
+    int buff[50]; //缓冲区域
+    int len = 0;//每次读到的数据长度
+    while ((len = fread(buff,sizeof(int), 50,read_fp))!=0) {//50 是写的比较大的一个数
+        //将读到的内容写入新的文件
+        fwrite(buff, sizeof(int), len, write_fp);
+    }
+
+    fclose(read_fp);
+    fclose(write_fp);*/
+
+    env->ReleaseStringUTFChars(path, path_);
+}

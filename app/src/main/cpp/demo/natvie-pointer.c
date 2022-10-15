@@ -197,6 +197,14 @@ void testPoint() {
 
     //c和java方法不同所在，c可以在传对象的地址在方法里面去赋值，java是返回一个对象，返回值
 
+    int b = 10;
+
+    int *d = &b;
+    int **c = &d;
+
+    //多级指针
+    LOGI("%d", **c);
+
 }
 
 

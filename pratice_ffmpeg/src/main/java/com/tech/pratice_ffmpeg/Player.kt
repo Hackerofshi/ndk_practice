@@ -11,6 +11,8 @@ object Player {
 
     public external fun pause(player: Int)
 
+    public external fun stop(player: Int)
+
 
     init {
         System.loadLibrary("native-lib")

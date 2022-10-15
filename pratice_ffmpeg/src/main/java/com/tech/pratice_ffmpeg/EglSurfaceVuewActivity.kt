@@ -8,11 +8,14 @@ import android.view.SurfaceView
 import androidx.appcompat.app.AppCompatActivity
 import com.tech.pratice_ffmpeg.drawer.VideoDrawer
 import com.tech.pratice_ffmpeg.egl.CustomerGLRenderer
+import com.tech.pratice_ffmpeg.media.BaseDecoder
+import com.tech.pratice_ffmpeg.media.DefDecoderStateListener
+import com.tech.pratice_ffmpeg.media.Frame
 import com.tech.pratice_ffmpeg.media.decoder.VideoDecoder
 import java.util.concurrent.Executors
 
 class EglSurfaceVuewActivity : AppCompatActivity() {
-    private val path = Environment.getExternalStorageDirectory().absolutePath + "/mvtest_2.mp4"
+    private val path = Environment.getExternalStorageDirectory().absolutePath + "/test1.mp4"
     private val path2 = Environment.getExternalStorageDirectory().absolutePath + "/mvtest.mp4"
 
     private val threadPool = Executors.newFixedThreadPool(10)
@@ -26,6 +29,8 @@ class EglSurfaceVuewActivity : AppCompatActivity() {
         setContentView(R.layout.activity_egl_surface_vuew)
 
         sfv = findViewById<SurfaceView>(R.id.sfv)
+        initFirstVideo()
+        setRenderSurface()
     }
 
     private fun initFirstVideo() {
@@ -55,6 +60,12 @@ class EglSurfaceVuewActivity : AppCompatActivity() {
         val videoDecoder = VideoDecoder(path, null, sf)
         threadPool.execute(videoDecoder)
         videoDecoder.goOn()
+
+        videoDecoder.setStateListener(object : DefDecoderStateListener {
+            override fun decodeOneFrame(decodeJob: BaseDecoder?, frame: Frame) {
+                mRenderer.notifySwap(frame.bufferInfo.presentationTimeUs)
+            }
+        })
 
 //        if (withSound) {
 //            val audioDecoder = AudioDecoder(path)

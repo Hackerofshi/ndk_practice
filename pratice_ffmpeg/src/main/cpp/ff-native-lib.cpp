@@ -14,7 +14,7 @@ extern "C" {
 #include <libavfilter/avfilter.h>
 #include <libavcodec/jni.h>
 
-JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved) {
+JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved) {
     av_jni_set_java_vm(vm, reserved);
     return JNI_VERSION_1_4;
 }
@@ -55,18 +55,20 @@ Java_com_tech_pratice_1ffmpeg_Player_createPlayer(JNIEnv *env, jobject thiz, jst
 }
 JNIEXPORT void JNICALL
 Java_com_tech_pratice_1ffmpeg_Player_play(JNIEnv *env, jobject thiz, jint player) {
-    Player *p = (Player *) player;
+    auto *p = (Player *) player;
     p->play();
 }
 
-extern "C"
+
 JNIEXPORT void JNICALL
 Java_com_tech_pratice_1ffmpeg_Player_pause(JNIEnv *env, jobject thiz, jint player) {
 }
-
+JNIEXPORT void JNICALL
+Java_com_tech_pratice_1ffmpeg_Player_stop(JNIEnv *env, jobject thiz, jint player) {
+    auto *p = (Player *) player;
+    p->Release();
 }
 
 
-
-
+}
 

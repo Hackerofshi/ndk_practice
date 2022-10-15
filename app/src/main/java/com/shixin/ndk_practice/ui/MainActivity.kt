@@ -101,6 +101,10 @@ class MainActivity : AppCompatActivity() {
                 bitmapWip,
             )
         }
+
+        binding.btn5.setOnClickListener {
+            startActivity(Intent(this, NativeFileActivity::class.java))
+        }
     }
 
     @NeedsPermission(

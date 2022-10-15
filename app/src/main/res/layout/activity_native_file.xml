@@ -2,21 +2,18 @@
 <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:orientation="vertical"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:orientation="vertical"
+    tools:context=".ui.NativeFileActivity">
 
-    <TextView
-        android:id="@+id/tv"
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:text="Hello World!" />
-
-    <Button
-        android:id="@+id/btn"
+        android:text="READ" />
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="EGL播放" />
-
+        android:text="Write" />
 </androidx.appcompat.widget.LinearLayoutCompat>

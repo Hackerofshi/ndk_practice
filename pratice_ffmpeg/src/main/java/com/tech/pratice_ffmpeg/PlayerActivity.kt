@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.tech.pratice_ffmpeg.Player.play
 
 class PlayerActivity : AppCompatActivity() {
-    val path = Environment.getExternalStorageDirectory().absolutePath + "/test.mp4"
+    val path = Environment.getExternalStorageDirectory().absolutePath + "/test1.mp4"
 
 
     private var player: Int? = null
@@ -16,7 +16,7 @@ class PlayerActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_player)
-        sfv = findViewById<SurfaceView>(R.id.sfv);
+        sfv = findViewById(R.id.sfv)
         initSfv()
     }
 

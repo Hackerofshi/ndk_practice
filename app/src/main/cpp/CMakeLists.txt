@@ -55,6 +55,7 @@ add_library( # Sets the name of the library.
         demo/testcpp/TestClass_algorithm.cpp
         demo/testc/JNIEnv_test.c
         demo/native-arr-copy.cpp
+        demo/m_thread.c
         libjpg/jpeg-compress.cpp
         )
 

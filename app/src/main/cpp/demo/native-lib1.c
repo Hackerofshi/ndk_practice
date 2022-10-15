@@ -118,6 +118,11 @@ Java_com_shixin_ndk_1practice_practicec_Test1_testConst(JNIEnv *env, jobject thi
 
     jstring str = (*env)->NewStringUTF(env, "123456");
     LOGI("%s", str);
+
+    // 第一个 const ：常量指针，代表值不能修改
+    // 第二个 const ：指针常量，代表指针的地址不能修改
+    const int *const *a = (const int *const *) 10;
+    LOGI("%d", *a);
 }
 
 

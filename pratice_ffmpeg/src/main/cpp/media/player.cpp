@@ -8,6 +8,14 @@ Player::Player(JNIEnv *jniEnv, jstring path, jobject surface) {
     m_v_decoder = new VideoDecoder(jniEnv, path);
     m_v_render = new NativeRender(jniEnv, surface);
     m_v_decoder->setRender(m_v_render);
+
+
+    //音频解码
+    audioDecoder = new AudioDecoder(jniEnv, path, false);
+    audioRender = new OpenSLRender();
+    audioDecoder->SetRender(audioRender);
+
+
 }
 
 Player::~Player() {
@@ -16,13 +24,21 @@ Player::~Player() {
 }
 
 void Player::play() {
-    if (m_v_decoder != NULL) {
+    if (m_v_decoder != nullptr) {
         m_v_decoder->GoOn();
+        audioDecoder->GoOn();
     }
 }
 
 void Player::pause() {
-    if (m_v_decoder != NULL) {
+    if (m_v_decoder != nullptr) {
         m_v_decoder->Pause();
+        audioDecoder->Pause();
     }
+}
+
+
+void Player::Release() {
+    m_v_decoder->Stop();
+    audioDecoder->Stop();
 }

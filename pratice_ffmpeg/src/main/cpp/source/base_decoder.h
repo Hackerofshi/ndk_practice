@@ -61,7 +61,7 @@ private:
      * 初始化FFMpeg相关参数
      * @param env
      */
-    void InitFFMpegDecoder(JNIEnv *env);
+    bool InitFFMpegDecoder(JNIEnv *env);
 
     /**
      * 分配解码过程中需要的缓存
@@ -153,7 +153,7 @@ public:
    * 静态解码方法，用于解码线程回调
    * @param that 当前解码器
    */
-    static void Decode(std::shared_ptr<BaseDecoder> that);
+    static void Decode(const std::shared_ptr<BaseDecoder>& that);
 
 protected:
 

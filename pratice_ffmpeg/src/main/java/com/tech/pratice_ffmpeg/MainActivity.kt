@@ -19,6 +19,10 @@ class MainActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.tv).setOnClickListener {
             startActivity(Intent(this, PlayerActivity::class.java))
         }
+
+        findViewById<TextView>(R.id.btn).setOnClickListener {
+            startActivity(Intent(this, EglSurfaceVuewActivity::class.java))
+        }
     }
 
     @NeedsPermission(
@@ -27,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         Manifest.permission.RECORD_AUDIO,
         Manifest.permission.MODIFY_AUDIO_SETTINGS,
         Manifest.permission.CAMERA,
-        )
+    )
     fun needStorage() {
     }
 }
