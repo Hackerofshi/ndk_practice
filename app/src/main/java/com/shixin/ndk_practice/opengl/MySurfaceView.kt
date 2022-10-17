@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory
 import android.opengl.GLSurfaceView
 import android.util.AttributeSet
 import android.util.Log
+import com.shixin.ndk_practice.R
 import java.io.IOException
 import java.nio.ByteBuffer
 import javax.microedition.khronos.egl.EGLConfig
@@ -23,7 +24,7 @@ class MySurfaceView @JvmOverloads constructor(context: Context?, attrs: Attribut
         setEGLContextClientVersion(3)
         nativeRender = MyNativeRender()
         mGLRender = MyGLRender(nativeRender)
-        //loadRGBAImage(R.drawable.dzzz)
+        loadRGBAImage(R.drawable.dzzz)
         setRenderer(mGLRender)
         renderMode = RENDERMODE_CONTINUOUSLY
     }

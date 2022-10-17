@@ -10,14 +10,16 @@
 #include "../sample/Square.h"
 #include "../sample/Cube.h"
 #include "../sample/Cone.h"
+#include "../sample/VAOSample.h"
 
 
 MyGLRenderContext *MyGLRenderContext::m_pContext = nullptr;
 
 MyGLRenderContext::MyGLRenderContext() {
-    // m_Sample = new TextureMapSample();
-    m_Sample = new Cone();
-    // Cone cone;
+    m_Sample = new TextureMapSample();
+   // m_Sample = new Cone();
+   // m_Sample = new VAOSample();
+    //m_Sample = new TriangleSample();
 };
 
 

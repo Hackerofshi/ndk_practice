@@ -24,13 +24,17 @@ void TextureMapSample::Init() {
     glBindTexture(GL_TEXTURE_2D, m_TextureId);
 
     //设置纹理 S 轴（横轴）的拉伸方式为截取
+    //设置环绕方向S，截取纹理坐标到[1/2n,1-1/2n]。将导致永远不会与border融合
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 
     //设置纹理 T 轴（纵轴）的拉伸方式为截取
+    //设置环绕方向T，截取纹理坐标到[1/2n,1-1/2n]。将导致永远不会与border融合
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
     //设置纹理采样方式
+    //设置缩小过滤为使用纹理中坐标最接近的一个像素的颜色作为需要绘制的像素颜色
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    //设置放大过滤为使用纹理中坐标最接近的若干个颜色，通过加权平均算法得到需要绘制的像素颜色
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     //解除绑定  解除与纹理的绑定，避免用其他的纹理方法意外地改变这个纹理
@@ -149,9 +153,8 @@ void TextureMapSample::Draw(int screenW, int screenH) {
 
     if (m_ProgramObj == GL_NONE || m_TextureId == GL_NONE) return;
 
-
-    glClear(GL_STENCIL_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glClearColor(1.0, 1.0, 1.0, 1.0);
+    glClear(GL_STENCIL_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     GLfloat verticesCoords[] = {
             -1.0f, 0.5f, 0.0f,  // Position 0
@@ -169,10 +172,13 @@ void TextureMapSample::Draw(int screenW, int screenH) {
 
     GLushort indices[] = {0, 1, 2, 0, 2, 3};
 
-    //upload RGBA image data
-    glActiveTexture(GL_TEXTURE0);
+
+    /*upload RGBA image data
+     * glActiveTexture(GL_TEXTURE0);
     //创建成功之后，使用 glBindTexture 函数将纹理 ID 和纹理目标绑定。
-    glBindTexture(GL_TEXTURE_2D, m_TextureId);
+    glBindTexture(GL_TEXTURE_2D, m_TextureId);*/
+
+
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_RenderImage.width, m_RenderImage.height, 0, GL_RGBA,
                  GL_UNSIGNED_BYTE, m_RenderImage.ppPlane[0]);
     glBindTexture(GL_TEXTURE_2D, GL_NONE);

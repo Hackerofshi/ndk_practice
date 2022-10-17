@@ -15,6 +15,9 @@
 #include "../util/ByteFlowLock.h"
 #include "../glm/detail/type_mat.hpp"
 #include "../glm/detail/type_mat4x4.hpp"
+#include "../util/LogUtil.h"
+#include "../util/GLUtils.h"
+
 
 //For PI define
 #define MATH_PI 3.1415926535897932384626433832802

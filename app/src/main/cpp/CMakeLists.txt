@@ -38,6 +38,7 @@ add_library( # Sets the name of the library.
         sample/TextureMapSample.cpp
         sample/Cube.cpp
         sample/Cone.cpp
+        sample/VAOSample.cpp
         demo/native-lib1.c
         demo/native-parcel.cpp
         demo/native-arr-err.c
@@ -73,6 +74,10 @@ find_library( # Sets the name of the path variable.
         # you want CMake to locate.
         log)
 
+find_library(
+        jnigraphics-lib
+
+        jnigraphics)
 # Specifies libraries CMake should link to your target library. You
 # can link multiple libraries, such as libraries you define in this
 # build script, prebuilt third-party libraries, or system libraries.
@@ -80,15 +85,17 @@ find_library( # Sets the name of the path variable.
 target_link_libraries( # Specifies the target library.
         ndk_practice
 
-        jnigraphics #JNI层,添加bitmap支持
 
         # Links the target library to the log library
         # included in the NDK.
         ${log-lib}
         ${OPENGL_LIB}
+        ${jnigraphics-lib}
         android
         EGL
         GLESv3
         log
         m
         )
+
+message("jnigraphics= ${jnigraphics-lib}")

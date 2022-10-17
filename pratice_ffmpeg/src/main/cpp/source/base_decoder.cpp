@@ -133,6 +133,13 @@ bool BaseDecoder::InitFFMpegDecoder(JNIEnv *env) {
         return false;
     }
 
+    //输出视频信息
+    LOGI("视频的文件格式：%s", m_format_ctx->iformat->name);
+    LOGI("视频时长：" PRId64 "\n", (m_format_ctx->duration) / 1000000);
+    LOGI("视频的宽高：%d,%d", m_codec_ctx->width, m_codec_ctx->height);
+    LOGI("解码器的名称：%s", m_codec->name);
+
+
     m_duration = (long) ((float) m_format_ctx->duration / AV_TIME_BASE * 1000);
 
     LOGI(TAG, "Decoder init success")
@@ -143,6 +150,12 @@ bool BaseDecoder::InitFFMpegDecoder(JNIEnv *env) {
 void BaseDecoder::AllocFrameBuffer() {
     //初始化待解码和解码数据结构
     // 初始化AVPacket ，存放解码前数据
+    //准备读取
+    //AVPacket用于存储一帧一帧的压缩数据（H264）
+    //缓冲区，开辟空间
+
+    // m_packet = (AVPacket*)av_malloc(sizeof(AVPacket));
+
     m_packet = av_packet_alloc();
     //初始化av_frame 存放解码后数据
     m_frame = av_frame_alloc();
@@ -216,6 +229,8 @@ AVFrame *BaseDecoder::DecodeOneFrame() {
         }
         //释放packet
         av_packet_unref(m_packet);
+
+        //从数据包里面循环读取
         ret = av_read_frame(m_format_ctx, m_packet);
     }
 

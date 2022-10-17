@@ -86,13 +86,15 @@ Java_com_shixin_ndk_1practice_practicec_Compressor_convertBmp(JNIEnv *env, jobje
     }
     LOGCATE("get bitmap info success");
 
-    void *srcBuf, *dstBuf;
-    if (ANDROID_BITMAP_RESULT_SUCCESS != AndroidBitmap_lockPixels(env, jsrcBitmap, &srcBuf)) {
+    uint8_t *srcBuf, *dstBuf;
+    if (ANDROID_BITMAP_RESULT_SUCCESS !=
+        AndroidBitmap_lockPixels(env, jsrcBitmap, (void **) &srcBuf)) {
         LOGCATE("lock src bitmap failed");
         return;
     }
     LOGCATE("lock bitmap info success");
-    if (ANDROID_BITMAP_RESULT_SUCCESS != AndroidBitmap_lockPixels(env, desBitmap, &dstBuf)) {
+    if (ANDROID_BITMAP_RESULT_SUCCESS !=
+        AndroidBitmap_lockPixels(env, desBitmap, (void **) &dstBuf)) {
         LOGCATE("lock dst bitmap failed");
         return;
     }

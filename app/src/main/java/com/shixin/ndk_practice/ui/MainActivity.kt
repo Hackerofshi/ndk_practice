@@ -88,19 +88,11 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, SurfaceViewActivity::class.java))
         }
 
+
         binding.btn4.setOnClickListener {
-            Log.i("TAG", "onCreate: " + Environment.getExternalStorageDirectory())
-            val bitmap = BitmapFactory.decodeResource(resources, R.drawable.normal)
-            val Compressor = Compressor()
-            val bitmapWip = Bitmap.createBitmap(
-                bitmap.getWidth(),
-                bitmap.getHeight(), Bitmap.Config.ARGB_8888
-            );
-            Compressor.convertBmp(
-                bitmap,
-                bitmapWip,
-            )
+            startActivity(Intent(this, BitmapActivity::class.java))
         }
+
 
         binding.btn5.setOnClickListener {
             startActivity(Intent(this, NativeFileActivity::class.java))
