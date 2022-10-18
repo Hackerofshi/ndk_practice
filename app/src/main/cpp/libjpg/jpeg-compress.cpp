@@ -81,8 +81,8 @@ Java_com_shixin_ndk_1practice_practicec_Compressor_convertBmp(JNIEnv *env, jobje
     AndroidBitmapInfo srcInfo, dstInfo;
     if (ANDROID_BITMAP_RESULT_SUCCESS != AndroidBitmap_getInfo(env, jsrcBitmap, &srcInfo)
         || ANDROID_BITMAP_RESULT_SUCCESS != AndroidBitmap_getInfo(env, desBitmap, &dstInfo)) {
-        LOGCATE("get bitmap info failed");
-        return;
+            LOGCATE("get bitmap info failed");
+            return;
     }
     LOGCATE("get bitmap info success");
 
