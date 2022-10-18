@@ -145,12 +145,15 @@ void TextureMapSample2::Draw(int screenW, int screenH) {
     projection = glm::perspective(glm::radians(45.0f), (float) screenW / (float) screenH,
                                   0.1f,
                                   100.0f);
-    model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
     View = glm::translate(View, glm::vec3(0.0f, 0.0f, -3.0f));
-//    model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-//    view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
-//    projection = glm::perspective(glm::radians(45.0f), (float) screenW / (float) screenH, 0.1f,
-//                                  100.0f);
+
+    /**
+     * 	tmat4x4<T, P> const & m,
+	 * 	T angle,  角度
+	 * 	tvec3<T, P> const & v //旋转轴 x y z
+     */
+    model = glm::rotate(model, glm::radians(-30.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+
 
     glm::mat4 mvpMatrix = projection * View * model;
 
