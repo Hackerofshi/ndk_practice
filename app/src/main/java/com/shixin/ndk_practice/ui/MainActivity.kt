@@ -2,15 +2,14 @@ package com.shixin.ndk_practice.ui
 
 import android.Manifest
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.os.Environment
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import com.shixin.ndk_practice.R
 import com.shixin.ndk_practice.databinding.ActivityMainBinding
-import com.shixin.ndk_practice.practicec.*
+import com.shixin.ndk_practice.practicec.Parcel
+import com.shixin.ndk_practice.practicec.Test1
+import com.shixin.ndk_practice.practicec.TestArray
+import com.shixin.ndk_practice.practicec.TestPoniter
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.RuntimePermissions
 
@@ -28,6 +27,8 @@ class MainActivity : AppCompatActivity() {
         initLocationWithPermissionCheck()
 
         initevent()
+
+       // val a = 5 / 0
     }
 
     private fun initevent() {

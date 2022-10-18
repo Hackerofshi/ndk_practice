@@ -7,6 +7,7 @@
 #include "../util/ImageDef.h"
 #include "../sample/TriangleSample.h"
 #include "../sample/TextureMapSample.h"
+#include "../sample/TextureMapSample2.h"
 #include "../sample/Square.h"
 #include "../sample/Cube.h"
 #include "../sample/Cone.h"
@@ -16,9 +17,9 @@
 MyGLRenderContext *MyGLRenderContext::m_pContext = nullptr;
 
 MyGLRenderContext::MyGLRenderContext() {
-    m_Sample = new TextureMapSample();
-   // m_Sample = new Cone();
-   // m_Sample = new VAOSample();
+    m_Sample = new TextureMapSample2();
+    // m_Sample = new Cone();
+    // m_Sample = new VAOSample();
     //m_Sample = new TriangleSample();
 };
 

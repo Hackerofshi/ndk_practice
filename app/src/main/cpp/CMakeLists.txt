@@ -36,6 +36,7 @@ add_library( # Sets the name of the library.
         sample/TriangleSample.cpp
         sample/Square.cpp
         sample/TextureMapSample.cpp
+        sample/TextureMapSample2.cpp
         sample/Cube.cpp
         sample/Cone.cpp
         sample/VAOSample.cpp

@@ -110,7 +110,9 @@ void TriangleSample::Destroy() {
 
 void TriangleSample::UpdateTransformMatrix(glm::mat4 &mvpMatrix, int screenW, int screenH) {
 
-    float ratio = (float) screenW / screenH;
+    float ratio = (float) screenW / screenH;  //关系到左右缩放
+    float ratio1 = (float) screenH / screenW; //关系到上下缩放
+
     //Matrix.frustumM (float[] m,         //接收透视投影的变换矩阵
     //                int mOffset,        //变换矩阵的起始位置（偏移量）
     //                float left,         //相对观察点近面的左边距
@@ -131,10 +133,11 @@ void TriangleSample::UpdateTransformMatrix(glm::mat4 &mvpMatrix, int screenW, in
     //                float near,         //相对观察点近面距离
     //                float far)          //相对观察点远面距离
     //————————————————
-    glm::mat4 Projection = glm::ortho(-ratio, ratio, -1.0f, 1.0f, 3.0f, 100.0f);
+    glm::mat4 Projection = glm::ortho(-ratio, ratio, -1.0f, 1.0f, 1.0f, 100.0f);
+    glm::mat4 Projection1 = glm::ortho(-1.0f, 1.0f, -ratio1, ratio1, 10.0f, 100.0f);
     // View matrix
     glm::mat4 View = glm::lookAt(
-            glm::vec3(0, 0, 4), // Camera is at (0,0,1), in World Space
+            glm::vec3(0, 0, 100), // Camera is at (0,0,1), in World Space
             // 相机位置
             glm::vec3(0, 0, 0), // and looks at the origin
             // 观测点位置
@@ -146,5 +149,5 @@ void TriangleSample::UpdateTransformMatrix(glm::mat4 &mvpMatrix, int screenW, in
 
     // Model matrix : an identity matrix (model will be at the origin)
     // glm::mat4 Model = glm::mat4(1.0f);
-    mvpMatrix = Projection * View;
+    mvpMatrix = Projection1 * View;
 }

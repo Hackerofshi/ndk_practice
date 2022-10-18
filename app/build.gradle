@@ -18,6 +18,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         externalNativeBuild {
             cmake {
+
                 cppFlags ""
                 arguments '-DANDROID_TOOLCHAIN=clang', '-DANDROID_ARM_MODE=arm', '-DANDROID_STL=c++_static'
                 cFlags "-ferror-limit=0 -fPIC"
@@ -25,6 +26,8 @@ android {
             }
             ndk {
                 abiFilters "armeabi-v7a"
+                moduleName "androidclog"
+                ldLibs "log"
             }
         }
     }
@@ -33,6 +36,9 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug{
+
         }
     }
     compileOptions {
@@ -49,7 +55,7 @@ android {
 
         }
     }
-    ndkVersion '21.0.6113669'
+//    ndkVersion '21.0.6113669'
     buildFeatures {
         viewBinding true
     }

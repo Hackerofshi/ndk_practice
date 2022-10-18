@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.shixin.ndk_practice.R
 import com.shixin.ndk_practice.databinding.ActivityBitmapBinding
 import com.shixin.ndk_practice.practicec.Compressor
+import com.shixin.ndk_practice.util.NDKUtils
 
 class BitmapActivity : AppCompatActivity() {
     private lateinit var binding: ActivityBitmapBinding
@@ -26,11 +27,13 @@ class BitmapActivity : AppCompatActivity() {
                 bitmap.getWidth(),
                 bitmap.getHeight(), Bitmap.Config.ARGB_8888
             )
+
             Compressor.convertBmp(
                 bitmap,
                 bitmapWip,
             )
 
+           // NDKUtils.testCmd()
         }
 
     }

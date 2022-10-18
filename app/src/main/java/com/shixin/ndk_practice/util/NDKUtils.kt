@@ -11,4 +11,9 @@ object NDKUtils {
     external fun write(path: String)
 
     external fun testThread()
+
+
+    external fun testCmd()
+
+
 }

@@ -9,7 +9,6 @@
 #ifdef ANDROID
 
 
-
 #define LOG_TAG    "HelloTriangle"
 #define LOGE(format, ...)  __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, format, ##__VA_ARGS__)
 #define LOGI(format, ...)  __android_log_print(ANDROID_LOG_INFO,  LOG_TAG, format, ##__VA_ARGS__)
@@ -449,3 +448,11 @@ Java_com_shixin_ndk_1practice_util_NDKUtils_write(JNIEnv *env, jobject thiz, jst
 
     env->ReleaseStringUTFChars(path, path_);
 }
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_shixin_ndk_1practice_util_NDKUtils_testCmd(JNIEnv *env, jobject thiz) {
+    int a = 5;
+    int b = 5 / 0;
+    LOGI("%s", b);
+}
+

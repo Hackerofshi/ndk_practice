@@ -63,6 +63,20 @@ void TextureMapSample::Init() {
             "   v_texCoord = a_texCoord;                \n"
             "}                                          \n";
 
+
+    char vShaderStr1[] =
+            "#version 300 es                            \n"
+            "layout(location = 0) in vec4 a_position;   \n"
+            "layout(location = 1) in vec2 a_texCoord;   \n"
+            "out vec2 v_texCoord;                       \n"
+            "uniform mat4 model;                        \n"
+            "uniform mat4 view;                         \n"
+            "uniform mat4 projection;                   \n"
+            "void main()                                \n"
+            "{                                          \n"
+            "   gl_Position = projection * view * model * vec4(a_position, 1.0)       \n"
+            "   v_texCoord = a_texCoord;                \n"
+            "}                                          \n";
     //#version 300 es
     //    precision mediump float;
     //    in vec2 v_texCoord;
