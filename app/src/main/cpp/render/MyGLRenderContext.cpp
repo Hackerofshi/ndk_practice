@@ -13,15 +13,19 @@
 #include "../sample/Cube.h"
 #include "../sample/Cone.h"
 #include "../sample/VAOSample.h"
+#include "../sample/Ball.h"
+#include "../sample/SkySphere.h"
 
 
 MyGLRenderContext *MyGLRenderContext::m_pContext = nullptr;
 
 MyGLRenderContext::MyGLRenderContext() {
-    m_Sample = new TextureMapSample3();
+    //m_Sample = new TextureMapSample3();
     // m_Sample = new Cone();
     // m_Sample = new VAOSample();
     //m_Sample = new TriangleSample();
+    //m_Sample = new TextureMapSample();
+    m_Sample = new SkySphere();
 };
 
 
@@ -76,6 +80,13 @@ void MyGLRenderContext::OnDrawFrame() {
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
     if (m_Sample) {
         m_Sample->Draw(m_ScreenW, m_ScreenH);
+    }
+}
+
+void MyGLRenderContext::setMatrix(float *matrix) {
+    LOGCATI("------进入");
+    if (m_Sample) {
+        m_Sample->setMatrix(matrix);
     }
 }
 

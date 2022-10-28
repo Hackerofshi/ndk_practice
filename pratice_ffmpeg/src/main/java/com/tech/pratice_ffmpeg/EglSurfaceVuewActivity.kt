@@ -46,6 +46,8 @@ class EglSurfaceVuewActivity : AppCompatActivity() {
         val drawer = VideoDrawer()
         drawer.setAlpha(0.5f)
         drawer.setVideoSize(1920, 1080)
+
+        //提供一个surface
         drawer.getSurfaceTexture {
             initPlayer(path2, Surface(it), false)
         }
@@ -57,6 +59,7 @@ class EglSurfaceVuewActivity : AppCompatActivity() {
     }
 
     private fun initPlayer(path: String, sf: Surface, withSound: Boolean) {
+        //关联Surface 到解码器
         val videoDecoder = VideoDecoder(path, null, sf)
         threadPool.execute(videoDecoder)
         videoDecoder.goOn()

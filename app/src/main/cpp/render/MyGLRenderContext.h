@@ -6,6 +6,7 @@
 #define ANDROID_PRACTICE_MYGLRENDERCONTEXT_H
 
 #include <cstdint>
+#include <jni.h>
 #include "GLES3/gl3.h"
 #include "../sample/GLSampleBase.h"
 
@@ -31,6 +32,8 @@ public:
     void OnSurfaceChanged(int width,int height);
 
     void OnDrawFrame();
+
+    void setMatrix(float *matrix);
 
     static MyGLRenderContext*GetInstance();
 

@@ -40,6 +40,8 @@ add_library( # Sets the name of the library.
         sample/TextureMapSample3.cpp
         sample/Cube.cpp
         sample/Cone.cpp
+        sample/Ball.cpp
+        sample/SkySphere.cpp
         sample/VAOSample.cpp
         demo/native-lib1.c
         demo/native-parcel.cpp

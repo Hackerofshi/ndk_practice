@@ -71,12 +71,29 @@ JNIEXPORT void JNICALL native_OnDrawFrame(JNIEnv *env, jobject instance) {
     MyGLRenderContext::GetInstance()->OnDrawFrame();
 }
 
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_shixin_ndk_1practice_opengl_MyNativeRender_setMatrix(JNIEnv *env, jobject thiz,
+                                                              jfloatArray matrix) {
+    jfloat *body = (env)->GetFloatArrayElements(matrix, 0);
+    jsize featureSize1 = env->GetArrayLength(matrix);
+
+    float *mat = new float[featureSize1];
+    for (int i = 0; i < featureSize1; ++i) {
+        mat[i] = body[i];
+    }
+
+    LOGI("----------------matrix length %f %d", mat[0], featureSize1);
+    MyGLRenderContext::GetInstance()->setMatrix(mat);
+
+    (env)->ReleaseFloatArrayElements(matrix, body, 0);
+}
+
 #ifdef __cplusplus
 }
 #endif
 
 //--------------------------------------------------------------------------------------------------
-
 /**
  * 动态注册
  */
@@ -455,4 +472,5 @@ Java_com_shixin_ndk_1practice_util_NDKUtils_testCmd(JNIEnv *env, jobject thiz) {
     int b = 5 / 0;
     LOGI("%s", b);
 }
+
 

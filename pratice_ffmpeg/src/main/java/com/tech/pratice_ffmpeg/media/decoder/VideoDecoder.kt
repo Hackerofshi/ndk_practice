@@ -48,7 +48,7 @@ class VideoDecoder(path: String, sfv: SurfaceView?, surface: Surface?): BaseDeco
             codec.configure(format, mSurface , null, 0)
             notifyDecode()
         } else if (mSurfaceView?.holder?.surface != null) {
-            mSurface = mSurfaceView?.holder?.surface
+            mSurface = mSurfaceView.holder?.surface
             configCodec(codec, format)
         } else {
             mSurfaceView?.holder?.addCallback(object : SurfaceHolder.Callback2 {

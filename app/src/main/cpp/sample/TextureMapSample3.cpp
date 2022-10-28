@@ -107,6 +107,7 @@ void TextureMapSample3::Draw(int screenW, int screenH) {
     glClearColor(1.0, 1.0, 1.0, 1.0);
     glClear(GL_STENCIL_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    //6个面
     float vertices[] = {
             -0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
             0.5f, -0.5f, -0.5f, 1.0f, 0.0f,
@@ -168,10 +169,10 @@ void TextureMapSample3::Draw(int screenW, int screenH) {
     unsigned int VBO, VAO;
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
-
     glBindVertexArray(VAO);
-
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
 
@@ -196,8 +197,6 @@ void TextureMapSample3::Draw(int screenW, int screenH) {
     View = glm::lookAt(glm::vec3(camX, 0.0f, camZ),
                        glm::vec3(0.0f, 0.0f, 0.0f),
                        glm::vec3(0.0f, 1.0f, 0.0f));
-
-
 
 
     // position attribute
@@ -236,7 +235,6 @@ void TextureMapSample3::Draw(int screenW, int screenH) {
 
         glDrawArrays(GL_TRIANGLES, 0, 36);
     }
-
 
 
     glDeleteVertexArrays(1, &VAO);

@@ -11,6 +11,7 @@
 
 #include "stdint.h"
 #include <GLES3/gl3.h>
+#include <jni.h>
 #include "../util/ImageDef.h"
 #include "../util/ByteFlowLock.h"
 #include "../glm/detail/type_mat.hpp"
@@ -115,6 +116,10 @@ public:
 	virtual void Draw(int screenW, int screenH) = 0;
 
 	virtual void Destroy() = 0;
+
+    virtual void setMatrix(float *pArray) {
+
+	};
 
 protected:
 	GLuint m_VertexShader;

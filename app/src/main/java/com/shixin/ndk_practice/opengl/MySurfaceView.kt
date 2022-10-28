@@ -3,6 +3,10 @@ package com.shixin.ndk_practice.opengl
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.opengl.GLSurfaceView
 import android.util.AttributeSet
 import android.util.Log
@@ -14,7 +18,7 @@ import javax.microedition.khronos.opengles.GL10
 
 
 class MySurfaceView @JvmOverloads constructor(context: Context?, attrs: AttributeSet? = null) :
-    GLSurfaceView(context, attrs) {
+    GLSurfaceView(context, attrs), SensorEventListener {
 
     private val mGLRender: MyGLRender
     private val nativeRender: MyNativeRender
@@ -24,7 +28,7 @@ class MySurfaceView @JvmOverloads constructor(context: Context?, attrs: Attribut
         setEGLContextClientVersion(3)
         nativeRender = MyNativeRender()
         mGLRender = MyGLRender(nativeRender)
-        loadRGBAImage(R.drawable.dzzz)
+        loadRGBAImage(R.drawable.allsp)
         setRenderer(mGLRender)
         renderMode = RENDERMODE_CONTINUOUSLY
     }
@@ -70,6 +74,10 @@ class MySurfaceView @JvmOverloads constructor(context: Context?, attrs: Attribut
         fun setImageData(format: Int, width: Int, height: Int, bytes: ByteArray?) {
             mNativeRender.native_SetImageData(format, width, height, bytes)
         }
+
+        fun setMatrix(matrix: FloatArray?) {
+            mNativeRender.setMatrix(matrix)
+        }
     }
 
     companion object {
@@ -102,6 +110,16 @@ class MySurfaceView @JvmOverloads constructor(context: Context?, attrs: Attribut
         }
         return bitmap
     }
+
+    private val matrix = FloatArray(16)
+    override fun onSensorChanged(event: SensorEvent?) {
+        SensorManager.getRotationMatrixFromVector(matrix, event?.values)
+        mGLRender.setMatrix(matrix)
+    }
+
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+
+    }
 }
 
 
@@ -121,4 +139,6 @@ class MyNativeRender {
     external fun native_OnSurfaceChanged(width: Int, height: Int)
 
     external fun native_OnDrawFrame()
+
+    external fun setMatrix(matrix: FloatArray?)
 }
