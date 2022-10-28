@@ -471,6 +471,10 @@ Java_com_shixin_ndk_1practice_util_NDKUtils_testCmd(JNIEnv *env, jobject thiz) {
     int a = 5;
     int b = 5 / 0;
     LOGI("%s", b);
+
+
+
+
 }
 
 

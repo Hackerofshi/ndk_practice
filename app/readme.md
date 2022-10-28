@@ -76,3 +76,20 @@ far参数，far参数影响的是立体图形的背面，far一定比near大，�
 
 # 上传符号表
 java -jar D:\file\videostream\buglyqq-upload-symbol\buglyqq-upload-symbol.jar -appid b5500b224d -appkey ce0a9054-2c12-4b0a-9399-b23fa9740d54 -bundleid com.shixin.ndk_practice -version 1.0 -platform Android -inputSymbol D:\file\asproject\ndk_practice\app\build\intermediates\cmake\debug\obj\armeabi-v7a\
+
+
+
+## glDrawElements
+
+//从indices中按顺序取出索引对应6个顶点依次进行绘制，图元类型为GL_TRIANGLES
+glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, indices);
+
+第一个参数mode:
+和glDrawArrays方法一样，依然表示要绘制的具体图元类型（关于图元绘制相关，可以看下一看就懂的OpenGL ES教程——这或许是你遇过最难画的三角形（四））
+第二个参数count:
+表示要绘制多少个顶点，比如绘制一个三角形那就是3个顶点。
+第三个参数type:
+表示的是顶点索引的类型，必须是GL_UNSIGNED_BYTE,GL_UNSIGNED_SHORT, or GL_UNSIGNED_INT其中一个种。
+第四个参数indices:
+就是索引数组的指针。
+绘制代码什么样的呢？

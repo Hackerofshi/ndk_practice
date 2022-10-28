@@ -104,6 +104,7 @@ void VAOSample::Draw(int screenW, int screenH) {
     glBufferData(GL_ARRAY_BUFFER, sizeof(triangleVerWithColor), triangleVerWithColor,
                  GL_STATIC_DRAW);
 
+
     //4.将指定如何解析顶点属性数组
     //指定如何解析顶点属性的数组，注意这里面最后一个参数传的不是原数据地址，而是数据在vbo缓冲区的相对地址
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 24, (void *) 0);

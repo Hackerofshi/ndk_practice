@@ -43,6 +43,11 @@ Java_com_shixin_ndk_1practice_practicec_Test1_test1(JNIEnv *env, jobject thiz) {
     jstring mName = (*env)->NewStringUTF(env, "test1");
     (*env)->SetObjectField(env, thiz, j_fid, mName);
 
+
+    const char *s = "1234";
+    jstring mName1 = (*env)->NewStringUTF(env, s);
+
+
 }
 
 JNIEXPORT void JNICALL
