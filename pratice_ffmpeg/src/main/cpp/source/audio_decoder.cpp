@@ -71,9 +71,7 @@ void AudioDecoder::InitOutBuffer() {
 
 void AudioDecoder::InitRender() {
     if (m_render != nullptr) {
-        LOGI("-------------------渲染开始")
         m_render->InitRender();
-        LOGI("-------------------渲染结束")
     }
 }
 
@@ -83,8 +81,6 @@ void AudioDecoder::Render(AVFrame *frame) {
     //转换返回每个通道的样本数
     int ret = swr_convert(m_swr, m_out_buffer, m_dest_data_size / 2, (const uint8_t **) frame->data,
                           frame->nb_samples);
-
-    LOGI("-------------------渲染结束%d", ret)
 
     if (ret > 0) {
         if (ForSynthesizer()) {

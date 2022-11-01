@@ -20,8 +20,6 @@ void OpenSLRender::InitRender() {
 }
 
 void OpenSLRender::Render(uint8_t *pcm, int size) {
-    LOGI("-------------------Render渲染开始")
-
     if (m_pcm_player) {
         if (pcm != nullptr && size > 0) {
             while (m_data_queue.size() >= 2) {
@@ -41,8 +39,6 @@ void OpenSLRender::Render(uint8_t *pcm, int size) {
     } else {
         free(pcm);
     }
-    LOGI("-------------------Render渲染结束")
-
 }
 
 void OpenSLRender::ReleaseRender() {
@@ -195,14 +191,11 @@ void OpenSLRender::StartRender() {
 
 void OpenSLRender::sReadPcmBufferCBFun(SLAndroidSimpleBufferQueueItf bufferQueueItf,
                                        void *context) {
-    LOGI("-------------------音频解码播放")
-
     auto *player = (OpenSLRender *) context;
     player->BolckEnqueue();
 }
 
 void OpenSLRender::BolckEnqueue() {
-    LOGI("-------------------音频解码播放")
     if (m_pcm_player == nullptr) return;
 
     //先将已经使用过的数据移除

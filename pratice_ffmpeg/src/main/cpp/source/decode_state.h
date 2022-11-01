@@ -6,7 +6,7 @@
 #define NDK_PRACTICE_DECODE_STATE_H
 
 
-enum DecodeSate {
+enum DecodeState {
     STOP,
     PREPARE,
     START,

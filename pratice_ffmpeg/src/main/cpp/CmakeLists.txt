@@ -126,11 +126,20 @@ add_library( # Sets the name of the library.
         ff-native-lib.cpp
         source/base_decoder.cpp
         source/v_decoder.cpp
+        #utils/timer.c
         source/audio_decoder.cpp
+        source/test/base_decoder1.cpp
+        source/test/i_decode_state_cb.cpp
         render/video/native_render.cpp
         media/player.cpp
         render/audio/opensl_render.cpp
-
+        opengl/egl/egl_core.cpp
+        opengl/egl/egl_surface.cpp
+        opengl/drawer/drawer.cpp
+        opengl/drawer/video_drawer.cpp
+        opengl/drawer/proxy/def_drawer_proxy_impl.cpp
+        render/video/opengl_render.cpp
+        player/gl_player.cpp
         )
 
 find_library( # Sets the name of the path variable.

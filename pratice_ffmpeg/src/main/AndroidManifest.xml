@@ -16,6 +16,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Ndk_practice">
         <activity
+            android:name=".FFmpegGLPlayerActivity"
+            android:exported="false" />
+        <activity
             android:name=".EglSurfaceVuewActivity"
             android:exported="false" />
         <activity

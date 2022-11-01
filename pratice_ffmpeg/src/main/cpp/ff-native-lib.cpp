@@ -6,6 +6,7 @@
 #include <string>
 #include <unistd.h>
 #include "media/player.h"
+#include "player/gl_player.h"
 
 
 extern "C" {
@@ -69,6 +70,32 @@ Java_com_tech_pratice_1ffmpeg_Player_stop(JNIEnv *env, jobject thiz, jint player
     p->Release();
 }
 
+extern "C"
+JNIEXPORT jint JNICALL
+Java_com_tech_pratice_1ffmpeg_FFmpegGLPlayerActivity_createGLPlayer(JNIEnv *env, jobject thiz,
+                                                                    jstring path, jobject surface) {
+    GLPlayer *player = new GLPlayer(env, path);
+    player->SetSurface(surface);
+    return (jint) player;
+}
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_tech_pratice_1ffmpeg_FFmpegGLPlayerActivity_playOrPause(JNIEnv *env, jobject thiz,
+                                                                 jint player) {
+    GLPlayer *p = (GLPlayer *) player;
+    p->PlayOrPause();
+}
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_tech_pratice_1ffmpeg_FFmpegGLPlayerActivity_stop(JNIEnv *env, jobject thiz,
+                                                          jint player) {
+    GLPlayer *p = (GLPlayer *) player;
+    p->Release();
+}
+
 
 }
+
 

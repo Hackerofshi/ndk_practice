@@ -23,6 +23,10 @@ class MainActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.btn).setOnClickListener {
             startActivity(Intent(this, EglSurfaceVuewActivity::class.java))
         }
+
+        findViewById<TextView>(R.id.btn1).setOnClickListener {
+            startActivity(Intent(this, FFmpegGLPlayerActivity::class.java))
+        }
     }
 
     @NeedsPermission(

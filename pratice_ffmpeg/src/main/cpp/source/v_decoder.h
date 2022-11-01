@@ -11,6 +11,7 @@
 #include <android/native_window_jni.h>
 #include <android/native_window.h>
 #include "../render/one_frame.h"
+#include "test/base_decoder1.h"
 
 extern "C" {
 #include <libavutil/imgutils.h>

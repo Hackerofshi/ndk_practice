@@ -12,9 +12,6 @@
 OpenSLAudioPlay::
 
 
-
-
-
 OpenSLAudioPlay(int sampleRate, int sampleFormat, int channels)
         : mAudioEngine(new AudioEngine()), mPlayerObj(nullptr), mPlayer(nullptr),
           mBufferQueue(nullptr), mEffectSend(nullptr), mVolume(nullptr),
@@ -118,7 +115,7 @@ bool OpenSLAudioPlay::init() {
     // 4.1 获取播放器队列接口：SLAndroidSimpleBufferQueueItf mBufferQueue
     result = (*mPlayerObj)->GetInterface(mPlayerObj, SL_IID_BUFFERQUEUE, &mBufferQueue);
     if (result != SL_RESULT_SUCCESS) {
-        LOGE("mPlayerObj GetInterface failed: %d", result);
+        LOGE("mPlayerObj GetInterface failed: %d", result)
         return false;
     }
 
@@ -177,7 +174,7 @@ void OpenSLAudioPlay::enqueueSample(void *data, size_t length) {
 
 void OpenSLAudioPlay::release() {
     pthread_mutex_lock(&mMutex);
-    if(mPlayerObj){
+    if (mPlayerObj) {
         (*mPlayerObj)->Destroy(mPlayerObj);
         mPlayerObj = nullptr;
         mPlayer = nullptr;
@@ -186,7 +183,7 @@ void OpenSLAudioPlay::release() {
         mVolume = nullptr;
     }
 
-    if(mAudioEngine){
+    if (mAudioEngine) {
         delete mAudioEngine;
         mAudioEngine = nullptr;
     }
