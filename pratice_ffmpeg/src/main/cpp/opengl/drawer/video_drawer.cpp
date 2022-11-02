@@ -33,8 +33,9 @@ const char *VideoDrawer::GetVertexShader() {
             attribute vec4 aPosition;
             attribute vec2 aCoordinate;
             varying vec2 vCoordinate;
+            uniform mat4 u_MVPMatrix;
             void main() {
-                gl_Position = aPosition;
+                gl_Position = u_MVPMatrix * aPosition;
                 vCoordinate = aCoordinate;
             }
     );
@@ -64,7 +65,7 @@ void VideoDrawer::BindTexture() {
 }
 
 void VideoDrawer::PrepareDraw() {
-    if(cst_data!= nullptr){
+    if (cst_data != nullptr) {
         glTexImage2D(GL_TEXTURE_2D, 0, // level一般为0
                      GL_RGBA, //纹理内部格式
                      origin_width(), origin_height(), // 画面宽高
@@ -78,3 +79,5 @@ void VideoDrawer::PrepareDraw() {
 void VideoDrawer::DoneDraw() {
 
 }
+
+

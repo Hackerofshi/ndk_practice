@@ -108,6 +108,9 @@ set_target_properties(postproc
 #生成可执行文件
 # ADD_EXECUTABLE(hello hello.cpp)
 
+include_directories(
+        glm
+)
 
 # set 用于指定变量 set(key value) ，这里表示 CMAKE_CXX_STANDARD 变量为 17
 # set(CMAKE_CXX_STANDARD 17)

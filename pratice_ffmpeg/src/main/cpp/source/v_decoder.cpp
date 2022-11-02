@@ -38,9 +38,9 @@ void VideoDecoder::InitRender(JNIEnv *env) {
             m_dst_h = height();
         }
 
-        LOGI(TAG, "dst %d, %d", m_dst_w, m_dst_h);
+        LOGI("获取视频的宽高  dst %d, %d", m_dst_w, m_dst_h);
     } else {
-        LOGE(TAG, "Init render error, you should call SetRender first!");
+        LOGE("Init render error, you should call SetRender first!");
     }
 }
 
@@ -126,8 +126,8 @@ void VideoDecoder::Render(AVFrame *frame) {
               m_rgb_frame->linesize);
     auto *oneFrame = new OneFrame(m_rgb_frame->data[0],
                                   m_rgb_frame->linesize[0], frame->pts,
-                                      time_base(), NULL,
-                                      false);
+                                  time_base(), NULL,
+                                  false);
     m_video_render->Render(oneFrame);
 }
 

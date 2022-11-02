@@ -16,6 +16,8 @@ public:
     virtual void Release() = 0;
 
     virtual ~DrawerProxy() {}
+
+    virtual void SetScreenSize(int width, int height) = 0;
 };
 
 

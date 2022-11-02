@@ -113,7 +113,8 @@ void OpenglRender::InitDspWindow(JNIEnv *env) {
         //设置宽高限制缓冲区中的像素数量
         ANativeWindow_setBuffersGeometry(m_native_window, m_window_width, m_window_height,
                                          WINDOW_FORMAT_RGBA_8888);
-        LOGI(TAG, "View Port width: %d, height: %d", m_window_width, m_window_height)
+        LOGI("View Port width: %d, height: %d", m_window_width, m_window_height)
+        m_drawer_proxy->SetScreenSize(m_window_width, m_window_height);
     }
 }
 
@@ -132,7 +133,7 @@ void OpenglRender::Render() {
     if (m_state == RENDERING) {
         m_drawer_proxy->Draw();
         m_egl_surface->SwapBuffers();
-       // LOGI(TAG, "渲染画面")
+        // LOGI(TAG, "渲染画面")
         if (m_need_output_pixels && m_pixel_receiver != nullptr) {
             m_need_output_pixels = false;
             Render();

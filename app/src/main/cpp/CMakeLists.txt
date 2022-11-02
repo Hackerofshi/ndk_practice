@@ -58,6 +58,7 @@ add_library( # Sets the name of the library.
         demo/testcpp/TestClassOperator_override.cpp
         demo/testcpp/Test_str.cpp
         demo/testcpp/TestClass_algorithm.cpp
+        demo/testcpp/Test_struct_union.cpp
         demo/testc/JNIEnv_test.c
         demo/native-arr-copy.cpp
         demo/m_thread.c

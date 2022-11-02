@@ -19,6 +19,9 @@ public:
     void Draw() override;
 
     void Release() override;
+
+    void SetScreenSize(int width, int height) override;
+
 };
 
 

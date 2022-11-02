@@ -51,7 +51,7 @@ void Drawer::CreateProgram() {
         glLinkProgram(m_program_id);
 
 
-        m_vertex_matrix_handler = glGetUniformLocation(m_program_id, "uMatrix");
+        m_vertex_matrix_handler = glGetUniformLocation(m_program_id, "u_MVPMatrix");
         m_vertex_pos_handler = glGetAttribLocation(m_program_id, "aPosition");
         m_texture_handler = glGetUniformLocation(m_program_id, "uTexture");
         m_texture_pos_handler = glGetAttribLocation(m_program_id, "aCoordinate");
@@ -117,11 +117,15 @@ void Drawer::ActivateTexture(GLenum type, GLuint texture, GLenum index, int text
 
 
 void Drawer::DoDraw() {
+    UpdateTransformMatrix(m_MVPMatrix);
+
+    //设置着色器参数
+    glUniformMatrix4fv(m_vertex_matrix_handler, 1, GL_FALSE, &m_MVPMatrix[0][0]);
+
     glEnableVertexAttribArray(m_vertex_pos_handler);
     glEnableVertexAttribArray(m_texture_pos_handler);
 
-    //设置着色器参数
-    //glUniformMatrix4fv(m_vertex_matrix_handler, 1, false, m_matrix, 0);
+
     glVertexAttribPointer(m_vertex_pos_handler, 2, GL_FLOAT, GL_FALSE, 0, m_vertex_coors);
     glVertexAttribPointer(m_texture_pos_handler, 2, GL_FLOAT, GL_FALSE, 0, m_texture_coors);
     //开始绘制
@@ -149,4 +153,27 @@ void Drawer::Release() {
     glDeleteProgram(m_program_id);
 }
 
+void Drawer::SetScreenSize(int width, int height) {
+    this->m_window_width = width;
+    this->m_window_height = height;
+}
+
+
+void Drawer::UpdateTransformMatrix(glm::mat4 &mvpMatrix) {
+
+    //屏幕的宽高比
+    float ratio = (float) window_width() / window_height();
+    float videoRatio = (float) origin_width() / origin_height();
+
+    LOGI("屏幕的宽高比 ratio= %f videoRatio= %f", ratio, videoRatio)
+    glm::mat4 Model = glm::mat4(1.0f);
+    if (videoRatio > ratio) {
+        Model = glm::scale(Model, glm::vec3(1.0f,
+                                            1 - ((videoRatio - ratio) / 2), 1.0f));
+    } else {
+        Model = glm::scale(Model, glm::vec3(1 - ((ratio - videoRatio) / 2),
+                                            1.0f, 1.0f));
+    }
+    mvpMatrix = Model;
+}
 

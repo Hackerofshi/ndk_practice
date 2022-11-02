@@ -4,7 +4,10 @@
 
 #ifndef NDK_PRACTICE_DRAWER_H
 #define NDK_PRACTICE_DRAWER_H
+
 #include "../../utils/log.h"
+#include "../../glm/detail/type_mat.hpp"
+#include "../../glm/gtc/matrix_transform.hpp"
 
 extern "C" {
 #include <GLES2/gl2.h>
@@ -32,7 +35,7 @@ private:
     GLuint m_program_id = 0;
     GLuint m_texture_id = 0;
 
-    GLuint m_vertex_matrix_handler = -1;
+    GLint m_vertex_matrix_handler = -1;
 
     GLint m_vertex_pos_handler = -1;
     GLint m_texture_pos_handler = -1;
@@ -40,6 +43,12 @@ private:
 
     int m_origin_width = 0;
     int m_origin_height = 0;
+
+
+    int m_window_width = 0;
+
+    int m_window_height = 0;
+
 
     void CreateTextureId();
 
@@ -65,14 +74,29 @@ public:
         return m_origin_height;
     }
 
+
+    int window_width() {
+        return m_window_width;
+    }
+
+
+    int window_height() {
+        return m_window_height;
+    }
+
+
     bool IsReadyToDraw();
 
     //释放
     void Release();
 
+    void SetScreenSize(int width, int height);
+
 protected:
     //自定义用户数据
     void *cst_data = nullptr;
+
+    glm::mat4 m_MVPMatrix;
 
     void SetSize(int width, int height);
 
@@ -81,12 +105,18 @@ protected:
     ) const;
 
     virtual const char *GetVertexShader() = 0;
+
     virtual const char *GetFragmentShader() = 0;
+
     virtual void InitCstShaderHandler() = 0;
 
     virtual void BindTexture() = 0;
+
     virtual void PrepareDraw() = 0;
+
     virtual void DoneDraw() = 0;
+
+    void UpdateTransformMatrix(glm::mat4 &mvpMatrix);
 
 
 };

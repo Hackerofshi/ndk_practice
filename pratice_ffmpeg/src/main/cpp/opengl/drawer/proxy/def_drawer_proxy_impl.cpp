@@ -21,3 +21,9 @@ void DefDrawerProxyImpl::Release() {
     }
     m_drawers.clear();
 }
+
+void DefDrawerProxyImpl::SetScreenSize(int width, int height) {
+    for (const auto &item: m_drawers) {
+        item->SetScreenSize(width, height);
+    }
+}

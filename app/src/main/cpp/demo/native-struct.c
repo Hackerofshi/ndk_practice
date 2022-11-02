@@ -17,6 +17,10 @@
 
 struct MyStruct {
     char *name;
+    union {
+        int x, r, s;
+    };
+
 };
 
 // int32_t ，可以对基本数据类型取别名
@@ -29,6 +33,7 @@ typedef struct MyStruct Student;// 给 MyStruct 取一个别名叫做 Student
 
 void testStruct() {
     Student stu = {"Darren"};
+    stu.x = 1;
 
     int32 number1 = 100;
 
@@ -77,6 +82,8 @@ void copyTo(MyStudent *from, MyStudent *to) {
 
 void testStruct1() {
     MyStudent stu1 = {"test", 12};
+
+
     MyStudent stu2;
     stu2 = stu1; // = 是内容赋值操作，是吧stu1的值，赋值给stu2
 
