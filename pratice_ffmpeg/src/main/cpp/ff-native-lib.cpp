@@ -45,6 +45,7 @@ Java_com_tech_pratice_1ffmpeg_Player_ffmpegInfo(JNIEnv *env, jobject thiz) {
         c_temp = c_temp->next;
     }
 
+
     return env->NewStringUTF(info);
 }
 

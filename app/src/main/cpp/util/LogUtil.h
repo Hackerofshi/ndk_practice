@@ -13,7 +13,7 @@
 #include "C:\user\sdk\ndk\21.3.6528147\toolchains\llvm\prebuilt\windows-x86_64\sysroot\usr\include\android\log.h"
 #include "time.h"
 
-#define  LOG_TAG "ByteFlow"
+#define  LOG_TAG "ShiXin"
 
 #define  LOGCATE(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
 #define  LOGCATV(...)  __android_log_print(ANDROID_LOG_VERBOSE,LOG_TAG,__VA_ARGS__)

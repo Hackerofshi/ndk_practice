@@ -43,6 +43,9 @@ add_library( # Sets the name of the library.
         sample/Ball.cpp
         sample/SkySphere.cpp
         sample/VAOSample.cpp
+        sample/BasicLighting.cpp
+
+
         demo/native-lib1.c
         demo/native-parcel.cpp
         demo/native-arr-err.c

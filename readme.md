@@ -98,3 +98,13 @@ https://blog.csdn.net/tkwxty/article/details/103539392
 
 ##  __attribute__ 机制
 https://blog.csdn.net/weaiken/article/details/88085360
+
+## OCR
+
+Android 实现 Ocr手机号扫描
+https://blog.csdn.net/mr_sk/article/details/79077271
+
+
+Android OCR文字识别 实时扫描手机号（极速扫描单行文本方案）
+https://blog.csdn.net/mr_sk/article/details/72877492
+

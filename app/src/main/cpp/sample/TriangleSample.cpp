@@ -19,7 +19,7 @@ TriangleSample::~TriangleSample() {
 }
 
 void TriangleSample::Init() {
-    LOGCATE("TriangleSample::Draw");
+    LOGCATE("-----------------TriangleSample::Init");
 
     //脚本
 
@@ -38,26 +38,32 @@ void TriangleSample::Init() {
             "#version 300 es                            \n"
             "layout(location = 0) in vec4 a_position;   \n"
             "uniform mat4 u_MVPMatrix;                  \n"
+            "uniform mat4 model;                        \n"
             "void main()                                \n"
             "{                                          \n"
-            "   gl_Position = u_MVPMatrix * a_position; \n"
+            "   gl_Position = u_MVPMatrix*model*a_position; \n"
             "}                                          \n";
+
 
     char fShaderStr[] =
             "#version 300 es                              \n"
             "precision mediump float;                     \n"
             "out vec4 fragColor;                          \n"
+            "uniform vec4 objectColor;                    \n"
             "void main()                                  \n"
             "{                                            \n"
-            "   fragColor = vec4 ( 1.0, 0.0, 0.0, 1.0 );  \n"
+            "   fragColor = objectColor;                 \n"
             "}                                            \n";
-    LOGCATE("TriangleSample::Draw");
+    LOGCATE("-----------------TriangleSample::Init");
     m_ProgramObj = GLUtils::CreateProgram(vShaderStr1, fShaderStr, m_VertexShader,
                                           m_FragmentShader);
     if (m_ProgramObj) {
         m_MVPMatLoc = glGetUniformLocation(m_ProgramObj, "u_MVPMatrix");
+        m_ModelMatLoc = glGetUniformLocation(m_ProgramObj, "model");
+        m_LightColorLoc = glGetUniformLocation(m_ProgramObj, "objectColor");
+
     }
-    LOGCATE("TriangleSample::Draw");
+    LOGCATE("-----------------TriangleSample::Init");
 
 }
 
@@ -78,8 +84,12 @@ void TriangleSample::Draw(int screenW, int screenH) {
     // Use the program object
     glUseProgram(m_ProgramObj);
 
+    glUniform4f(m_LightColorLoc, 1.0f, 1.0f, 1.0f, 1.0f);
+
     UpdateTransformMatrix(m_MVPMatrix, screenW, screenH);
+    UpdateModel(model);
     glUniformMatrix4fv(m_MVPMatLoc, 1, GL_FALSE, &m_MVPMatrix[0][0]);
+    glUniformMatrix4fv(m_ModelMatLoc, 1, GL_FALSE, &model[0][0]);
 
     // Load the vertex data
     //index：表示着色器中要接收数据的变量的引用。即着色器中的layout。
@@ -126,7 +136,8 @@ void TriangleSample::UpdateTransformMatrix(glm::mat4 &mvpMatrix, int screenW, in
 
     //Matrix.orthoM (float[] m,           //接收正交投影的变换矩阵
     //                int mOffset,        //变换矩阵的起始位置（偏移量）
-    //                float left,         //相对观察点近面的左边距
+    //                float left,         //相对观察点近面的左边
+    //                距
     //                float right,        //相对观察点近面的右边距
     //                float bottom,       //相对观察点近面的下边距
     //                float top,          //相对观察点近面的上边距
@@ -150,4 +161,8 @@ void TriangleSample::UpdateTransformMatrix(glm::mat4 &mvpMatrix, int screenW, in
     // Model matrix : an identity matrix (model will be at the origin)
     // glm::mat4 Model = glm::mat4(1.0f);
     mvpMatrix = Projection1 * View;
+}
+
+void TriangleSample::UpdateModel(glm::mat4 &model) {
+    model = glm::mat4(1.0f);
 }

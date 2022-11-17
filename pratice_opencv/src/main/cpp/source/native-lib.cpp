@@ -412,3 +412,48 @@ Java_com_shixin_pratice_1opencv_NdkBitmapUtils_hsv(JNIEnv *env, jclass clazz, jo
     return bitmap;
 
 }
+extern "C"
+JNIEXPORT jobject JNICALL
+Java_com_shixin_pratice_1opencv_NdkBitmapUtils_filter2D(JNIEnv *env, jclass clazz, jobject bitmap) {
+
+    Mat src;
+    cv_helper::bitmap2mat(env, bitmap, src);
+
+    // 高斯（模糊），计算高斯卷积核，卷积操作，考虑像素之间的差值（更好的保留图像的边缘）
+    // 2-3 S
+    Mat dst;
+
+    int size = 55;
+    Mat kernel = Mat::ones(size, size, CV_32FC1) / (size * size);
+
+    long st = getTickCount();
+    filter2D(src, dst, src.depth(), kernel);
+    long et = getTickCount();
+    long time = (et - st) * 1000 / getTickFrequency();
+    std::cout << "time" << time << std::endl;
+
+    // 时间复杂度问题
+    // 时间复杂度 = src.rows * src.cols * size * size
+    // 小的作业：手写 filter2D 的源码
+
+    cv_helper::mat2bitmap(env, dst, bitmap);
+
+    return bitmap;
+}
+extern "C"
+JNIEXPORT jobject JNICALL
+Java_com_shixin_pratice_1opencv_NdkBitmapUtils_bilateralFilter(JNIEnv *env, jclass clazz,
+                                                               jobject bitmap) {
+    Mat src;
+    cv_helper::bitmap2mat(env, bitmap, src);
+
+    // 高斯（模糊），计算高斯卷积核，卷积操作，考虑像素之间的差值（更好的保留图像的边缘）
+    // 2-3 S
+    Mat dst;
+    bilateralFilter(src, dst, 0, 100, 10);
+
+
+    cv_helper::mat2bitmap(env, dst, bitmap);
+
+    return bitmap;
+}

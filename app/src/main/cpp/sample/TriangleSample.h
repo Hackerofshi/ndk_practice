@@ -9,6 +9,8 @@
 #include "../util/ImageDef.h"
 #include "GLSampleBase.h"
 
+#define GET_STR(x) #x
+
 class TriangleSample : public GLSampleBase {
 public:
     TriangleSample();
@@ -24,8 +26,14 @@ public:
     //
     virtual void Destroy();
 
-    virtual void UpdateTransformMatrix(glm::mat4 &mvpMatrix,int screenW, int screenH);
+    virtual void UpdateTransformMatrix(glm::mat4 &mvpMatrix, int screenW, int screenH);
 
+    void UpdateModel(glm::mat4 &model);
+
+protected:
+    glm::mat4  model;
+    GLint m_ModelMatLoc;
+    GLint m_LightColorLoc;
 
 
     // virtual void OnDraw();

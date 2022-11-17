@@ -11,7 +11,7 @@ struct MyStruct {
 typedef struct MyStruct Student;// 给 MyStruct 取一个别名叫做 Student
 
 
-int test() {
+int teststudent1() {
     Student student = {};
     return 0;
 }

@@ -23,9 +23,9 @@ MyGLRenderContext::MyGLRenderContext() {
     //m_Sample = new TextureMapSample3();
     // m_Sample = new Cone();
     // m_Sample = new VAOSample();
-    //m_Sample = new TriangleSample();
+    m_Sample = new TriangleSample();
     //m_Sample = new TextureMapSample();
-    m_Sample = new SkySphere();
+    //m_Sample = new SkySphere();
 };
 
 

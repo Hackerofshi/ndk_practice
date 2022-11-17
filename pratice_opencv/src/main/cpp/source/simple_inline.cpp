@@ -6,7 +6,7 @@
 using namespace std;
 using namespace cv;
 
-void test(){
+void teststd(){
 
 }
 

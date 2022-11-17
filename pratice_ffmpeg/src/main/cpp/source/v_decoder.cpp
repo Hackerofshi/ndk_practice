@@ -25,7 +25,7 @@ void VideoDecoder::Prepare(JNIEnv *env) {
 
 
 void VideoDecoder::InitRender(JNIEnv *env) {
-    if (m_video_render != NULL) {
+    if (m_video_render != nullptr) {
         int dst_size[2] = {-1, -1};
         m_video_render->InitRender(env, width(), height(), dst_size);
         m_dst_w = dst_size[0];
@@ -126,7 +126,7 @@ void VideoDecoder::Render(AVFrame *frame) {
               m_rgb_frame->linesize);
     auto *oneFrame = new OneFrame(m_rgb_frame->data[0],
                                   m_rgb_frame->linesize[0], frame->pts,
-                                  time_base(), NULL,
+                                  time_base(), nullptr,
                                   false);
     m_video_render->Render(oneFrame);
 }
@@ -138,20 +138,20 @@ bool VideoDecoder::NeedLoopDecode() {
 
 void VideoDecoder::Release() {
     LOGE(TAG, "[VIDEO] release")
-    if (m_rgb_frame != NULL) {
+    if (m_rgb_frame != nullptr) {
         av_frame_free(&m_rgb_frame);
-        m_rgb_frame = NULL;
+        m_rgb_frame = nullptr;
     }
-    if (m_buf_for_rgb_frame != NULL) {
+    if (m_buf_for_rgb_frame != nullptr) {
         free(m_buf_for_rgb_frame);
-        m_buf_for_rgb_frame = NULL;
+        m_buf_for_rgb_frame = nullptr;
     }
-    if (m_sws_ctx != NULL) {
+    if (m_sws_ctx != nullptr) {
         sws_freeContext(m_sws_ctx);
-        m_sws_ctx = NULL;
+        m_sws_ctx = nullptr;
     }
-    if (m_video_render != NULL) {
+    if (m_video_render != nullptr) {
         m_video_render->ReleaseRender();
-        m_video_render = NULL;
+        m_video_render = nullptr;
     }
 }

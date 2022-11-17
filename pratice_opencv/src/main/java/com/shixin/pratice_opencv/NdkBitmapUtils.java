@@ -2,6 +2,8 @@ package com.shixin.pratice_opencv;
 
 import android.graphics.Bitmap;
 
+import java.lang.annotation.Documented;
+
 public class NdkBitmapUtils {
 
     static {
@@ -73,5 +75,11 @@ public class NdkBitmapUtils {
      * @return 均衡后的图像
      */
     public static final native Bitmap hsv(Bitmap bitmap);
+
+
+    public static final native Bitmap filter2D(Bitmap bitmap);
+
+
+    public static final native Bitmap bilateralFilter(Bitmap bitmap);
 
 }
