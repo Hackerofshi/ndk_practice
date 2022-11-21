@@ -14,6 +14,7 @@
 #define LOGE(...) __android_log_print(ANDROID_LOG_ERROR,TAG,__VA_ARGS__)
 // 使用命名空间
 using namespace cv;
+using namespace std;
 
 extern "C"
 {
@@ -456,4 +457,50 @@ Java_com_shixin_pratice_1opencv_NdkBitmapUtils_bilateralFilter(JNIEnv *env, jcla
     cv_helper::mat2bitmap(env, dst, bitmap);
 
     return bitmap;
+}
+extern "C"
+JNIEXPORT jobject JNICALL
+Java_com_shixin_pratice_1opencv_NdkBitmapUtils_findContours(JNIEnv *env, jclass clazz,
+                                                            jobject bitmap) {
+
+    Mat src;
+    cv_helper::bitmap2mat(env, bitmap, src);
+
+
+    Mat gary;
+    cvtColor(src, gary, COLOR_BGRA2GRAY);
+
+    //模糊
+    Mat detected_edges;
+    blur( gary, detected_edges, Size(3,3) );
+
+    // 梯度和二值化
+    Mat binary;
+    Canny(detected_edges, binary, 70, 210);
+
+
+    vector<vector<Point>> contours;
+    findContours(binary, contours, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
+
+
+    LOGE("数量，%d",contours.size());
+
+    Mat contours_mat = Mat::zeros(src.size(), CV_8UC3);
+      Rect card_rect;
+      for (int i = 0; i < contours.size(); i++) {
+          // 画轮廓
+          Rect rect = boundingRect(contours[i]);
+          //筛选轮廓
+          if (rect.width > src.cols / 20 && rect.height > src.rows / 20) {
+              drawContours(contours_mat, contours, i, Scalar(0, 0, 255), 1);
+              card_rect = rect;
+              rectangle(contours_mat, Point(rect.x, rect.y),
+                        Point(rect.x + rect.width, rect.y + rect.height),
+                        Scalar(255, 255, 255), 2);
+              break;
+          }
+      }
+    jobject bitmap1 = cv_helper::createBitMap(env, src.cols, src.rows, 0);
+    cv_helper::mat2bitmap(env, binary, bitmap1);
+    return bitmap1;
 }
