@@ -4,8 +4,10 @@
 cmake_minimum_required(VERSION 3.10.2)
 
 # 需要引入我们头文件,以这个配置的目录为基准，可以是多个
-include_directories(${PROJECT_SOURCE_DIR}/include)
+include_directories(${CMAKE_SOURCE_DIR}/include)
 # include_directories(src/main/jniLibs/other)
+
+
 
 #添加共享库搜索路径
 link_directories(./libs/${ANDROID_ABI})

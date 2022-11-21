@@ -8,6 +8,10 @@
 #include <android/bitmap.h>
 #include <android/log.h>
 #include "cv_helper.h"
+#include <opencv2/imgcodecs.hpp>
+#include <opencv2/highgui.hpp>
+#include <opencv2/imgproc.hpp>
+#include <iostream>
 
 
 #define TAG "JNI_TAG"
@@ -458,6 +462,55 @@ Java_com_shixin_pratice_1opencv_NdkBitmapUtils_bilateralFilter(JNIEnv *env, jcla
 
     return bitmap;
 }
+
+
+Mat imgOriginal, imgWarp, imgCrop;;
+
+void drawPoints(vector<Point> points, Scalar color) {
+    for (int i = 0; i < points.size(); i++) {
+        circle(imgOriginal, points[i], 10, color, FILLED);
+        putText(imgOriginal, to_string(i), points[i], FONT_HERSHEY_PLAIN, 4, color, 4);
+    }
+}
+
+//重新排序边缘
+vector<Point> reorder(vector<Point> points) {
+    vector<Point> newPoints;
+    vector<int> sumPoints, subPoints;
+
+    for (int i = 0; i < 4; i++) {
+        sumPoints.push_back(points[i].x + points[i].y);
+        subPoints.push_back(points[i].x - points[i].y);
+    }
+    //cout << sumPoints.begin() << endl;
+    newPoints.push_back(
+            points[min_element(sumPoints.begin(), sumPoints.end()) - sumPoints.begin()]); // 0
+    //cout << newPoints[0].x << endl;
+    newPoints.push_back(
+            points[max_element(subPoints.begin(), subPoints.end()) - subPoints.begin()]); //1
+    newPoints.push_back(
+            points[min_element(subPoints.begin(), subPoints.end()) - subPoints.begin()]); //2
+    newPoints.push_back(
+            points[max_element(sumPoints.begin(), sumPoints.end()) - sumPoints.begin()]); //3
+    cout << sizeof(newPoints) << endl;
+    return newPoints;
+}
+
+vector<Point> initialPoints, docPoints;
+float w = 3264, h = 7252;
+
+Mat getWarp(Mat img, vector<Point> points, float w, float h) {
+    Point2f src[4] = {points[0], points[1], points[2], points[3]};
+    Point2f dst[4] = {{0.0f, 0.0f},
+                      {w,0.0f},
+                      {0.0f, h},
+                      {w, h}};
+    Mat matrix = getPerspectiveTransform(src, dst);
+    warpPerspective(img, imgWarp, matrix, Point(w, h));
+    return imgWarp;
+}
+
+
 extern "C"
 JNIEXPORT jobject JNICALL
 Java_com_shixin_pratice_1opencv_NdkBitmapUtils_findContours(JNIEnv *env, jclass clazz,
@@ -466,41 +519,99 @@ Java_com_shixin_pratice_1opencv_NdkBitmapUtils_findContours(JNIEnv *env, jclass 
     Mat src;
     cv_helper::bitmap2mat(env, bitmap, src);
 
+    //resize(src, src, Size(), 0.5, 0.5);
 
     Mat gary;
     cvtColor(src, gary, COLOR_BGRA2GRAY);
 
     //模糊
-    Mat detected_edges;
-    blur( gary, detected_edges, Size(3,3) );
+    Mat imgBlur;
+    GaussianBlur(gary, imgBlur, Size(3, 3), 3, 0);
+
 
     // 梯度和二值化
-    Mat binary;
-    Canny(detected_edges, binary, 70, 210);
+    Mat imgCanny;
+    Canny(imgBlur, imgCanny, 25, 75);
+
+    // 膨胀
+    Mat imgDil;
+
+    //卷积核
+    Mat kernel = getStructuringElement(MORPH_RECT, Size(35, 35));
+    dilate(imgCanny, imgDil, kernel);
 
 
     vector<vector<Point>> contours;
-    findContours(binary, contours, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
+    vector<Vec4i> hierarchy;
 
 
-    LOGE("数量，%d",contours.size());
+    //查找边缘
+    findContours(imgDil, contours, hierarchy, RETR_LIST, CHAIN_APPROX_SIMPLE);
 
-    Mat contours_mat = Mat::zeros(src.size(), CV_8UC3);
-      Rect card_rect;
-      for (int i = 0; i < contours.size(); i++) {
-          // 画轮廓
-          Rect rect = boundingRect(contours[i]);
-          //筛选轮廓
-          if (rect.width > src.cols / 20 && rect.height > src.rows / 20) {
-              drawContours(contours_mat, contours, i, Scalar(0, 0, 255), 1);
-              card_rect = rect;
-              rectangle(contours_mat, Point(rect.x, rect.y),
-                        Point(rect.x + rect.width, rect.y + rect.height),
-                        Scalar(255, 255, 255), 2);
-              break;
-          }
-      }
-    jobject bitmap1 = cv_helper::createBitMap(env, src.cols, src.rows, 0);
-    cv_helper::mat2bitmap(env, binary, bitmap1);
+    vector<vector<Point>> conPoly(contours.size());
+    vector<Rect> boundRect(contours.size());
+
+    vector<Point> biggest;
+    int maxArea = 0;
+
+    //提取并标记文档边缘
+    for (int i = 0; i < contours.size(); i++) {
+        int area = contourArea(contours[i]);
+        //cout << area << endl;
+        string objectType;
+
+        if (area > 1000000) {
+            LOGE("area=====>%d", area);
+
+            float peri = arcLength(contours[i], true);
+            approxPolyDP(contours[i], conPoly[i], 0.02 * peri, true);
+
+            if (area > maxArea && conPoly[i].size() == 4) {
+
+                // drawContours(src, conPoly, i, Scalar(255, 0, 255), 5);
+                biggest = {conPoly[i][0], conPoly[i][1], conPoly[i][2], conPoly[i][3]};
+                maxArea = area;
+            }
+            // drawContours(src, conPoly, i, Scalar(0, 0, 0), 10);
+            // rectangle(src, boundRect[i].tl(), boundRect[i].br(), Scalar(0, 0, 255), 5);
+        }
+    }
+
+    LOGE("biggest，%d", biggest.size());
+
+    docPoints = reorder(biggest);
+    LOGE("数量，%d", docPoints.size());
+
+
+    imgWarp = getWarp(src, docPoints, w, h);
+    LOGE("imgWarp.rows，%d", imgWarp.rows);
+    LOGE("imgWarp.cols，%d", imgWarp.cols);
+    int cropVal = 5;
+    Rect roi(cropVal, cropVal, w - (2 * cropVal), h - (2 * cropVal));
+    imgCrop = imgWarp(roi);
+
+    LOGE("imgCrop.rows，%d", imgCrop.rows);
+    LOGE("imgCrop.cols，%d", imgCrop.cols);
+
+
+    /*Mat contours_mat = Mat::zeros(src.size(), CV_8UC3);
+    Rect card_rect;
+    for (int i = 0; i < contours.size(); i++) {
+        // 画轮廓
+        Rect rect = boundingRect(contours[i]);
+        //筛选轮廓
+        if (rect.width > src.cols / 20 && rect.height > src.rows / 20) {
+            drawContours(contours_mat, contours, i, Scalar(0, 0, 255), 1);
+            card_rect = rect;
+            rectangle(contours_mat, Point(rect.x, rect.y),
+                      Point(rect.x + rect.width, rect.y + rect.height),
+                      Scalar(255, 255, 255), 2);
+            break;
+        }
+    }*/
+
+
+    jobject bitmap1 = cv_helper::createBitMap(env, w, h, 0);
+    cv_helper::mat2bitmap(env, imgWarp, bitmap1);
     return bitmap1;
 }

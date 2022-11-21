@@ -1,4 +1,9 @@
 
+## https://blog.csdn.net/youcans/article/details/124565960
+
+### 处理文档。
+
+
 过程：
 
 （1）读取模板图像，将其转为灰度图，并且二值化；
