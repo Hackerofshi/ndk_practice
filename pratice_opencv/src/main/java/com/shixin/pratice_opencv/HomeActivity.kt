@@ -20,6 +20,9 @@ class HomeActivity : AppCompatActivity() {
         findViewById<Button>(R.id.btn2).setOnClickListener {
             startActivity(Intent(this, CameraPreviewActivity::class.java))
         }
+        findViewById<Button>(R.id.btn3).setOnClickListener {
+            startActivity(Intent(this, LocalOcrActivity::class.java))
+        }
         initCameraWithPermissionCheck()
     }
 

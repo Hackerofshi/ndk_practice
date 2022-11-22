@@ -42,6 +42,10 @@ android {
             version "3.10.2"
         }
     }
+    dataBinding {
+        enabled = true
+    }
+
     ndkVersion '21.0.6113669'
 }
 
@@ -57,5 +61,6 @@ dependencies {
     implementation project(':mylibrary')
 
     kapt 'com.github.permissions-dispatcher:permissionsdispatcher-processor:4.9.1'
+    implementation 'com.rmtheis:tess-two:9.1.0'//https://github.com/rmtheis/tess-two
 
 }

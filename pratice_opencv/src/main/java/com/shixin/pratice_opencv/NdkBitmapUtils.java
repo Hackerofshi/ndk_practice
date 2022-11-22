@@ -2,6 +2,11 @@ package com.shixin.pratice_opencv;
 
 import android.graphics.Bitmap;
 
+import org.opencv.core.MatOfPoint2f;
+import org.opencv.core.Point;
+import org.opencv.core.RotatedRect;
+import org.opencv.imgproc.Imgproc;
+
 public class NdkBitmapUtils {
 
     static {
@@ -82,5 +87,12 @@ public class NdkBitmapUtils {
 
 
     public static native Bitmap findContours(Bitmap bitmap);
+
+    public void test(){
+        Point[] points = new Point[2];
+        Point point = new Point();
+        RotatedRect rotatedRect = Imgproc.minAreaRect(new MatOfPoint2f(points));
+        rotatedRect = rotatedRect;
+    }
 
 }

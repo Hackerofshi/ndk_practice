@@ -1,6 +1,11 @@
 
 ## https://blog.csdn.net/youcans/article/details/124565960
 
+
+##  OpenCV 中boundingRect、minAreaRect的用法区别
+https://blog.csdn.net/u013925378/article/details/84563011
+
+
 ### 处理文档。
 
 

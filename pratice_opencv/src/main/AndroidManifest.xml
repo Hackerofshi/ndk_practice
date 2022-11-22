@@ -26,11 +26,11 @@
             android:name=".BitmapActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
-            android:exported="true">
+            android:name=".MainActivity">
 
         </activity>
         <activity android:name=".CameraPreviewActivity" />
+        <activity android:name=".LocalOcrActivity" />
     </application>
 
 </manifest>
