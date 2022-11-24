@@ -6,6 +6,10 @@
 https://blog.csdn.net/u013925378/article/details/84563011
 
 
+## 二维码识别和裁剪出二维码
+https://www.jb51.net/article/234405.htm
+
+
 ### 处理文档。
 
 

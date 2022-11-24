@@ -502,9 +502,9 @@ float w = 3264, h = 7252;
 Mat getWarp(Mat img, vector<Point> points, float w, float h) {
     Point2f src[4] = {points[0], points[1], points[2], points[3]};
     Point2f dst[4] = {{0.0f, 0.0f},
-                      {w,0.0f},
+                      {w,    0.0f},
                       {0.0f, h},
-                      {w, h}};
+                      {w,    h}};
     Mat matrix = getPerspectiveTransform(src, dst);
     warpPerspective(img, imgWarp, matrix, Point(w, h));
     return imgWarp;
@@ -544,7 +544,6 @@ Java_com_shixin_pratice_1opencv_NdkBitmapUtils_findContours(JNIEnv *env, jclass 
     vector<vector<Point>> contours;
     vector<Vec4i> hierarchy;
 
-
     //查找边缘
     findContours(imgDil, contours, hierarchy, RETR_LIST, CHAIN_APPROX_SIMPLE);
 
@@ -568,7 +567,7 @@ Java_com_shixin_pratice_1opencv_NdkBitmapUtils_findContours(JNIEnv *env, jclass 
 
             if (area > maxArea && conPoly[i].size() == 4) {
 
-                // drawContours(src, conPoly, i, Scalar(255, 0, 255), 5);
+                //drawContours(src, conPoly, i, Scalar(255, 0, 255), 5);
                 biggest = {conPoly[i][0], conPoly[i][1], conPoly[i][2], conPoly[i][3]};
                 maxArea = area;
             }
@@ -613,5 +612,98 @@ Java_com_shixin_pratice_1opencv_NdkBitmapUtils_findContours(JNIEnv *env, jclass 
 
     jobject bitmap1 = cv_helper::createBitMap(env, w, h, 0);
     cv_helper::mat2bitmap(env, imgWarp, bitmap1);
+    return bitmap1;
+}
+extern "C"
+JNIEXPORT jobject JNICALL
+Java_com_shixin_pratice_1opencv_NdkBitmapUtils_findContours1(JNIEnv *env, jclass clazz,
+                                                             jobject bitmap) {
+
+    Mat src;
+    cv_helper::bitmap2mat(env, bitmap, src);
+
+    //resize(src, src, Size(), 0.5, 0.5);
+
+    Mat gary;
+    cvtColor(src, gary, COLOR_BGRA2GRAY);
+
+    //模糊
+    Mat imgBlur;
+    GaussianBlur(gary, imgBlur, Size(15.0, 15.0), 0);
+
+
+    // 梯度和二值化
+    Mat imgCanny;
+    Canny(imgBlur, imgCanny, 50, 150);
+
+    // 膨胀
+    Mat imgDil;
+
+    //卷积核
+    Mat kernel = getStructuringElement(MORPH_RECT, Size(3, 3));
+    dilate(imgCanny, imgDil, kernel);
+
+
+    vector<vector<Point>> contours;
+    vector<Vec4i> hierarchy;
+
+    //查找边缘
+    findContours(imgDil, contours, hierarchy, RETR_TREE, CHAIN_APPROX_SIMPLE);
+
+    vector<vector<Point>> conPoly(contours.size());
+    vector<Rect> boundRect(contours.size());
+
+
+    vector<vector<Point>> points;
+    for (int i = 0; i < contours.size(); i++) {
+        double area = contourArea(contours[i]);
+        if (area < 49) {
+            continue;
+        }
+        int k = i;
+        int c = 0;
+
+        //drawContours(src, contours, i, Scalar(255,255), 1, 8, hierarchy);
+
+        while (hierarchy[k][2] != -1.0) {
+            k = hierarchy[k][2];
+            c = c + 1;
+           // LOGE("c======>%d", k);
+            if (c >= 5) {
+                points.push_back(contours[i]);
+                //Scalar(255,0,0,255) 要用a r g b，不然没法显示颜色
+                drawContours(src, contours, i, Scalar(255,0,0,255), 1, 8, hierarchy);
+            }
+        }
+    }
+    LOGE("个数======>%d", points.size());
+    vector<Point> pts;
+    for (auto & point : points) {
+        pts.insert(pts.end(),point.begin(),point.end());
+        LOGE("points.size()======>%d", point.size());
+    }
+    LOGE("pts.size()======>%d", pts.size());
+
+    //Point2f
+    RotatedRect rotatedRect = minAreaRect(pts);
+    Rect qrRect = rotatedRect.boundingRect();
+
+    Point2f points1[4];
+    rotatedRect.points(points1);
+
+    for (int j = 0; j < 4; j++)
+    {
+        line(src, points1[j], points1[(j + 1) % 4], Scalar(255,0, 0, 255), 2);
+    }
+
+    Mat qrCodeImg = Mat(src, qrRect);
+    LOGE("qrCodeImg.cols()======>%d", qrCodeImg.cols);
+    LOGE("qrCodeImg.rows()======>%d", qrCodeImg.rows);
+
+
+
+
+    jobject bitmap1 = cv_helper::createBitMap(env, src.cols, src.rows, 0);
+    cv_helper::mat2bitmap(env, src, bitmap1);
     return bitmap1;
 }

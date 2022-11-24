@@ -11,6 +11,7 @@ import android.text.TextUtils
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.blankj.utilcode.util.FileIOUtils
+import com.blankj.utilcode.util.LogUtils
 import com.googlecode.tesseract.android.TessBaseAPI
 import com.shixin.pratice_opencv.databinding.ActivityLocalocrBinding
 import org.opencv.android.BaseLoaderCallback
@@ -18,18 +19,10 @@ import org.opencv.android.LoaderCallbackInterface
 import org.opencv.android.OpenCVLoader
 import org.opencv.android.Utils
 import org.opencv.core.*
-import org.opencv.imgproc.Imgproc
 import org.opencv.imgproc.Imgproc.*
+import org.opencv.objdetect.QRCodeDetector
 import java.io.File
 import kotlin.concurrent.thread
-import org.opencv.imgproc.Imgproc.THRESH_OTSU
-
-import org.opencv.imgproc.Imgproc.THRESH_BINARY
-
-import org.opencv.imgproc.Imgproc.threshold
-
-
-
 
 
 class LocalOcrActivity : AppCompatActivity() {
@@ -94,52 +87,52 @@ class LocalOcrActivity : AppCompatActivity() {
         val thresholdImage = Mat(src.size(), src.type()) //这个二值图像用于找出关键信息的图像
         val cannyImage = Mat(src.size(), src.type())
         //将图像转换为灰度图像
-        Imgproc.cvtColor(src, thresholdImage, Imgproc.COLOR_RGBA2GRAY)
+        cvtColor(src, thresholdImage, COLOR_RGBA2GRAY)
         //将图像转换为边缘二值图像
-        Imgproc.threshold(
+        threshold(
             thresholdImage,
             thresholdImage,
             60.0,
             255.0,
-            Imgproc.THRESH_BINARY
+            THRESH_BINARY
         )
 
         //开操作让信息联结到一起方便查出数字的位置
-        var kernel = Imgproc.getStructuringElement(
-            Imgproc.MORPH_RECT,
+        var kernel = getStructuringElement(
+            MORPH_RECT,
             Size(bitmap.width * 0.08, bitmap.width * 0.036)
         ) //获取结构元素
-        Imgproc.morphologyEx(thresholdImage, cannyImage, Imgproc.MORPH_OPEN, kernel)
+        morphologyEx(thresholdImage, cannyImage, MORPH_OPEN, kernel)
 
         //查找边缘
         //apertureSize---Sobel算子的大小，
         //
         //L2gradient---是否使用L2范数来计算图像梯度幅值。
-        Imgproc.Canny(
+        Canny(
             cannyImage, cannyImage, 100.0,
             200.0, 3
         )
         //膨胀让边缘更明显
-        kernel = Imgproc.getStructuringElement(
-            Imgproc.MORPH_RECT,
+        kernel = getStructuringElement(
+            MORPH_RECT,
             Size(bitmap.width * 0.0036, bitmap.width * 0.0036)
         ) //获取结构元素
-        Imgproc.dilate(cannyImage, cannyImage, kernel)
+        dilate(cannyImage, cannyImage, kernel)
 
         //轮廓发现
         val hierarchy = Mat()
         val contours: ArrayList<MatOfPoint> = ArrayList()
-        Imgproc.findContours(
+        findContours(
             cannyImage,
             contours,
             hierarchy,
-            Imgproc.RETR_EXTERNAL,
-            Imgproc.CHAIN_APPROX_NONE
+            RETR_EXTERNAL,
+            CHAIN_APPROX_NONE
         )
         //找出信息所在的轮廓
         val allRect = ArrayList<Rect>()
         contours.forEach {
-            val rect = Imgproc.boundingRect(it)
+            val rect = boundingRect(it)
             //计算出数字所在位置的高与宽的大致比例
             val widthHeightRatio = rect.height.toDouble() / rect.width.toDouble()
             //剔除一部分明显不是信息位置的
@@ -160,7 +153,7 @@ class LocalOcrActivity : AppCompatActivity() {
         val showInfoRectImg = Mat()
         src.copyTo(showInfoRectImg)
         infoRectData.forEach {
-            Imgproc.rectangle(
+            rectangle(
                 showInfoRectImg, it,
                 Scalar(0.0, 255.0, 0.0, 255.0), (bitmap.width * 0.003).toInt(), 8
             )
@@ -230,11 +223,44 @@ class LocalOcrActivity : AppCompatActivity() {
     private fun findQrCode() {
         //导入源图像
         val bitmap: Bitmap =
-            BitmapFactory.decodeResource(resources, R.drawable.icon_qrcode)
-
+            BitmapFactory.decodeResource(resources, R.drawable.icon_test_qr1)
 
         val image = Mat()
         Utils.bitmapToMat(bitmap, image) //将bitmap转换为Mat
+
+
+        /*val res = Mat()
+        val det = QRCodeDetector()
+         val detect = det.detectAndDecode(image, res)
+        // val detect1 = det.detectMulti(image, res)
+
+
+        //det.detect
+
+        LogUtils.i("----- detect= ${detect}")
+        LogUtils.i("-----res cols= ${res.cols()}")
+        LogUtils.i("-----res rows= ${res.rows()}")
+        LogUtils.i("-----res channels = ${res.channels()}")
+
+        val cols = res.cols()
+        for (i in 0 until cols) {
+            for (j in 0 until res.rows()) {
+                LogUtils.i("-----$i===$j")
+                val (value,value1) = res.at<Float>(i, j).v2c
+                LogUtils.i("-----value = ${value}---value1 = ${value1}")
+            }
+        }*/
+
+        /*val binaryBitmap1 =
+            Bitmap.createBitmap(res.cols(), res.rows(), bitmap.config)
+
+        Utils.matToBitmap(res, binaryBitmap1)
+
+        runOnUiThread {
+             binding.img.setImageBitmap(binaryBitmap1)
+        }*/
+        //LogUtils.i("-----detect = $detect1")
+
         //建立灰度图像存储空间
         val gray = Mat()
         //彩色图像灰度化
@@ -247,7 +273,7 @@ class LocalOcrActivity : AppCompatActivity() {
 
         // 函数检测边缘
         val canny = Mat()
-        Canny(gauss, canny, 50.0, 100.0)
+        Canny(gauss, canny, 50.0, 150.0)
 
 
         /*val binary = Mat()
@@ -272,6 +298,7 @@ class LocalOcrActivity : AppCompatActivity() {
         val ints: MutableList<Int> = ArrayList()
         val points: MutableList<MatOfPoint> = ArrayList()
 
+
         println("共有" + contours.size + "个标志轮廓!")
         println("hierarchy cols = " + hierarchy.cols())
         println("hierarchy rows = " + hierarchy.rows())
@@ -290,24 +317,25 @@ class LocalOcrActivity : AppCompatActivity() {
         for (i in contours.indices) {
             val area: Double = contourArea(contours[i])
             // 2.1 初步过滤面积 7*7 = 49
-            /*if (area < 49) {
+            if (area < 49) {
                 continue
-            }*/
+            }
             //println("大于49")
 
-            //drawContours(image, contours, i, Scalar(0.0, 0.0, 255.0), 4);
+            drawContours(imgDil, contours, i, Scalar(0.0, 0.0, 255.0))
 
             var k = i
             var c = 0
             while (hierarchy.get(0, k)[2] != -1.0) {
                 k = hierarchy.get(0, k)[2].toInt()
-                println("hierarchy0====" + hierarchy.get(0, k)[0])
-                println("hierarchy1====" + hierarchy.get(0, k)[1])
+                // println("hierarchy0====" + hierarchy.get(0, k)[0])
+                // println("hierarchy1====" + hierarchy.get(0, k)[1])
                 c = c + 1
-                println("c====$c")
+                //  println("c====$c")
                 if (c >= 5) {
                     ints.add(i)
                     points.add(contours[i])
+                   // drawContours(image, contours, i, Scalar(0.0, 0.0, 255.0), 2)
                 }
             }
         }
@@ -316,22 +344,30 @@ class LocalOcrActivity : AppCompatActivity() {
 
         val point: Array<Point?> = convertPoints(points)
 
+        val binaryBitmap1 =
+            Bitmap.createBitmap(imgDil.cols(), imgDil.rows(), bitmap.config)
+
+        Utils.matToBitmap(imgDil, binaryBitmap1)
+
+        runOnUiThread {
+             binding.img.setImageBitmap(binaryBitmap1)
+        }
 
         // cv::boundingRect(InputArray points)得到每一个轮廓周围最小矩形左上角点坐标和右下角点坐标
         // cv::AreaRect(InputArray points)得到一个旋转矩形，返回旋转矩形
 
         //轮廓转换成最小矩形包围盒
-        /*val rotatedRect = minAreaRect(MatOfPoint2f(*point))
+        val rotatedRect = minAreaRect(MatOfPoint2f(*point))
         //截取出二维码
         val qrRect = rotatedRect.boundingRect()
         val qrCodeImg = Mat(image, qrRect)
-        val binaryBitmap1 =
+        val binaryBitmap2 =
             Bitmap.createBitmap(qrCodeImg.cols(), qrCodeImg.rows(), bitmap.config)
 
-        Utils.matToBitmap(qrCodeImg, binaryBitmap1)*/
+        Utils.matToBitmap(qrCodeImg, binaryBitmap1)
 
         runOnUiThread {
-           // binding.img.setImageBitmap(binaryBitmap1)
+            // binding.img.setImageBitmap(binaryBitmap1)
         }
 
         image.release()
