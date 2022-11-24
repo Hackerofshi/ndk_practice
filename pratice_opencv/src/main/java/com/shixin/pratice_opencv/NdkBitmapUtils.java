@@ -89,4 +89,6 @@ public class NdkBitmapUtils {
     public static native Bitmap findContours(Bitmap bitmap);
 
     public static native Bitmap findContours1(Bitmap bitmap);
+
+    public static native Bitmap findQrCode(Bitmap bitmap);
 }

@@ -88,3 +88,4 @@ jobject cv_helper::createBitMap(JNIEnv *env, jint width, jint height, int type) 
 
     return bitmap;
 }
+
