@@ -160,3 +160,15 @@ vColor=(ambientColor() + diffuseColor() + specularColor())* uBaseColor;
 }
 
  ```
+
+
+## EGLContext 
+
+EGLContext 只能创建一个，保证视频图片都放在一个上下文中，然后再绘制到屏幕。
+
+
+## FBO
+
+离屏渲染，将内容先绘制到FBO，比如加了一些特效，
+帽子绘制到每一帧的人头上，眼镜绘制，绘制完成后再一次性绘制到
+屏幕，这样可以节省性能

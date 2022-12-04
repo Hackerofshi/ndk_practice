@@ -2,8 +2,14 @@ package com.shixin.ndk_practice.ui
 
 import android.Manifest
 import android.content.Intent
+import android.media.audiofx.BassBoost
+import android.os.Build
 import android.os.Bundle
+import android.os.Environment
+import android.provider.Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION
 import android.util.Log
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.shixin.ndk_practice.databinding.ActivityMainBinding
 import com.shixin.ndk_practice.practicec.Parcel
@@ -98,6 +104,10 @@ class MainActivity : AppCompatActivity() {
         binding.btn5.setOnClickListener {
             startActivity(Intent(this, NativeFileActivity::class.java))
         }
+
+        binding.btn6.setOnClickListener {
+            startActivity(Intent(this, AudioRecoderActivity::class.java))
+        }
     }
 
     @NeedsPermission(
@@ -109,5 +119,21 @@ class MainActivity : AppCompatActivity() {
         Manifest.permission.BLUETOOTH,
     )
     fun initLocation() {
+    }
+
+    private fun checkStorageManagerPermission() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R ||
+            Environment.isExternalStorageManager()
+        ) {
+            Toast.makeText(this, "已获得访问所有文件权限", Toast.LENGTH_SHORT).show()
+        } else {
+            val builder = AlertDialog.Builder(this)
+                .setMessage("本程序需要您同意允许访问所有文件权限")
+                .setPositiveButton("确定") { _, _ ->
+                    val intent = Intent(ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION)
+                    startActivity(intent)
+                }
+            builder.show()
+        }
     }
 }
