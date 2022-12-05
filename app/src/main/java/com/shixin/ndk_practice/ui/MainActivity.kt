@@ -108,6 +108,9 @@ class MainActivity : AppCompatActivity() {
         binding.btn6.setOnClickListener {
             startActivity(Intent(this, AudioRecoderActivity::class.java))
         }
+        binding.btn7.setOnClickListener {
+            startActivity(Intent(this, VideoRecordActivity::class.java))
+        }
     }
 
     @NeedsPermission(
