@@ -48,7 +48,7 @@ public class VideoRecordActivity extends AppCompatActivity implements BaseVideoR
             public void onStart() {
                 mVideoRecorder = new DefaultVideoRecorder(VideoRecordActivity.this,
                         mCameraView.getEglContext(), mCameraView.getTextureId());
-                mVideoRecorder.initVideo(path + "/01.mp3",
+                mVideoRecorder.initVideo(
                         path + "/live_push.mp4",
                         720, 1280);
                 mVideoRecorder.setOnRecordListener(VideoRecordActivity.this);
