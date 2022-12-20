@@ -64,20 +64,20 @@ class CameraPreviewActivity : CameraActivity(), CameraBridgeViewBase.CvCameraVie
 
 
     override fun onCameraViewStarted(width: Int, height: Int) {
-        mGray = Mat()
-        mRgba = Mat()
+        mGrayMat = Mat()
+        mRgbaMat = Mat()
     }
 
     override fun onCameraViewStopped() {
-        mGray?.release();
-        mRgba?.release();
+        mGrayMat?.release();
+        mRgbaMat?.release();
     }
 
-    private var mRgba: Mat? = null
-    private var mGray: Mat? = null
+    private var mRgbaMat: Mat? = null
+    private var mGrayMat: Mat? = null
     override fun onCameraFrame(inputFrame: CameraBridgeViewBase.CvCameraViewFrame?): Mat {
-        mRgba = inputFrame?.rgba()
-        mGray = inputFrame?.gray()
+        mRgbaMat = inputFrame?.rgba()
+        mGrayMat = inputFrame?.gray()
         val cameraIndex = cameraView?.getCameraIndex()
         Log.i("tag", "------cameraIndex=$cameraIndex")
 
@@ -86,13 +86,13 @@ class CameraPreviewActivity : CameraActivity(), CameraBridgeViewBase.CvCameraVie
             == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
             && cameraView?.getCameraIndex() == CAMERA_ID_FRONT
         ) {
-            Core.rotate(mRgba, mRgba, Core.ROTATE_90_COUNTERCLOCKWISE);
+            Core.rotate(mRgbaMat, mRgbaMat, Core.ROTATE_90_COUNTERCLOCKWISE);
         } else if (this.getResources().getConfiguration().orientation
             == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
             && cameraView?.getCameraIndex() == CAMERA_ID_BACK
         ) {
-            Core.rotate(mRgba, mRgba, Core.ROTATE_90_CLOCKWISE);
+            Core.rotate(mRgbaMat, mRgbaMat, Core.ROTATE_90_CLOCKWISE);
         }
-        return mRgba!!
+        return mRgbaMat!!
     }
 }

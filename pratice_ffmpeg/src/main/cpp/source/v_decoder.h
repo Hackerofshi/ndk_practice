@@ -12,6 +12,7 @@
 #include <android/native_window.h>
 #include "../render/one_frame.h"
 #include "test/base_decoder1.h"
+#include "../utils/timer.h"
 
 extern "C" {
 #include <libavutil/imgutils.h>

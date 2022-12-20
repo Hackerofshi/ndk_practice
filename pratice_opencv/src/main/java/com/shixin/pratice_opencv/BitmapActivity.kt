@@ -22,7 +22,8 @@ class BitmapActivity : AppCompatActivity() {
 
         // RGB_565 747  ARGB_8888 1494  1 倍
         // ARGB_8888 -> RGB 565 RGB 5位R 6位G 5位B   16位
-        val src: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.icon_test_qr1)
+        //val src: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.icon_test_qr1,options)
+        val src: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.icon_test_document)
         image1.setImageBitmap(src)
         Log.i("TAG", "onCreate: ${src.width}")
         Log.i("TAG", "onCreate: ${src.height}")
@@ -33,7 +34,7 @@ class BitmapActivity : AppCompatActivity() {
         findViewById<Button>(R.id.test).setOnClickListener {
             val thread = Thread(object : Runnable {
                 override fun run() {
-                    val res = NdkBitmapUtils.findContours1(src)
+                    val res = NdkBitmapUtils.findContours(src)
 
                     Log.i("TAG", "onCreate: ${res.width}")
                     Log.i("TAG", "onCreate: ${res.height}")

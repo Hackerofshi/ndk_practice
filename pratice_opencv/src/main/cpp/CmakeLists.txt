@@ -54,6 +54,7 @@ add_library( # Sets the name of the library.
         source/cardocr.cpp
         source/cv_helper.cpp
         source/qrcode_simple.cpp
+        source/find_qrcode_simple.cpp
         )
 
 find_library( # Sets the name of the path variable.

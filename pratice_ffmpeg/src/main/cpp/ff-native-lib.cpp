@@ -64,6 +64,7 @@ Java_com_tech_pratice_1ffmpeg_Player_play(JNIEnv *env, jobject thiz, jint player
 
 JNIEXPORT void JNICALL
 Java_com_tech_pratice_1ffmpeg_Player_pause(JNIEnv *env, jobject thiz, jint player) {
+
 }
 JNIEXPORT void JNICALL
 Java_com_tech_pratice_1ffmpeg_Player_stop(JNIEnv *env, jobject thiz, jint player) {

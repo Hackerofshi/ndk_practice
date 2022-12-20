@@ -7,7 +7,7 @@ import android.view.SurfaceView
 import androidx.appcompat.app.AppCompatActivity
 import com.tech.pratice_ffmpeg.Player.play
 
-class PlayerActivity : AppCompatActivity() {
+class NativePlayerActivity : AppCompatActivity() {
     val path = Environment.getExternalStorageDirectory().absolutePath + "/test1.mp4"
 
 
@@ -41,6 +41,13 @@ class PlayerActivity : AppCompatActivity() {
                 }
             }
         })
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (player != null) {
+            Player.stop(player!!)
+        }
     }
 
 }

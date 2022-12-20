@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
         needStorageWithPermissionCheck()
 
         findViewById<TextView>(R.id.tv).setOnClickListener {
-            startActivity(Intent(this, PlayerActivity::class.java))
+            startActivity(Intent(this, NativePlayerActivity::class.java))
         }
 
         findViewById<TextView>(R.id.btn).setOnClickListener {

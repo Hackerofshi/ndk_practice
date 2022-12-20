@@ -88,7 +88,8 @@ public class NdkBitmapUtils {
 
     public static native Bitmap findContours(Bitmap bitmap);
 
-    public static native Bitmap findContours1(Bitmap bitmap);
+    //判断是否为二维码。
+    public static native Bitmap findQrCodeSimple(Bitmap bitmap);
 
     public static native Bitmap findQrCode(Bitmap bitmap);
 }

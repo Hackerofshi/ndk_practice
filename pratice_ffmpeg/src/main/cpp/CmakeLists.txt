@@ -129,7 +129,7 @@ add_library( # Sets the name of the library.
         ff-native-lib.cpp
         source/base_decoder.cpp
         source/v_decoder.cpp
-        #utils/timer.c
+        utils/timer.c
         source/audio_decoder.cpp
         source/test/base_decoder1.cpp
         source/test/i_decode_state_cb.cpp

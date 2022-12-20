@@ -9,9 +9,7 @@ NativeRender::NativeRender(JNIEnv *env, jobject surface) {
     m_surface_ref = env->NewGlobalRef(surface);
 }
 
-NativeRender::~NativeRender() {
-
-}
+NativeRender::~NativeRender() {}
 
 void NativeRender::InitRender(JNIEnv *env, int video_width, int video_height, int *dst_size) {
     //初始化窗口
@@ -33,8 +31,7 @@ void NativeRender::InitRender(JNIEnv *env, int video_width, int video_height, in
     LOGE("windowW: %d, windowH: %d, dstVideoW: %d, dstVideoH: %d",
          windowWidth, windowHeight, m_dst_w, m_dst_h)
 
-    ANativeWindow_setBuffersGeometry(m_native_window, windowWidth, windowHeight,
-                                     WINDOW_FORMAT_RGBA_8888);
+    ANativeWindow_setBuffersGeometry(m_native_window, windowWidth, windowHeight,WINDOW_FORMAT_RGBA_8888);
 
     dst_size[0] = m_dst_w;
     dst_size[1] = m_dst_h;

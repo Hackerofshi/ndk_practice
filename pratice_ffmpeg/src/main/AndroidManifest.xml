@@ -22,7 +22,7 @@
             android:name=".EglSurfaceVuewActivity"
             android:exported="false" />
         <activity
-            android:name=".PlayerActivity"
+            android:name=".NativePlayerActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
