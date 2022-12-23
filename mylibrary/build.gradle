@@ -39,6 +39,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
     api 'com.github.permissions-dispatcher:permissionsdispatcher:4.9.1'
-    api "com.blankj:utilcodex:1.31.0"
+    api "com.blankj:utilcodex:1.31.1"
 
 }

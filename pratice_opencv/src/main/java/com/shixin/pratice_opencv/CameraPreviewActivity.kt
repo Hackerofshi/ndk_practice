@@ -38,7 +38,7 @@ class CameraPreviewActivity : CameraActivity(), CameraBridgeViewBase.CvCameraVie
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_camera_preview)
         // Example of a call to a native method
-        cameraView = findViewById<JavaCameraView>(R.id.sample_text)
+        cameraView = findViewById(R.id.sample_text)
         findViewById<Button>(R.id.btn_capture).setOnClickListener {
             ImageUtils.save2Album(
                 NdkBitmapUtils.matToBitmap(mRgbaMat?.nativeObj!!),
