@@ -1,8 +1,11 @@
 package com.shixin.pratice_opencv
 
 import android.content.pm.ActivityInfo
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
+import com.blankj.utilcode.util.ImageUtils
 import org.opencv.android.*
 import org.opencv.android.CameraBridgeViewBase.CAMERA_ID_BACK
 import org.opencv.android.CameraBridgeViewBase.CAMERA_ID_FRONT
@@ -36,6 +39,12 @@ class CameraPreviewActivity : CameraActivity(), CameraBridgeViewBase.CvCameraVie
         setContentView(R.layout.activity_camera_preview)
         // Example of a call to a native method
         cameraView = findViewById<JavaCameraView>(R.id.sample_text)
+        findViewById<Button>(R.id.btn_capture).setOnClickListener {
+            ImageUtils.save2Album(
+                NdkBitmapUtils.matToBitmap(mRgbaMat?.nativeObj!!),
+                Bitmap.CompressFormat.JPEG
+            )
+        }
         cameraView?.setVisibility(CameraBridgeViewBase.VISIBLE);
         cameraView?.setCvCameraViewListener(this)
         cameraView?.cameraIndex = CAMERA_ID_BACK

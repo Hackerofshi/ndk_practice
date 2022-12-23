@@ -509,12 +509,11 @@ Mat getWarp(Mat img, vector<Point> points, float w, float h) {
     warpPerspective(img, imgWarp, matrix, Point(w, h));
     return imgWarp;
 }
-void drawPoints(vector<Point> points, Scalar color, Mat imgOriginal)
-{
-    for (int i = 0; i < points.size(); i++)
-    {
-        circle(imgOriginal,points[i],10,color,FILLED);
-        putText(imgOriginal, to_string(i), points[i], FONT_HERSHEY_PLAIN, 4, color,4);
+
+void drawPoints(vector<Point> points, Scalar color, Mat imgOriginal) {
+    for (int i = 0; i < points.size(); i++) {
+        circle(imgOriginal, points[i], 10, color, FILLED);
+        putText(imgOriginal, to_string(i), points[i], FONT_HERSHEY_PLAIN, 4, color, 4);
     }
 }
 
@@ -580,8 +579,8 @@ Java_com_shixin_pratice_1opencv_NdkBitmapUtils_findContours(JNIEnv *env, jclass 
                 maxArea = area;
             }
             //绘制面积大于1000000平方的边界。
-           // drawContours(src, conPoly, i, Scalar(0, 0, 0), 10);
-           // rectangle(src, boundRect[i].tl(), boundRect[i].br(), Scalar(0, 0, 255), 5);
+            // drawContours(src, conPoly, i, Scalar(0, 0, 0), 10);
+            // rectangle(src, boundRect[i].tl(), boundRect[i].br(), Scalar(0, 0, 255), 5);
         }
     }
 
@@ -591,7 +590,7 @@ Java_com_shixin_pratice_1opencv_NdkBitmapUtils_findContours(JNIEnv *env, jclass 
     LOGE("数量，%d", docPoints.size());
     drawPoints(docPoints, Scalar(0, 255, 0), src);
 
-    /*imgWarp = getWarp(src, docPoints, w, h);
+    imgWarp = getWarp(src, docPoints, w, h);
     LOGE("imgWarp.rows，%d", imgWarp.rows);
     LOGE("imgWarp.cols，%d", imgWarp.cols);
     int cropVal = 5;
@@ -599,27 +598,131 @@ Java_com_shixin_pratice_1opencv_NdkBitmapUtils_findContours(JNIEnv *env, jclass 
     imgCrop = imgWarp(roi);
 
     LOGE("imgCrop.rows，%d", imgCrop.rows);
-    LOGE("imgCrop.cols，%d", imgCrop.cols);*/
+    LOGE("imgCrop.cols，%d", imgCrop.cols);
 
 
-   /* Mat contours_mat = Mat::zeros(src.size(), CV_8UC3);
-    Rect card_rect;
-    for (int i = 0; i < contours.size(); i++) {
-        // 画轮廓
-        Rect rect = boundingRect(contours[i]);
-        //筛选轮廓
-        if (rect.width > src.cols / 20 && rect.height > src.rows / 20) {
-            drawContours(contours_mat, contours, i, Scalar(0, 0, 255), 1);
-            card_rect = rect;
-            rectangle(contours_mat, Point(rect.x, rect.y),
-                      Point(rect.x + rect.width, rect.y + rect.height),
-                      Scalar(255, 255, 255), 2);
-            break;
-        }
-    }*/
+    /* Mat contours_mat = Mat::zeros(src.size(), CV_8UC3);
+     Rect card_rect;
+     for (int i = 0; i < contours.size(); i++) {
+         // 画轮廓
+         Rect rect = boundingRect(contours[i]);
+         //筛选轮廓
+         if (rect.width > src.cols / 20 && rect.height > src.rows / 20) {
+             drawContours(contours_mat, contours, i, Scalar(0, 0, 255), 1);
+             card_rect = rect;
+             rectangle(contours_mat, Point(rect.x, rect.y),
+                       Point(rect.x + rect.width, rect.y + rect.height),
+                       Scalar(255, 255, 255), 2);
+             break;
+         }
+     }*/
 
 
     jobject bitmap1 = cv_helper::createBitMap(env, w, h, 0);
-    cv_helper::mat2bitmap(env, src, bitmap1);
+    cv_helper::mat2bitmap(env, imgCrop, bitmap1);
+    return bitmap1;
+}
+
+extern "C"
+JNIEXPORT jobject JNICALL
+Java_com_shixin_pratice_1opencv_NdkBitmapUtils_matToBitmap(JNIEnv *env, jclass clazz,
+                                                           jlong native_obj) {
+    Mat *src = reinterpret_cast<Mat *>(native_obj);
+
+    //resize(src, src, Size(), 0.5, 0.5);
+
+    Mat gary;
+    cvtColor(*src, gary, COLOR_BGRA2GRAY);
+
+    //模糊
+    Mat imgBlur;
+    GaussianBlur(gary, imgBlur, Size(3, 3), 3, 0);
+
+
+    // 梯度和二值化
+    Mat imgCanny;
+    Canny(imgBlur, imgCanny, 25, 75);
+
+    // 膨胀
+    Mat imgDil;
+
+    //卷积核
+    Mat kernel = getStructuringElement(MORPH_RECT, Size(35, 35));
+    dilate(imgCanny, imgDil, kernel);
+
+
+    vector<vector<Point>> contours;
+    vector<Vec4i> hierarchy;
+
+    //查找边缘
+    findContours(imgDil, contours, hierarchy, RETR_LIST, CHAIN_APPROX_SIMPLE);
+
+    vector<vector<Point>> conPoly(contours.size());
+    vector<Rect> boundRect(contours.size());
+
+    vector<Point> biggest;
+    int maxArea = 0;
+
+    //提取并标记文档边缘
+    for (int i = 0; i < contours.size(); i++) {
+        int area = contourArea(contours[i]);
+        //cout << area << endl;
+        string objectType;
+
+        if (area > 1000000) {
+            LOGE("area=====>%d", area);
+
+            float peri = arcLength(contours[i], true);
+            approxPolyDP(contours[i], conPoly[i], 0.02 * peri, true);
+
+            if (area > maxArea && conPoly[i].size() == 4) {
+
+                //绘制识别到的边界
+                drawContours(*src, conPoly, i, Scalar(0, 0, 0), 10);
+                biggest = {conPoly[i][0], conPoly[i][1], conPoly[i][2], conPoly[i][3]};
+                maxArea = area;
+            }
+            //绘制面积大于1000000平方的边界。
+            // drawContours(src, conPoly, i, Scalar(0, 0, 0), 10);
+            // rectangle(src, boundRect[i].tl(), boundRect[i].br(), Scalar(0, 0, 255), 5);
+        }
+    }
+
+    LOGE("biggest，%d", biggest.size());
+
+    docPoints = reorder(biggest);
+    LOGE("数量，%d", docPoints.size());
+    drawPoints(docPoints, Scalar(0, 255, 0), *src);
+
+    imgWarp = getWarp(*src, docPoints, w, h);
+    LOGE("imgWarp.rows，%d", imgWarp.rows);
+    LOGE("imgWarp.cols，%d", imgWarp.cols);
+    int cropVal = 5;
+    Rect roi(cropVal, cropVal, w - (2 * cropVal), h - (2 * cropVal));
+    imgCrop = imgWarp(roi);
+
+    LOGE("imgCrop.rows，%d", imgCrop.rows);
+    LOGE("imgCrop.cols，%d", imgCrop.cols);
+
+
+    /* Mat contours_mat = Mat::zeros(src.size(), CV_8UC3);
+     Rect card_rect;
+     for (int i = 0; i < contours.size(); i++) {
+         // 画轮廓
+         Rect rect = boundingRect(contours[i]);
+         //筛选轮廓
+         if (rect.width > src.cols / 20 && rect.height > src.rows / 20) {
+             drawContours(contours_mat, contours, i, Scalar(0, 0, 255), 1);
+             card_rect = rect;
+             rectangle(contours_mat, Point(rect.x, rect.y),
+                       Point(rect.x + rect.width, rect.y + rect.height),
+                       Scalar(255, 255, 255), 2);
+             break;
+         }
+     }*/
+
+
+    jobject bitmap1 = cv_helper::createBitMap(env, w, h, 0);
+    cv_helper::mat2bitmap(env, imgCrop, bitmap1);
     return bitmap1;
 }

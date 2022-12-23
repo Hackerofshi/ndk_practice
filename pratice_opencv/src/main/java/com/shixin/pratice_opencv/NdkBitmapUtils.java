@@ -96,4 +96,8 @@ public class NdkBitmapUtils {
 
     public static native Bitmap findDocument(long nativeObj);
 
+
+    public static native Bitmap matToBitmap(long nativeObj);
+
+
 }
