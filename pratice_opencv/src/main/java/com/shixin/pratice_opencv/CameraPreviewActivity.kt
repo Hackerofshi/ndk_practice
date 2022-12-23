@@ -82,17 +82,20 @@ class CameraPreviewActivity : CameraActivity(), CameraBridgeViewBase.CvCameraVie
         Log.i("tag", "------cameraIndex=$cameraIndex")
 
         // 在这里写业务逻辑
-        if (this.getResources().getConfiguration().orientation
+        if (this.resources.configuration.orientation
             == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
             && cameraView?.getCameraIndex() == CAMERA_ID_FRONT
         ) {
             Core.rotate(mRgbaMat, mRgbaMat, Core.ROTATE_90_COUNTERCLOCKWISE);
-        } else if (this.getResources().getConfiguration().orientation
+        } else if (this.resources.configuration.orientation
             == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
             && cameraView?.getCameraIndex() == CAMERA_ID_BACK
         ) {
             Core.rotate(mRgbaMat, mRgbaMat, Core.ROTATE_90_CLOCKWISE);
         }
+
+        NdkBitmapUtils.findDocument(mRgbaMat?.nativeObj!!)
+
         return mRgbaMat!!
     }
 }

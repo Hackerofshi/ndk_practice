@@ -92,4 +92,8 @@ public class NdkBitmapUtils {
     public static native Bitmap findQrCodeSimple(Bitmap bitmap);
 
     public static native Bitmap findQrCode(Bitmap bitmap);
+
+
+    public static native Bitmap findDocument(long nativeObj);
+
 }

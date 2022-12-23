@@ -8,7 +8,7 @@
 using namespace cv;
 using namespace std;
 
-Mat warpTransfrom(const Mat &gary, const RotatedRect &rect){
+Mat warpTransfrom(const Mat &gary, const RotatedRect &rect) {
     int width = rect.size.width;
     int height = rect.size.height;
     Mat result(Size(width, height), gary.type());
@@ -17,8 +17,7 @@ Mat warpTransfrom(const Mat &gary, const RotatedRect &rect){
     vector<Point> srcPoints;
     Point2f pts[4];
     rect.points(pts);
-    for (int i = 0; i < 4; i++)
-    {
+    for (int i = 0; i < 4; i++) {
         srcPoints.push_back(pts[i]);
     }
     vector<Point> dstPoints;
@@ -33,7 +32,7 @@ Mat warpTransfrom(const Mat &gary, const RotatedRect &rect){
     return result;
 }
 
-bool isXCorner(const Mat& qrROI){
+bool isXCorner(const Mat &qrROI) {
     // 四个值
     int cb = 0, lw = 0, rw = 0, lb = 0, rb = 0;
 
@@ -42,93 +41,89 @@ bool isXCorner(const Mat& qrROI){
     int cx = width / 2;
     int cy = height / 2;
     uchar pixels = qrROI.at<uchar>(cy, cx);
-    if (pixels == 255){
+    if (pixels == 255) {
         return false;
     }
 
     // 求中心黑色
     int start = 0, end = 0, offset = 0;
     bool findleft = false, findright = false;
-    while (true){
+    while (true) {
         offset++;
 
-        if ((cx - offset) <= 0 || (cx+offset) >= width - 1){
+        if ((cx - offset) <= 0 || (cx + offset) >= width - 1) {
             break;
         }
 
         // 左边扫
         pixels = qrROI.at<uchar>(cy, cx - offset);
-        if (!findleft && pixels == 255){
+        if (!findleft && pixels == 255) {
             start = cx - offset;
             findleft = true;
         }
 
         // 右边扫
         pixels = qrROI.at<uchar>(cy, cx + offset);
-        if (!findright && pixels == 255){
+        if (!findright && pixels == 255) {
             end = cx + offset;
             findright = true;
         }
 
-        if (findleft && findright){
+        if (findleft && findright) {
             break;
         }
     }
-    if (start == 0 || end == 0){
+    if (start == 0 || end == 0) {
         return false;
     }
     cb = end - start;
     // 相间的白色
-    for (int col = end; col < width - 1; col++)
-    {
+    for (int col = end; col < width - 1; col++) {
         pixels = qrROI.at<uchar>(cy, col);
-        if (pixels == 0){
+        if (pixels == 0) {
             break;
         }
         rw++;
     }
-    for (int col = start; col > 0; col--)
-    {
+    for (int col = start; col > 0; col--) {
         pixels = qrROI.at<uchar>(cy, col);
-        if (pixels == 0){
+        if (pixels == 0) {
             break;
         }
         lw++;
     }
-    if (rw == 0 || lw == 0){
+    if (rw == 0 || lw == 0) {
         return false;
     }
 
     // 两边的黑色
-    for (int col = end + rw; col < width - 1; col++)
-    {
+    for (int col = end + rw; col < width - 1; col++) {
         pixels = qrROI.at<uchar>(cy, col);
-        if (pixels == 255){
+        if (pixels == 255) {
             break;
         }
         rb++;
     }
-    for (int col = start - lw; col > 0; col--)
-    {
+    for (int col = start - lw; col > 0; col--) {
         pixels = qrROI.at<uchar>(cy, col);
-        if (pixels == 255){
+        if (pixels == 255) {
             break;
         }
         lb++;
     }
-    if (rb == 0 || lb == 0){
+    if (rb == 0 || lb == 0) {
         return false;
     }
 
     float sum = cb + lb + rb + lw + rw;
     // 求比例 3:1:1:1:1
-    cb = (cb / sum)*7.0 + 0.5;
-    lb = (lb / sum)*7.0 + 0.5;
-    rb = (rb / sum)*7.0 + 0.5;
-    lw = (lw / sum)*7.0 + 0.5;
-    rw = (rw / sum)*7.0 + 0.5;
+    cb = (cb / sum) * 7.0 + 0.5;
+    lb = (lb / sum) * 7.0 + 0.5;
+    rb = (rb / sum) * 7.0 + 0.5;
+    lw = (lw / sum) * 7.0 + 0.5;
+    rw = (rw / sum) * 7.0 + 0.5;
 
-    if ((cb == 3 || cb == 4) && (lw == rw) && (lb == rb) && (lw == rb) && (lw == 1)){
+    if ((cb == 3 || cb == 4) && (lw == rw) && (lb == rb) && (lw == rb) && (lw == 1)) {
         // 3:1:1:1:1 or 4:1:1:1:1
         return true;
     }
@@ -137,7 +132,7 @@ bool isXCorner(const Mat& qrROI){
 }
 
 // 最好还是加上
-bool isYCorner(const Mat& qrROI){
+bool isYCorner(const Mat &qrROI) {
     // 统计白色像素点和黑色像素点
     int bp = 0, wp = 0;
     int width = qrROI.cols;
@@ -147,22 +142,20 @@ bool isYCorner(const Mat& qrROI){
     // 中心点是黑的
     int pv = 0;
 
-    for (int row = 0; row < height; row++)
-    {
+    for (int row = 0; row < height; row++) {
         pv = qrROI.at<uchar>(row, cx);
-        if (pv == 0){
+        if (pv == 0) {
             bp++;
-        }
-        else if (pv == 255){
+        } else if (pv == 255) {
             wp++;
         }
     }
 
-    if (bp == 0 || wp == 0){
+    if (bp == 0 || wp == 0) {
         return false;
     }
 
-    if (wp * 2 > bp || bp > 4 * wp){
+    if (wp * 2 > bp || bp > 4 * wp) {
         return false;
     }
 
@@ -263,4 +256,5 @@ Java_com_shixin_pratice_1opencv_NdkBitmapUtils_findQrCode(JNIEnv *env, jclass cl
 //    normalize(calcMat, removeShadowMat, 0, 200, NORM_MINMAX);
 //
 //}
+
 
