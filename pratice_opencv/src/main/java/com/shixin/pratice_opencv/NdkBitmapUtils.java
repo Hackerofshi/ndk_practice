@@ -93,11 +93,25 @@ public class NdkBitmapUtils {
 
     public static native Bitmap findQrCode(Bitmap bitmap);
 
-
+    /**
+     * 查找文档范围
+     * @param nativeObj mat地址
+     * @return bitmap
+     */
     public static native Bitmap findDocument(long nativeObj);
 
-
+    /**
+     * 将mat转为bitmap
+     * @param nativeObj mat地址
+     * @return bitmap
+     */
     public static native Bitmap matToBitmap(long nativeObj);
 
+    /**
+     * 去除文档上面的阴影
+     * @param bitmap  图片的bitmap
+     * @return bitmap
+     */
+    public static native Bitmap removeShadows(Bitmap bitmap);
 
 }
