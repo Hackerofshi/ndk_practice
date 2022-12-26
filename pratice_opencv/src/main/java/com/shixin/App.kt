@@ -1,4 +1,4 @@
-package com.shixin.ndk_practice
+package com.shixin
 
 import com.tech.mylibrary.BaseApp
 

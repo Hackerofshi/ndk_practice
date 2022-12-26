@@ -20,6 +20,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Ndk_practice">
         <activity
+            android:name=".ui.ThreeDimensionalMainActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.BitmapActivity"
             android:exported="false" />
         <activity

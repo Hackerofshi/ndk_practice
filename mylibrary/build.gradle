@@ -40,5 +40,6 @@ dependencies {
 
     api 'com.github.permissions-dispatcher:permissionsdispatcher:4.9.1'
     api "com.blankj:utilcodex:1.31.1"
+    api 'com.tencent.bugly:crashreport:latest.release'
 
 }

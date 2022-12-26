@@ -64,4 +64,6 @@ dependencies {
 
     implementation 'com.github.permissions-dispatcher:permissionsdispatcher:4.9.1'
     kapt  'com.github.permissions-dispatcher:permissionsdispatcher-processor:4.9.1'
+    implementation project(':mylibrary')
+
 }

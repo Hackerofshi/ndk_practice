@@ -19,7 +19,7 @@ class BitmapActivity : AppCompatActivity() {
         //options.inMutable = true
         // 有啥区别？  ARGB_8888  32 位最好
         //options.inPreferredConfig = Bitmap.Config.RGB_565
-
+        //options.inPreferredConfig = Bitmap.Config.ARGB_8888
         // RGB_565 747  ARGB_8888 1494  1 倍
         // ARGB_8888 -> RGB 565 RGB 5位R 6位G 5位B   16位
         //val src: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.icon_test_qr1,options)

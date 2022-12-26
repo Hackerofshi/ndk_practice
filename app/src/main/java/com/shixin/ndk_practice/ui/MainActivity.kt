@@ -111,6 +111,9 @@ class MainActivity : AppCompatActivity() {
         binding.btn7.setOnClickListener {
             startActivity(Intent(this, VideoRecordActivity::class.java))
         }
+        binding.btn8.setOnClickListener {
+            startActivity(Intent(this, ThreeDimensionalMainActivity::class.java))
+        }
     }
 
     @NeedsPermission(
