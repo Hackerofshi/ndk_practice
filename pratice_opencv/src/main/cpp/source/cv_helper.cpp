@@ -3,7 +3,9 @@
 //
 
 #include "cv_helper.h"
-
+#include <android/log.h>
+#define TAG "JNI_TAG"
+#define LOGE(...) __android_log_print(ANDROID_LOG_ERROR,TAG,__VA_ARGS__)
 int cv_helper::bitmap2mat(JNIEnv *env, jobject &bitmap, cv::Mat &dst) {
     AndroidBitmapInfo bitmapInfo;
     int getInfoRes = AndroidBitmap_getInfo(env, bitmap, &bitmapInfo);
@@ -89,3 +91,12 @@ jobject cv_helper::createBitMap(JNIEnv *env, jint width, jint height, int type) 
     return bitmap;
 }
 
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_shixin_pratice_1opencv_NdkBitmapUtils_test(JNIEnv *env, jclass clazz) {
+    LOGE("%s", "rrr");
+    int a = 5;
+    int b = 5 / 0;
+    LOGE("%s", b);
+}

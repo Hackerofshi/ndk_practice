@@ -7,6 +7,7 @@ import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import com.blankj.utilcode.util.LogUtils
 
 class BitmapActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,7 +30,8 @@ class BitmapActivity : AppCompatActivity() {
         Log.i("TAG", "onCreate: ${src.height}")
         // Log.e("TAG", src.byteCount / 1024.toString() + "")
         // BitmapUtils.gary(src)
-
+        NdkBitmapUtils.test()
+        LogUtils.i("---------------")
 
         findViewById<Button>(R.id.test).setOnClickListener {
             val thread = Thread(object : Runnable {

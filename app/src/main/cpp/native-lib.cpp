@@ -468,13 +468,10 @@ Java_com_shixin_ndk_1practice_util_NDKUtils_write(JNIEnv *env, jobject thiz, jst
 extern "C"
 JNIEXPORT void JNICALL
 Java_com_shixin_ndk_1practice_util_NDKUtils_testCmd(JNIEnv *env, jobject thiz) {
+    LOGI("%s", "rrr");
     int a = 5;
     int b = 5 / 0;
     LOGI("%s", b);
-
-
-
-
 }
 
 

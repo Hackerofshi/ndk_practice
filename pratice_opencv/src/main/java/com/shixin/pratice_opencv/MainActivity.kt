@@ -34,6 +34,7 @@ class MainActivity : AppCompatActivity() {
 
         mFaceDetection = FaceDetection()
         mFaceDetection?.loadCascade(mCascadeFile?.absolutePath)
+
     }
 
     private fun copyCascadeFile() {

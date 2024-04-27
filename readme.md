@@ -93,6 +93,8 @@ https://www.cnblogs.com/Allen-rg/p/6999360.html
 https://github.com/yangkun19921001/AVEditor
 https://github.com/yangkun19921001/AVSample
 
+https://github.com/ZLMediaKit/ZLMediaKit
+
 ## jni 
 https://blog.csdn.net/tkwxty/article/details/103539392 
 
@@ -108,3 +110,11 @@ https://blog.csdn.net/mr_sk/article/details/79077271
 Android OCR文字识别 实时扫描手机号（极速扫描单行文本方案）
 https://blog.csdn.net/mr_sk/article/details/72877492
 
+## ijk源码分析
+http://events.jianshu.io/p/1ba0763ba024
+
+
+
+
+## ffmpeg常见名词解析
+scan_all_pmts， 扫描全部的ts流的"Program Map Table"表。

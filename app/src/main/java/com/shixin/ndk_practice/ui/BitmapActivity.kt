@@ -20,20 +20,20 @@ class BitmapActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.btn1.setOnClickListener {
-            Log.i("TAG", "onCreate: " + Environment.getExternalStorageDirectory())
-            val bitmap = BitmapFactory.decodeResource(resources, R.drawable.dzzz)
-            val Compressor = Compressor()
-            val bitmapWip = Bitmap.createBitmap(
-                bitmap.getWidth(),
-                bitmap.getHeight(), Bitmap.Config.ARGB_8888
-            )
+            //            Log.i("TAG", "onCreate: " + Environment.getExternalStorageDirectory())
+            //            val bitmap = BitmapFactory.decodeResource(resources, R.drawable.dzzz)
+            //            val Compressor = Compressor()
+            //            val bitmapWip = Bitmap.createBitmap(
+            //                bitmap.getWidth(),
+            //                bitmap.getHeight(), Bitmap.Config.ARGB_8888
+            //            )
+            //
+            //            Compressor.convertBmp(
+            //                bitmap,
+            //                bitmapWip,
+            //            )
 
-            Compressor.convertBmp(
-                bitmap,
-                bitmapWip,
-            )
-
-           // NDKUtils.testCmd()
+            NDKUtils.testCmd()
         }
 
     }

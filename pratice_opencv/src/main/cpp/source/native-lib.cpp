@@ -740,7 +740,7 @@ Java_com_shixin_pratice_1opencv_NdkBitmapUtils_removeShadows(JNIEnv *env, jclass
     Mat gray;
     cvtColor(src, gray, COLOR_BGR2GRAY);
     //CvUtils::SetShowWindow(gray, "gray", 0, 30);
-    imshow("gray", gray);
+    //imshow("gray", gray);
 
 
     //定义腐蚀和膨胀的结构化元素和迭代次数
@@ -763,7 +763,7 @@ Java_com_shixin_pratice_1opencv_NdkBitmapUtils_removeShadows(JNIEnv *env, jclass
     //4.膨胀再腐蚀后的图减去原灰度图再进行取反操作
     Mat calcMat = ~(erodeMat - gray);
     //CvUtils::SetShowWindow(calcMat, "calc", gray.cols*2, 30);
-    imshow("calc", calcMat);
+   // imshow("calc", calcMat);
 
 
     //5.使用规一化将原来背景白色的改了和原来灰度图差不多的灰色

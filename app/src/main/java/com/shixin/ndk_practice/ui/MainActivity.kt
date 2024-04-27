@@ -11,6 +11,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.blankj.utilcode.util.LogUtils
 import com.shixin.ndk_practice.databinding.ActivityMainBinding
 import com.shixin.ndk_practice.practicec.Parcel
 import com.shixin.ndk_practice.practicec.Test1
@@ -97,6 +98,7 @@ class MainActivity : AppCompatActivity() {
 
 
         binding.btn4.setOnClickListener {
+            //val  i = 5/0
             startActivity(Intent(this, BitmapActivity::class.java))
         }
 

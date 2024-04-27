@@ -121,6 +121,8 @@ int max1(int x, int y) {
     return x > y ? x : y;
 }
 
+
+
 void testMax() {
     int (*p)(int, int) = &max1;
     int a = 3;

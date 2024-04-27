@@ -114,4 +114,7 @@ public class NdkBitmapUtils {
      */
     public static native Bitmap removeShadows(Bitmap bitmap);
 
+
+    public static native void test();
+
 }

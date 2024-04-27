@@ -53,7 +53,7 @@ typedef struct MyStruct1 {
 
 struct MyStruct2 {
     int a;
-} value;
+} value; // 结构体变量value
 
 typedef struct Date {
     int s;
@@ -77,6 +77,7 @@ void copyTo(MyStudent *from, MyStudent *to) {
     to->className = (char *) malloc(100);
     strcpy(to->className, from->className);
 
+    value.a = 20;
 
 }
 
