@@ -23,7 +23,6 @@ public:
 
     virtual void Draw(int screenW, int screenH);
 
-    //
     virtual void Destroy();
 
     virtual void UpdateTransformMatrix(glm::mat4 &mvpMatrix, int screenW, int screenH);

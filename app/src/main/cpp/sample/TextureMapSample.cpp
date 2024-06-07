@@ -89,6 +89,13 @@ void TextureMapSample::Init() {
     //        outColor = texture(s_TextureMap, v_texCoord);
     //   }
 
+    //可见它就是代表一个纹理对象，这里sampler2D中的“2D”代表的就是2D纹理。
+    //但是说它代表一个纹理对象其实是不准确的，更准确的是代表一个纹理单元，通过纹理单元去绑定一个纹理对象，从而间接绑定纹理对象。
+    //它只能被uniform修饰或者作为方法参数，这里被uniform修饰也就代表了一帧图像内，这个纹理单元是不会变的，即对应的纹理的图片是不变的。
+    //它就是传说中重中之重的采样函数了，具体来说就是获取到传入的具体纹理坐标值
+    // TexCoord在ourTexture对应的纹理上的纹素的颜色（当然由于不同的过滤模式会导致具体采样颜色的细节不同）。
+
+
     char fShaderStr[] =
             "#version 300 es                                     \n"
             "precision mediump float;                            \n"
@@ -211,12 +218,23 @@ void TextureMapSample::Draw(int screenW, int screenH) {
     glEnableVertexAttribArray(1);
 
     //bind the rgba map
+    //将纹理单元和纹理对象进行绑定
+    //激活纹理单元，下面的绑定就会和当前激活的纹理单元关联上
+
+    //而在客户端程序中，我们也并没有制定创建的纹理是属于哪个纹理单元的，所以默认也为第一个纹理单元，即GL_TEXTURE0，
+    //所以对该纹理对象的所有操作，都默认为针对即GL_TEXTURE0对应的纹理单元，所以我们的数据其实是默认和片段着色器的ourTexture变量关联上的。
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, m_TextureId);
 
-    // Set the RGBA map sampler to texture unit to 0
+
+    // 如果当前的渲染只需要一个纹理单元的情况下，OpenGL会默认我们使用的是第一个纹理单元，即GL_TEXTURE0。
+    // 所以片段着色器声明的sampler2D对象就会默认赋值为0,0则代表和GL_TEXTURE0的纹理关联。
+    // 对着色器中的纹理单元变量进行赋值
     glUniform1i(m_SamplerLoc, 0);
 
+
+    /*glUniform1i(glGetUniformLocation(program, "ourTexture"), 0);
+    glUniform1i(glGetUniformLocation(program, "ourTexture1"), 1);*/
 
     int len = length(indices);
 
