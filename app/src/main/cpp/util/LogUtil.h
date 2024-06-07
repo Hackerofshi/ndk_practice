@@ -10,7 +10,7 @@
 #define BYTEFLOW_LOGUTIL_H
 
 //sdk  log路径
-#include "C:\user\sdk\ndk\21.3.6528147\toolchains\llvm\prebuilt\windows-x86_64\sysroot\usr\include\android\log.h"
+#include <android/log.h>
 #include "time.h"
 
 #define  LOG_TAG "ShiXin"

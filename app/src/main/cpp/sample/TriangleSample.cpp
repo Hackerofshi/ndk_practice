@@ -97,14 +97,10 @@ void TriangleSample::Draw(int screenW, int screenH) {
     //type：每一个数组元素的格式是什么，比如GL_HALF_FLOAT,GL_FLOAT,GL_DOUBLE等。
     //normalized：是否需要归一化，即是否需要将数据范围映射到-1到1的区间内。
     //stride：步长，一个重要概念，表示前一个顶点属性的起始位置到下一个顶点属性的起始位置在数组中有多少字节。如果传0，则说明顶点属性数据是紧密挨着的。
-    //
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, vVertices);
-
     //这就是一个开关方法，就是打开着色器中 index = 0 这个变量，
     glEnableVertexAttribArray(0);
 
-
-    //
     glDrawArrays(GL_TRIANGLES, 0, 3);
 
 }
