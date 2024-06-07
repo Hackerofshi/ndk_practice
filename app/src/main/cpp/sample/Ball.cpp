@@ -8,9 +8,9 @@
 
 
 Ball::Ball() {
-    //     //球以(0,0,0)为中心，以R为半径，则球上任意一点的坐标为
-    //        // ( R * cos(a) * sin(b),y0 = R * sin(a),R * cos(a) * cos(b))
-    //        // 其中，a为圆心到点的线段与xz平面的夹角，b为圆心到点的线段在xz平面的投影与z轴的夹角
+    //球以(0,0,0)为中心，以R为半径，则球上任意一点的坐标为
+    // ( R * cos(a) * sin(b),y0 = R * sin(a),R * cos(a) * cos(b))
+    // 其中，a为圆心到点的线段与xz平面的夹角，b为圆心到点的线段在xz平面的投影与z轴的夹角
     float step = 1.0;
     std::list<float> values;
     float r1, r2; //相邻的两个半径
