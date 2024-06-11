@@ -191,7 +191,7 @@ void TextureMapSample3::Draw(int screenW, int screenH) {
     projection = glm::perspective(glm::radians(45.0f), (float) screenW / (float) screenH,
                                   0.1f,
                                   100.0f);
-  //  View = glm::translate(View, glm::vec3(0.0f, 0.0f, -3.0f));
+    //View = glm::translate(View, glm::vec3(0.0f, 0.0f, -3.0f));
     float radius = 10.0f;
     float camX = static_cast<float>(sin(2) * radius);
     float camZ = static_cast<float>(cos(2) * radius);

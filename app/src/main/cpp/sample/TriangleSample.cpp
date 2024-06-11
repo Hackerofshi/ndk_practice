@@ -41,7 +41,7 @@ void TriangleSample::Init() {
             "uniform mat4 model;                        \n"
             "void main()                                \n"
             "{                                          \n"
-            "   gl_Position = u_MVPMatrix*model*a_position; \n"
+            "   gl_Position = u_MVPMatrix * model * a_position; \n"
             "}                                          \n";
 
 
@@ -84,7 +84,7 @@ void TriangleSample::Draw(int screenW, int screenH) {
     // Use the program object
     glUseProgram(m_ProgramObj);
 
-    glUniform4f(m_LightColorLoc, 1.0f, 1.0f, 1.0f, 1.0f);
+    glUniform4f(m_LightColorLoc, 0.0f, 1.0f, 1.0f, 1.0f);
 
     UpdateTransformMatrix(m_MVPMatrix, screenW, screenH);
     UpdateModel(model);
@@ -144,14 +144,13 @@ void TriangleSample::UpdateTransformMatrix(glm::mat4 &mvpMatrix, int screenW, in
     glm::mat4 Projection1 = glm::ortho(-1.0f, 1.0f, -ratio1, ratio1, 10.0f, 100.0f);
     // View matrix
     glm::mat4 View = glm::lookAt(
-            glm::vec3(0, 0, 100), // Camera is at (0,0,1), in World Space
             // 相机位置
-            glm::vec3(0, 0, 0), // and looks at the origin
+            glm::vec3(0, 0, 99), // Camera is at (0,0,1), in World Space
             // 观测点位置
-
+            glm::vec3(0, 0, 0), // and looks at the origin
+            // up向量在xyz上的分量
             glm::vec3(0, 1,
                       0)  // Head is up (set to 0,-1,0 to look upside-down)is up (set to 0,-1,0 to look upside-down)
-            // up向量在xyz上的分量
     );
 
     // Model matrix : an identity matrix (model will be at the origin)
