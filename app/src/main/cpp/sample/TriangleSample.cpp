@@ -144,7 +144,7 @@ void TriangleSample::UpdateTransformMatrix(mat4 &mvpMatrix, int screenW, int scr
     mat4 Projection = ortho(-ratio, ratio, -1.0f, 1.0f, 1.0f, 100.0f);
     mat4 Projection1 = ortho(-1.0f, 1.0f, -ratio1, ratio1, 10.0f, 100.0f);
     // View matrix
-    //经过 gl.Ortho(-ratio, ratio, -1.0f, 1.0f, 1.0f, 1.0f, 100.0f) 正射投影之后,
+    // 经过 gl.Ortho(-ratio, ratio, -1.0f, 1.0f, 1.0f, 1.0f, 100.0f) 正射投影之后,
     // 三角形就被置于这个矩形长方体(-ratio, ratio, -1.0f, 1.0f, 1.0f, 1.0f, 100.0f)的视景体中了,
     // 以后LooAt 就是在看这个视影体中的内容, 如果摄像机的视点设置有超出这视景体的部分将看不到, 相当于被剪切了.
     // eye Z 需要在 1 - 100 之间
