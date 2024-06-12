@@ -159,7 +159,7 @@ void TriangleSample::UpdateTransformMatrix(mat4 &mvpMatrix, int screenW, int scr
     );
 
     // Model matrix : an identity matrix (model will be at the origin)
-    //  mat4 Model =  mat4(1.0f);
+    // mat4 Model =  mat4(1.0f);
     mvpMatrix = Projection1 * View;
 }
 
