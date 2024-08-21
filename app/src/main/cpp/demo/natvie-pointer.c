@@ -206,7 +206,6 @@ void testPoint() {
 
     //多级指针
     LOGI("%d", **c);
-
 }
 
 
@@ -217,8 +216,6 @@ void test_point1() {
     for (int i = 0; i < 6; ++i) {
         LOGI("%c", *name);
         //name++; //错误操作
-
-
 
         tempName++; //指针++
     }
