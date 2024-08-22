@@ -213,6 +213,10 @@ void BaseDecoder::LoopDecode() {
 }
 
 AVFrame *BaseDecoder::DecodeOneFrame() {
+    //++av_read_frame(m_format_ctx, m_packet)++：
+    //
+    //从 m_format_ctx 中读取一帧解封好的待解码数据，存放在 m_packet 中；
+
     int ret = av_read_frame(m_format_ctx, m_packet);
     while (ret == 0) {
         if (m_packet->stream_index == m_stream_index) {

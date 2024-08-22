@@ -143,6 +143,7 @@ add_library( # Sets the name of the library.
         opengl/drawer/proxy/def_drawer_proxy_impl.cpp
         render/video/opengl_render.cpp
         player/gl_player.cpp
+        source/test/avio_test.c
         )
 
 find_library( # Sets the name of the path variable.

@@ -13,6 +13,11 @@ object Player {
 
     public external fun stop(player: Int)
 
+    public external fun testAVIOContext(path: String)
+
+    external fun startTCPClient(ip: String?, port: Int)
+
+    external fun startUDPClient()
 
     init {
         System.loadLibrary("native-lib")
