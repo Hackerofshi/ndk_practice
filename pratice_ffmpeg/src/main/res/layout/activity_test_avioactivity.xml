@@ -6,4 +6,9 @@
     android:layout_height="match_parent"
     tools:context=".TestAVIOActivity">
 
+    <com.tech.pratice_ffmpeg.FlyPlayer
+        android:id="@+id/fl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

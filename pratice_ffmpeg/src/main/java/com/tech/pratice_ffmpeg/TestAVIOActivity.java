@@ -6,10 +6,12 @@ import androidx.core.app.ActivityCompat;
 import android.Manifest;
 import android.os.Bundle;
 import android.os.Environment;
+import android.view.View;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.NetworkUtils;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -26,18 +28,22 @@ public class TestAVIOActivity extends AppCompatActivity {
         setContentView(R.layout.activity_test_avioactivity);
         requestPermission();
 
-        String ipAddress = NetworkUtils.getIPAddress(true);
-        LogUtils.i(ipAddress);
-        new Thread(() -> {
-            //Player.INSTANCE.testAVIOContext(path);
-            Player.INSTANCE.startUDPClient();
-        }).start();
+        FlyPlayer flyPlayer = findViewById(R.id.fl);
 
-       // receiverData();
+
+        /*new Thread(() -> {
+            //Player.INSTANCE.testAVIOContext(path);
+
+            LogUtils.i(absolutePath);
+            Player.INSTANCE.testAVIOAndUDP(absolutePath);
+        }).start();*/
+
+        //receiverData();
 
     }
 
     private static final int MAX_PACKET_SIZE = 1024 * 8;
+
     private void receiverData() {
         new Thread(() -> {
             try {

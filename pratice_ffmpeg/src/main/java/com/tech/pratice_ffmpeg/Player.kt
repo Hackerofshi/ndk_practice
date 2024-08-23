@@ -3,21 +3,22 @@ package com.tech.pratice_ffmpeg
 import android.view.Surface
 
 object Player {
-    public external fun ffmpegInfo(): String
+    external fun ffmpegInfo(): String
 
-    public external fun createPlayer(path: String, surface: Surface): Int
+    external fun createPlayer(path: String, surface: Surface): Int
 
-    public external fun play(player: Int)
+    external fun play(player: Int)
 
-    public external fun pause(player: Int)
+    external fun pause(player: Int)
 
-    public external fun stop(player: Int)
+    external fun stop(player: Int)
 
-    public external fun testAVIOContext(path: String)
-
+    external fun testAVIOContext(path: String)
     external fun startTCPClient(ip: String?, port: Int)
-
     external fun startUDPClient()
+    external fun testAVIOAndUDP(fileName: String, surface: Surface)
+    external fun testThread()
+
 
     init {
         System.loadLibrary("native-lib")

@@ -144,6 +144,8 @@ add_library( # Sets the name of the library.
         render/video/opengl_render.cpp
         player/gl_player.cpp
         source/test/avio_test.c
+        source/test/pthread_test.c
+        source/test/pthread_test1.c
         )
 
 find_library( # Sets the name of the path variable.

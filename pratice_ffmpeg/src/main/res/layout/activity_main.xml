@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:paddingHorizontal="10dp"
     tools:context=".MainActivity">
 
     <Button
@@ -25,5 +26,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="FFMpeg+EGL" />
+
+    <com.google.android.material.button.MaterialButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="clickThread"
+        android:text="testThread" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>
