@@ -19,6 +19,7 @@ extern "C" {
 #include <android/log.h>
 #include "./source/test/avio_test.h"
 #include "./source/test/pthread_test.h"
+const char *TAG = "ff_native_lib";
 
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved) {
     av_jni_set_java_vm(vm, reserved);
@@ -97,7 +98,7 @@ Java_com_tech_pratice_1ffmpeg_FFmpegGLPlayerActivity_playOrPause(JNIEnv *env, jo
 JNIEXPORT void JNICALL
 Java_com_tech_pratice_1ffmpeg_FFmpegGLPlayerActivity_stop(JNIEnv *env, jobject thiz,
                                                           jint player) {
-    GLPlayer *p = (GLPlayer *) player;
+    auto *p = (GLPlayer *) player;
     p->Release();
 }
 
@@ -107,7 +108,6 @@ Java_com_tech_pratice_1ffmpeg_Player_testAVIOContext(JNIEnv *env, jobject thiz, 
     const char *cStr = env->GetStringUTFChars(str, nullptr);
     testPath(cStr);
     env->ReleaseStringUTFChars(str, cStr);
-    LOG_INFO("123123", "", "fff")
 }
 
 
@@ -119,12 +119,12 @@ Java_com_tech_pratice_1ffmpeg_Player_startTCPClient(JNIEnv *env, jobject thiz, j
     int server_port = port;
 
     int sockfd;
-    struct sockaddr_in server_addr;
+    struct sockaddr_in server_addr{};
     char buffer[1024];
 
     // 1. 创建套接字
     if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
-        LOGE("Socket creation error");
+        LOGE("Socket creation error")
         return;
     }
 
@@ -133,14 +133,14 @@ Java_com_tech_pratice_1ffmpeg_Player_startTCPClient(JNIEnv *env, jobject thiz, j
 
     // 2. 将 IP 地址转换为二进制形式
     if (inet_pton(AF_INET, server_ip, &server_addr.sin_addr) <= 0) {
-        LOGE("Invalid address/ Address not supported");
+        LOGE("Invalid address/ Address not supported")
         close(sockfd);
         return;
     }
 
     // 3. 连接到服务器
     if (connect(sockfd, (struct sockaddr *) &server_addr, sizeof(server_addr)) < 0) {
-        LOGE("Connection Failed");
+        LOGE("Connection Failed")
         close(sockfd);
         return;
     }
@@ -148,10 +148,10 @@ Java_com_tech_pratice_1ffmpeg_Player_startTCPClient(JNIEnv *env, jobject thiz, j
     LOGI("Connected to the server")
 
     // 4. 从服务器接收数据
-    while (1) {
+    while (true) {
         ssize_t bytes_read = recv(sockfd, buffer, sizeof(buffer), 0);
         if (bytes_read < 0) {
-            LOGE("Read error");
+            LOGE("Read error")
             break;
         } else if (bytes_read == 0) {
             LOGI("Server closed the connection")
@@ -160,6 +160,7 @@ Java_com_tech_pratice_1ffmpeg_Player_startTCPClient(JNIEnv *env, jobject thiz, j
         buffer[bytes_read] = '\0'; // 确保字符串以 nullptr 结尾
         LOGI("Received: %s", buffer)
     }
+    LOG_INFO(TAG, "LogSpec()", "Fail to open file [%s]", "123")
 
     // 5. 关闭套接字
     close(sockfd);
@@ -174,7 +175,7 @@ JNIEXPORT void JNICALL
 Java_com_tech_pratice_1ffmpeg_Player_startUDPClient(JNIEnv *env, jobject thiz) {
     int sockfd;
     char buffer[BUFFER_SIZE];
-    struct sockaddr_in servaddr;
+    struct sockaddr_in servaddr{};
 
     // 创建UDP socket
     sockfd = socket(AF_INET, SOCK_DGRAM, 0);
@@ -197,7 +198,7 @@ Java_com_tech_pratice_1ffmpeg_Player_startUDPClient(JNIEnv *env, jobject thiz) {
         return;
     }
 
-    while (1) {
+    while (true) {
         int n;
         socklen_t len = sizeof(servaddr);
         n = recvfrom(sockfd, (char *) buffer, BUFFER_SIZE, MSG_WAITALL,
@@ -230,16 +231,22 @@ int read_packet(void *opaque, uint8_t *buf, int buf_size) {
 
 // 自定义 seek 函数 (对于实时流, 通常不支持 seek, 返回 -1)
 int64_t seek_packet(void *opaque, int64_t offset, int whence) {
+    auto *socketParam = (struct SocketParam *) opaque;
+    int64_t ret = -1;
+    LOGI("whence=%d , offset=%lld \n", whence, offset)
+    LOGI("sockfd=%d , ret=%lld \n", socketParam->sockfd, ret)
     return -1; // 实时流不支持 seek
 }
 
 
 void setup_avio_context(AVFormatContext *fmt_ctx, SocketParam *socketParam) {
-    uint8_t *avio_ctx_buffer = nullptr;
+    uint8_t *avio_ctx_buffer;
     size_t avio_ctx_buffer_size = 4096; // 缓冲区大小
+
+
     avio_ctx_buffer = (uint8_t *) av_malloc(avio_ctx_buffer_size);
     if (!avio_ctx_buffer) {
-        LOGE("Could not allocate buffer");
+        LOGE("Could not allocate buffer")
         return;
     }
     AVIOContext *avio_ctx = avio_alloc_context(
@@ -252,12 +259,13 @@ void setup_avio_context(AVFormatContext *fmt_ctx, SocketParam *socketParam) {
     );
 
     if (!avio_ctx) {
-        LOGE("Could not allocate AVIOContext");
+        LOGE("Could not allocate AVIOContext")
         av_free(avio_ctx_buffer);
         return;
     }
 
     fmt_ctx->pb = avio_ctx;
+    //设置成自定义的IO
     fmt_ctx->flags = AVFMT_FLAG_CUSTOM_IO;
 
 }
@@ -266,7 +274,7 @@ void setup_avio_context(AVFormatContext *fmt_ctx, SocketParam *socketParam) {
 void save_yuv420p_to_file(const char *filename, AVFrame *frame) {
     FILE *file = fopen(filename, "wb");
     if (!file) {
-        LOGE("Could not open file %s for writing", filename);
+        LOGE("Could not open file %s for writing", filename)
         return;
     }
 
@@ -286,14 +294,14 @@ void save_yuv420p_to_file(const char *filename, AVFrame *frame) {
     }
 
     fclose(file);
-    LOGI("YUV data saved to %s", filename);
+    LOGI("YUV data saved to %s", filename)
 }
 
 
 JNIEXPORT void JNICALL
 Java_com_tech_pratice_1ffmpeg_Player_testAVIOAndUDP(JNIEnv *env, jobject thiz, jstring jfilePath,
                                                     jobject surface) {
-    //const char *filePath = env->GetStringUTFChars(jfilePath, nullptr);
+    const char *filePath = env->GetStringUTFChars(jfilePath, nullptr);
     LOGI("testAVIOAndUDP")
     avformat_network_init(); // 初始化网络模块（在 FFmpeg 3.x+ 版本中）
 
@@ -304,7 +312,7 @@ Java_com_tech_pratice_1ffmpeg_Player_testAVIOAndUDP(JNIEnv *env, jobject thiz, j
     // 创建UDP socket
     sockfd = socket(AF_INET, SOCK_DGRAM, 0);
     if (sockfd < 0) {
-        LOGI("socket creation failed");
+        LOGI("socket creation failed")
         return;
     }
 
@@ -352,20 +360,29 @@ Java_com_tech_pratice_1ffmpeg_Player_testAVIOAndUDP(JNIEnv *env, jobject thiz, j
 
     av_dump_format(fmt_ctx, 0, nullptr, 0);
 
-    int videoStreamIndex =
-            av_find_best_stream(fmt_ctx, AVMEDIA_TYPE_VIDEO, -1, -1, nullptr, 0);
+    //4，查找编解码器
+    //4.1 获取视频流的索引
+    int videoStreamIndex = av_find_best_stream(fmt_ctx, AVMEDIA_TYPE_VIDEO,
+                                               -1,
+                                               -1, nullptr, 0);
     LOGI("==============>%d", (videoStreamIndex))
 
+
+    //4.2 获取解码器参数
     AVStream *st = fmt_ctx->streams[videoStreamIndex];
     // 编码器查找
     // AVCodec *codec = avcodec_find_decoder(AV_CODEC_ID_ALAC);
     // set codec id from famat params
+
+    //4.3 获取解码器
     AVCodec *codec = avcodec_find_decoder(st->codecpar->codec_id);
     if (!codec) {
         LOGI("avcodec_find_decoder failed\n")
         return;
     }
 
+
+    //4.4 获取解码器上下文
     AVCodecContext *codec_ctx = avcodec_alloc_context3(codec);
     if (!codec_ctx) {
         LOGI("avcodec_alloc_context3 failed\n")
@@ -378,13 +395,15 @@ Java_com_tech_pratice_1ffmpeg_Player_testAVIOAndUDP(JNIEnv *env, jobject thiz, j
     if (ret < 0) {
         LOGI("Failed to copy in_stream codecpar to codec context\n")
     }
+
+
+    //5，打开解码器
     ret = avcodec_open2(codec_ctx, codec, nullptr);
     if (ret < 0) {
         LOGI("avcodec_open2 failed:%s\n", av_err2str(ret))
         return;
     }
 
-    LOGI("debug codec_ctx->sample_rate: %d\n", codec_ctx->sample_rate)
     LOGI("debug codec_ctx->sample_rate: %d\n", codec_ctx->sample_rate)
     AVPacket *packet = av_packet_alloc();
     AVFrame *frame = av_frame_alloc();
@@ -407,14 +426,11 @@ Java_com_tech_pratice_1ffmpeg_Player_testAVIOAndUDP(JNIEnv *env, jobject thiz, j
                          codec_ctx->width,
                          codec_ctx->height, 1);
 
-
-    //bool flag = false;
-
     while (av_read_frame(fmt_ctx, packet) >= 0) {
         if (packet->stream_index == videoStreamIndex) {
             ret = avcodec_send_packet(codec_ctx, packet);
             if (ret < 0) {
-                LOGE("Error sending packet to decoder");
+                LOGE("Error sending packet to decoder")
                 break;
             }
 
@@ -423,7 +439,7 @@ Java_com_tech_pratice_1ffmpeg_Player_testAVIOAndUDP(JNIEnv *env, jobject thiz, j
                 if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF) {
                     break;
                 } else if (ret < 0) {
-                    LOGE("Error receiving frame from decoder");
+                    LOGE("Error receiving frame from decoder")
                     break;
                 }
 
@@ -465,8 +481,7 @@ Java_com_tech_pratice_1ffmpeg_Player_testAVIOAndUDP(JNIEnv *env, jobject thiz, j
                                             outHeight,
                                             AV_PIX_FMT_RGBA,
                                             SWS_FAST_BILINEAR,
-                                            nullptr, nullptr, nullptr
-                );
+                                            nullptr, nullptr, nullptr);
 
                 if (!vctx) {
                     LOGE("sws_getCachedContext failed!")
@@ -532,12 +547,33 @@ Java_com_tech_pratice_1ffmpeg_Player_testAVIOAndUDP(JNIEnv *env, jobject thiz, j
 
             // 处理解码后的帧
             //LOGI("Received frame %d", codec_ctx->frame_number);
-            // 此处可以进一步处理解码后的图像帧，例如显示或保存
-            //}
+
         }
         av_packet_unref(packet);
     }
 
+    if (frame != nullptr) {
+        av_frame_free(&frame);
+    }
+    // 释放缓存
+    if (packet != nullptr) {
+        av_packet_free(&packet);
+    }
+    // 关闭解码器
+    avcodec_close(codec_ctx);
+    avcodec_free_context(&codec_ctx);
+
+    // 关闭输入流
+    if (fmt_ctx != nullptr) {
+        avformat_close_input(&fmt_ctx);
+        avformat_free_context(fmt_ctx);
+    }
+
+    // 释放转换参数
+    if (jfilePath != nullptr && filePath != nullptr) {
+        env->ReleaseStringUTFChars(jfilePath, filePath);
+        env->DeleteGlobalRef(jfilePath);
+    }
 }
 
 

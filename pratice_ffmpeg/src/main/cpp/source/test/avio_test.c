@@ -94,6 +94,9 @@ static int64_t seek_packet(void *opaque, int64_t offset, int whence) {
         case SEEK_END:
             LOGI("SEEK_end \n");
             break;
+        default:
+            LOGI("default \n");
+            break;
     }
     return ret;
 }
