@@ -20,7 +20,6 @@
 
 FILE *in_file = NULL;
 const char *TAG = "avio_test";
-const char *const SPEC = "test";
 struct buffer_data {
     uint8_t *ptr;
     uint8_t *ori_ptr;  // for seek file stream
@@ -35,10 +34,10 @@ static char *av_get_err(int errnum) {
 }
 
 static void print_sample_format(const AVFrame *frame) {
-    LOGI("ar-samplerate: %uHz\n", frame->sample_rate);
-    LOGI("ac-channel: %u\n", frame->channels);
+    LOGI("ar-samplerate: %uHz\n", frame->sample_rate)
+    LOGI("ac-channel: %u\n", frame->channels)
     LOGI("f-format: %u\n",
-         frame->format);  // 格式需要注意，实际存储到本地文件时已经改成交错模式
+         frame->format)  // 格式需要注意，实际存储到本地文件时已经改成交错模式
 }
 
 /*
@@ -63,7 +62,7 @@ static int read_packet(void *opaque, uint8_t *buf, int buf_size) {
     memcpy(buf, bd->ptr, buf_size);
     bd->ptr += buf_size;
     bd->size -= buf_size;
-    LOGI("=========> ptr:%p size:%zu buf_size: %d\n", bd->ptr, bd->size, buf_size);
+    LOGI("=========> ptr:%p size:%zu buf_size: %d\n", bd->ptr, bd->size, buf_size)
 
     return buf_size;
 }
@@ -75,27 +74,27 @@ static int64_t seek_packet(void *opaque, int64_t offset, int whence) {
     //    FILE *in_file = (FILE *)opaque;
     struct buffer_data *bd = (struct buffer_data *) opaque;
     int64_t ret = -1;
-    LOGI("whence=%d , offset=%lld \n", whence, offset);
+    LOGI("whence=%d , offset=%lld \n", whence, offset)
     switch (whence) {
         case AVSEEK_SIZE:
-            LOGI("AVSEEK_SIZE \n");
+            LOGI("AVSEEK_SIZE \n")
             ret = bd->file_size;
             break;
         case SEEK_SET:
-            LOGI("SEEK_SET \n");
+            LOGI("SEEK_SET \n")
             bd->ptr = bd->ori_ptr + offset;
             bd->size = bd->file_size - offset;
             ret = (int64_t) bd->ptr;
             break;
 
         case SEEK_CUR:
-            LOGI("SEEK_cur \n");
+            LOGI("SEEK_cur \n")
             break;
         case SEEK_END:
-            LOGI("SEEK_end \n");
+            LOGI("SEEK_end \n")
             break;
         default:
-            LOGI("default \n");
+            LOGI("default \n")
             break;
     }
     return ret;
@@ -107,10 +106,10 @@ static void decode(AVCodecContext *dec_ctx, AVPacket *packet, AVFrame *frame,
     ret = avcodec_send_packet(dec_ctx, packet);
     if (ret == AVERROR(EAGAIN)) {
         LOGI("Receive_frame and send_packet both returned EAGAIN, which is an API "
-             "violation.\n");
+             "violation.\n")
     } else if (ret < 0) {
         LOGI("Error submitting the packet to the decoder, err:%s\n",
-             av_get_err(ret));
+             av_get_err(ret))
         return;
     }
 
@@ -119,11 +118,11 @@ static void decode(AVCodecContext *dec_ctx, AVPacket *packet, AVFrame *frame,
         if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF) {
             return;
         } else if (ret < 0) {
-            LOGI("Error during decoding\n");
+            LOGI("Error during decoding\n")
             exit(1);
         }
         if (!packet) {
-            LOGI("get flush frame\n");
+            LOGI("get flush frame\n")
         }
         int out_sample_bytes = av_get_bytes_per_sample(dec_ctx->sample_fmt);
         int out_sample_is_plannar = av_sample_fmt_is_planar(dec_ctx->sample_fmt);
@@ -140,7 +139,7 @@ static void decode(AVCodecContext *dec_ctx, AVPacket *packet, AVFrame *frame,
         //  out_sample_bytes, frame->nb_samples,
         //  dec_ctx->ch_layout.nb_channels);
         if (out_sample_is_plannar) {  // plannar frames
-            LOGI("out_sample_is_plannar\n");
+            LOGI("out_sample_is_plannar\n")
             /**
                P表示Planar（平面），其数据格式排列方式为 :
                LLLLLLRRRRRRLLLLLLRRRRRRLLLLLLRRRRRRL...（每个LLLLLLRRRRRR为一个音频帧）
@@ -164,7 +163,7 @@ static void decode(AVCodecContext *dec_ctx, AVPacket *packet, AVFrame *frame,
                    frame->nb_samples * out_sample_bytes * frame->channels, 1,
                    outfile);*/
             uint8_t *res = frame->data[0];
-            LOGI("packed frame %lld\n", frame->pts);
+            LOGI("packed frame %lld\n", frame->pts)
         }
     }
 }
@@ -172,7 +171,7 @@ static void decode(AVCodecContext *dec_ctx, AVPacket *packet, AVFrame *frame,
 
 int main(int argc, char **argv) {
     if (argc != 3) {
-        LOGI("usage: %s <intput file> <out file>\n", argv[0]);
+        LOGI("usage: %s <intput file> <out file>\n", argv[0])
         return -1;
     }
 
@@ -189,7 +188,7 @@ int testPath(const char *str) {
     // 1. 打开参数文件
     in_file = fopen(in_file_name, "rb");
     if (!in_file) {
-        LOGI("open file %s failed\n", in_file_name);
+        LOGI("open file %s failed\n", in_file_name)
         return -1;
     }
     /*out_file = fopen(out_file_name, "wb+");
@@ -202,8 +201,8 @@ int testPath(const char *str) {
     uint8_t *buffer = NULL;
     size_t buffer_size;
     int ret = av_file_map(in_file_name, &buffer, &buffer_size, 0, NULL);
-    LOGI("file size: %d\n", buffer_size);
-    LOGI("ret: %d\n", ret);
+    LOGI("file size: %d\n", buffer_size)
+    LOGI("ret: %d\n", ret)
     bd.ptr = buffer;
     bd.ori_ptr = buffer;
     bd.file_size = buffer_size;
@@ -223,7 +222,7 @@ int testPath(const char *str) {
     // 从输入源读取封装格式文件头
     ret = avformat_open_input(&format_ctx, NULL, NULL, NULL);
     if (ret < 0) {
-        LOGI("avformat_open_input failed:%s\n", av_err2str(ret));
+        LOGI("avformat_open_input failed:%s\n", av_err2str(ret))
         return -1;
     }
 
@@ -244,13 +243,13 @@ int testPath(const char *str) {
     // set codec id from famat params
     AVCodec *codec = avcodec_find_decoder(st->codecpar->codec_id);
     if (!codec) {
-        LOGI("avcodec_find_decoder failed\n");
+        LOGI("avcodec_find_decoder failed\n")
         return -1;
     }
 
     AVCodecContext *codec_ctx = avcodec_alloc_context3(codec);
     if (!codec_ctx) {
-        LOGI("avcodec_alloc_context3 failed\n");
+        LOGI("avcodec_alloc_context3 failed\n")
         return -1;
     }
 
@@ -258,11 +257,11 @@ int testPath(const char *str) {
     ret = avcodec_parameters_to_context(
             codec_ctx, format_ctx->streams[videoStreamIndex]->codecpar);
     if (ret < 0) {
-        LOGI("Failed to copy in_stream codecpar to codec context\n");
+        LOGI("Failed to copy in_stream codecpar to codec context\n")
     }
     ret = avcodec_open2(codec_ctx, codec, NULL);
     if (ret < 0) {
-        LOGI("avcodec_open2 failed:%s\n", av_err2str(ret));
+        LOGI("avcodec_open2 failed:%s\n", av_err2str(ret))
         return -1;
     }
 
@@ -273,25 +272,25 @@ int testPath(const char *str) {
     while (1) {
         ret = av_read_frame(format_ctx, packet);
         if (ret < 0) {
-            LOGI("av_read_frame failed:%s\n", av_err2str(ret));
+            LOGI("av_read_frame failed:%s\n", av_err2str(ret))
             break;
         }
 
         decode(codec_ctx, packet, frame, NULL);
     }
 
-    LOGI("read file finish\n");
+    LOGI("read file finish\n")
     decode(codec_ctx, NULL, frame, NULL);
 
     fclose(in_file);
     //fclose(out_file);
 
-    av_frame_free(frame);
-    av_packet_free(packet);
+    av_frame_free(&frame);
+    av_packet_free(&packet);
 
     avformat_close_input(&format_ctx);
     avcodec_free_context(&codec_ctx);
 
-    LOGI("main finish\n");
+    LOGI("main finish\n")
     return 0;
 }

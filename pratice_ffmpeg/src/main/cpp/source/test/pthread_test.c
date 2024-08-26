@@ -2,6 +2,7 @@
 // Created by 78303 on 2024/8/23.
 //
 
+#include <stdbool.h>
 #include "pthread_test.h"
 
 
@@ -11,17 +12,17 @@ int buffer[BUFFER_SIZE];
 int count = 0;
 int in = 0;
 int out = 0;
+bool isRunning = true;
 
 // 互斥锁和条件变量
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t not_full = PTHREAD_COND_INITIALIZER;
 pthread_cond_t not_empty = PTHREAD_COND_INITIALIZER;
 
-
 // 生产者线程函数
 void *producer(void *arg) {
     int item;
-    while (1) {
+    while (isRunning) {
         item = rand() % 100;  // 生成一个随机数作为数据项
 
         pthread_mutex_lock(&mutex);
@@ -44,12 +45,13 @@ void *producer(void *arg) {
 
         sleep(1);  // 模拟生产时间
     }
+    return NULL;
 }
 
 // 消费者线程函数
 void *consumer(void *arg) {
     int item;
-    while (1) {
+    while (isRunning) {
         pthread_mutex_lock(&mutex);
 
         // 如果缓冲区为空，则等待
@@ -67,11 +69,14 @@ void *consumer(void *arg) {
         // 通知生产者缓冲区非满
         pthread_cond_signal(&not_full);
         pthread_mutex_unlock(&mutex);
+        if (out == 100) {
+            isRunning = false;
+        }
 
         sleep(2);  // 模拟消费时间
     }
+    return NULL;
 }
-
 
 
 int test_thread() {

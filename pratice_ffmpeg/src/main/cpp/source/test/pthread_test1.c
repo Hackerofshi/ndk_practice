@@ -44,7 +44,7 @@ void buffer_put(Buffer *buf, int item) {
     pthread_mutex_lock(&(buf->mutex));
     //缓冲区满，等待
     while (buf->count == BUFFER_SIZE) {
-        LOGI("Buffer is full. Producer is waiting.\n");
+        LOGI("Buffer is full. Producer is waiting.\n")
         pthread_cond_wait(&(buf->not_full), &(buf->mutex));
     }
 
