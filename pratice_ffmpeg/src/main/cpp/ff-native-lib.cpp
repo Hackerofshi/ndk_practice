@@ -104,10 +104,10 @@ Java_com_tech_pratice_1ffmpeg_FFmpegGLPlayerActivity_stop(JNIEnv *env, jobject t
 
 JNIEXPORT void JNICALL
 Java_com_tech_pratice_1ffmpeg_Player_testAVIOContext(JNIEnv *env, jobject thiz, jstring str) {
-    const char *cStr = env->GetStringUTFChars(str, NULL);
+    const char *cStr = env->GetStringUTFChars(str, nullptr);
     testPath(cStr);
     env->ReleaseStringUTFChars(str, cStr);
-    LOG_INFO("123123", "", "fff");
+    LOG_INFO("123123", "", "fff")
 }
 
 
@@ -115,7 +115,7 @@ JNIEXPORT void JNICALL
 Java_com_tech_pratice_1ffmpeg_Player_startTCPClient(JNIEnv *env, jobject thiz, jstring ip,
                                                     jint port) {
 
-    const char *server_ip = env->GetStringUTFChars(ip, NULL);
+    const char *server_ip = env->GetStringUTFChars(ip, nullptr);
     int server_port = port;
 
     int sockfd;
@@ -145,7 +145,7 @@ Java_com_tech_pratice_1ffmpeg_Player_startTCPClient(JNIEnv *env, jobject thiz, j
         return;
     }
 
-    LOGI("Connected to the server");
+    LOGI("Connected to the server")
 
     // 4. 从服务器接收数据
     while (1) {
@@ -154,11 +154,11 @@ Java_com_tech_pratice_1ffmpeg_Player_startTCPClient(JNIEnv *env, jobject thiz, j
             LOGE("Read error");
             break;
         } else if (bytes_read == 0) {
-            LOGI("Server closed the connection");
+            LOGI("Server closed the connection")
             break;
         }
-        buffer[bytes_read] = '\0'; // 确保字符串以 NULL 结尾
-        LOGI("Received: %s", buffer);
+        buffer[bytes_read] = '\0'; // 确保字符串以 nullptr 结尾
+        LOGI("Received: %s", buffer)
     }
 
     // 5. 关闭套接字
@@ -203,7 +203,7 @@ Java_com_tech_pratice_1ffmpeg_Player_startUDPClient(JNIEnv *env, jobject thiz) {
         n = recvfrom(sockfd, (char *) buffer, BUFFER_SIZE, MSG_WAITALL,
                      (struct sockaddr *) &servaddr, &len);
         buffer[n] = '\0';
-        LOGI("Received: %d\n", n);
+        LOGI("Received: %d\n", n)
     }
     close(sockfd);
 }
@@ -214,7 +214,7 @@ struct SocketParam {
 
 // 自定义读取函数
 int read_packet(void *opaque, uint8_t *buf, int buf_size) {
-    struct SocketParam *socketParam = (struct SocketParam *) opaque;
+    auto *socketParam = (struct SocketParam *) opaque;
 
     int n;
     socklen_t len = sizeof(socketParam->servaddr);
@@ -293,9 +293,7 @@ void save_yuv420p_to_file(const char *filename, AVFrame *frame) {
 JNIEXPORT void JNICALL
 Java_com_tech_pratice_1ffmpeg_Player_testAVIOAndUDP(JNIEnv *env, jobject thiz, jstring jfilePath,
                                                     jobject surface) {
-    const char *filePath = env->GetStringUTFChars(jfilePath, NULL);
-
-
+    //const char *filePath = env->GetStringUTFChars(jfilePath, nullptr);
     LOGI("testAVIOAndUDP")
     avformat_network_init(); // 初始化网络模块（在 FFmpeg 3.x+ 版本中）
 
@@ -319,7 +317,7 @@ Java_com_tech_pratice_1ffmpeg_Player_testAVIOAndUDP(JNIEnv *env, jobject thiz, j
 
     // 绑定socket
     if (bind(sockfd, (const struct sockaddr *) &servaddr, sizeof(servaddr)) < 0) {
-        LOGI("bind failed");
+        LOGI("bind failed")
         close(sockfd);
         return;
     }
@@ -328,7 +326,7 @@ Java_com_tech_pratice_1ffmpeg_Player_testAVIOAndUDP(JNIEnv *env, jobject thiz, j
     // 创建 AVFormatContext
     AVFormatContext *fmt_ctx = avformat_alloc_context();
     if (!fmt_ctx) {
-        LOGI("Could not allocate format context\n");
+        LOGI("Could not allocate format context\n")
         close(sockfd);
         return;
     }
@@ -342,13 +340,13 @@ Java_com_tech_pratice_1ffmpeg_Player_testAVIOAndUDP(JNIEnv *env, jobject thiz, j
 
     // 打开输入（对于自定义输入，使用空字符串作为 URL）
     if (avformat_open_input(&fmt_ctx, nullptr, nullptr, nullptr) < 0) {
-        LOGI("Could not open input\n");
+        LOGI("Could not open input\n")
         return;
     }
 
     // 读取流信息
     if (avformat_find_stream_info(fmt_ctx, nullptr) < 0) {
-        LOGI("Could not find stream info\n");
+        LOGI("Could not find stream info\n")
         return;
     }
 
@@ -364,13 +362,13 @@ Java_com_tech_pratice_1ffmpeg_Player_testAVIOAndUDP(JNIEnv *env, jobject thiz, j
     // set codec id from famat params
     AVCodec *codec = avcodec_find_decoder(st->codecpar->codec_id);
     if (!codec) {
-        LOGI("avcodec_find_decoder failed\n");
+        LOGI("avcodec_find_decoder failed\n")
         return;
     }
 
     AVCodecContext *codec_ctx = avcodec_alloc_context3(codec);
     if (!codec_ctx) {
-        LOGI("avcodec_alloc_context3 failed\n");
+        LOGI("avcodec_alloc_context3 failed\n")
         return;
     }
 
@@ -378,11 +376,11 @@ Java_com_tech_pratice_1ffmpeg_Player_testAVIOAndUDP(JNIEnv *env, jobject thiz, j
     int ret = avcodec_parameters_to_context(
             codec_ctx, fmt_ctx->streams[videoStreamIndex]->codecpar);
     if (ret < 0) {
-        LOGI("Failed to copy in_stream codecpar to codec context\n");
+        LOGI("Failed to copy in_stream codecpar to codec context\n")
     }
     ret = avcodec_open2(codec_ctx, codec, nullptr);
     if (ret < 0) {
-        LOGI("avcodec_open2 failed:%s\n", av_err2str(ret));
+        LOGI("avcodec_open2 failed:%s\n", av_err2str(ret))
         return;
     }
 
@@ -494,47 +492,47 @@ Java_com_tech_pratice_1ffmpeg_Player_testAVIOAndUDP(JNIEnv *env, jobject thiz, j
 
 
                 //if (!flag) {
-                    /*SwsContext *img_convert_ctx = sws_getContext(codec_ctx->width,
-                                                                 codec_ctx->height,
-                                                                 codec_ctx->pix_fmt,
-                                                                 codec_ctx->width,
-                                                                 codec_ctx->height,
-                                                                 AV_PIX_FMT_RGB24, SWS_BICUBIC,
-                                                                 NULL, NULL, NULL);
-                    sws_scale(img_convert_ctx, (const uint8_t *const *) frame->data,
-                              frame->linesize, 0, codec_ctx->height, pFrameYUV->data,
-                              pFrameYUV->linesize);
-                    FILE *file = fopen(filePath, "wb");
-                    fwrite(pFrameYUV->data[0], (codec_ctx->width) * (codec_ctx->height) * 3, 1,
-                           file);*/
+                /*SwsContext *img_convert_ctx = sws_getContext(codec_ctx->width,
+                                                             codec_ctx->height,
+                                                             codec_ctx->pix_fmt,
+                                                             codec_ctx->width,
+                                                             codec_ctx->height,
+                                                             AV_PIX_FMT_RGB24, SWS_BICUBIC,
+                                                             NULL, NULL, NULL);
+                sws_scale(img_convert_ctx, (const uint8_t *const *) frame->data,
+                          frame->linesize, 0, codec_ctx->height, pFrameYUV->data,
+                          pFrameYUV->linesize);
+                FILE *file = fopen(filePath, "wb");
+                fwrite(pFrameYUV->data[0], (codec_ctx->width) * (codec_ctx->height) * 3, 1,
+                       file);*/
 
-                    /*save_yuv420p_to_file(filePath, frame);*/
+                /*save_yuv420p_to_file(filePath, frame);*/
 
-                    /*SwsContext *img_convert_ctx = sws_getContext(codec_ctx->width,
-                                                                 codec_ctx->height,
-                                                                 codec_ctx->pix_fmt,
-                                                                 codec_ctx->width,
-                                                                 codec_ctx->height,
-                                                                 AV_PIX_FMT_YUV420P, SWS_BICUBIC,
-                                                                 NULL, NULL, NULL);
-                    sws_scale(img_convert_ctx, (const uint8_t *const *) frame->data,
-                              frame->linesize, 0, codec_ctx->height, pFrameYUV->data,
-                              pFrameYUV->linesize);
+                /*SwsContext *img_convert_ctx = sws_getContext(codec_ctx->width,
+                                                             codec_ctx->height,
+                                                             codec_ctx->pix_fmt,
+                                                             codec_ctx->width,
+                                                             codec_ctx->height,
+                                                             AV_PIX_FMT_YUV420P, SWS_BICUBIC,
+                                                             NULL, NULL, NULL);
+                sws_scale(img_convert_ctx, (const uint8_t *const *) frame->data,
+                          frame->linesize, 0, codec_ctx->height, pFrameYUV->data,
+                          pFrameYUV->linesize);
 
 
-                    //YUV420P
-                    FILE *output = fopen(filePath, "wb+");
-                    fwrite(pFrameYUV->data[0], (codec_ctx->width) * (codec_ctx->height), 1, output);
-                    fwrite(pFrameYUV->data[1], (codec_ctx->width) * (codec_ctx->height) / 4, 1,
-                           output);
-                    fwrite(pFrameYUV->data[2], (codec_ctx->width) * (codec_ctx->height) / 4, 1,
-                           output);
-                    flag = true;*/
-                }
+                //YUV420P
+                FILE *output = fopen(filePath, "wb+");
+                fwrite(pFrameYUV->data[0], (codec_ctx->width) * (codec_ctx->height), 1, output);
+                fwrite(pFrameYUV->data[1], (codec_ctx->width) * (codec_ctx->height) / 4, 1,
+                       output);
+                fwrite(pFrameYUV->data[2], (codec_ctx->width) * (codec_ctx->height) / 4, 1,
+                       output);
+                flag = true;*/
+            }
 
-                // 处理解码后的帧
-                //LOGI("Received frame %d", codec_ctx->frame_number);
-                // 此处可以进一步处理解码后的图像帧，例如显示或保存
+            // 处理解码后的帧
+            //LOGI("Received frame %d", codec_ctx->frame_number);
+            // 此处可以进一步处理解码后的图像帧，例如显示或保存
             //}
         }
         av_packet_unref(packet);
