@@ -305,6 +305,12 @@ Java_com_tech_pratice_1ffmpeg_Player_testAVIOAndUDP(JNIEnv *env, jobject thiz, j
     LOGI("testAVIOAndUDP")
     avformat_network_init(); // 初始化网络模块（在 FFmpeg 3.x+ 版本中）
 
+    AVPacket *packet = av_packet_alloc();
+    AVFrame *frame = av_frame_alloc();
+    AVFrame *pFrameYUV = av_frame_alloc();
+    SwsContext *vctx = nullptr;
+    ANativeWindow_Buffer wbuf;
+
 
     int sockfd;
     struct sockaddr_in servaddr{};
@@ -405,10 +411,7 @@ Java_com_tech_pratice_1ffmpeg_Player_testAVIOAndUDP(JNIEnv *env, jobject thiz, j
     }
 
     LOGI("debug codec_ctx->sample_rate: %d\n", codec_ctx->sample_rate)
-    AVPacket *packet = av_packet_alloc();
-    AVFrame *frame = av_frame_alloc();
-    AVFrame *pFrameYUV = av_frame_alloc();
-    SwsContext *vctx = nullptr;
+
     int outWidth = 1920;
     int outHeight = 1080;
     char *rgb = new char[outWidth * outHeight * 4];
@@ -417,7 +420,6 @@ Java_com_tech_pratice_1ffmpeg_Player_testAVIOAndUDP(JNIEnv *env, jobject thiz, j
     ANativeWindow *nwin = ANativeWindow_fromSurface(env, surface);
     ANativeWindow_setBuffersGeometry(nwin, outWidth, outHeight,
                                      WINDOW_FORMAT_RGBA_8888);
-    ANativeWindow_Buffer wbuf;
 
     auto *out_buffer = new uint8_t[av_image_get_buffer_size(AV_PIX_FMT_YUV420P, codec_ctx->width,
                                                             codec_ctx->height, 1)];

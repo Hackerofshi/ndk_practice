@@ -237,7 +237,7 @@ void test_point2() {
 
     LOGI("%s", name);
 
-    char name1 = NULL;
+    char name1 = '1';
     char *p = &name1;
 
     int *name2 = NULL;

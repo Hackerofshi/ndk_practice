@@ -234,8 +234,8 @@ int testPath(const char *str) {
 
     av_dump_format(format_ctx, 0, NULL, 0);
 
-    int videoStreamIndex =
-            av_find_best_stream(format_ctx, AVMEDIA_TYPE_VIDEO, -1, -1, NULL, 0);
+    int videoStreamIndex = av_find_best_stream(format_ctx, AVMEDIA_TYPE_VIDEO,
+                                               -1, -1, NULL, 0);
     LOGI("==============>%d", (videoStreamIndex))
     AVStream *st = format_ctx->streams[videoStreamIndex];
     // 编码器查找
