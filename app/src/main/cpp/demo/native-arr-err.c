@@ -20,8 +20,9 @@
 #endif
 
 
-int compare(const jint *number1, const jint *number2) {
-    return *number1 - *number2;
+// 比较函数，用于升序排序
+int compare(const void *a, const void *b) {
+    return (*(int *)a - *(int *)b);
 }
 
 JNIEXPORT void JNICALL
@@ -216,3 +217,21 @@ Java_com_shixin_ndk_1practice_practicec_Test1_nativeArr(JNIEnv *env, jobject thi
 }
 
 //--------------------------------------------------------------------------------------------------
+
+int compare_strings(const void *a, const void *b) {
+    return strcmp(*(const char **)a, *(const char **)b);
+}
+
+int main1() {
+    const char *arr[] = {"apple", "orange", "banana", "pear"};
+    size_t arr_size = sizeof(arr) / sizeof(arr[0]);
+
+    qsort(arr, arr_size, sizeof(char *), compare_strings);
+
+    for (int i = 0; i < arr_size; i++) {
+        printf("%s ", arr[i]);
+    }
+    printf("\n");
+
+    return 0;
+}

@@ -37,7 +37,7 @@ void *producer(void *arg) {
         in = (in + 1) % BUFFER_SIZE;
         count++;
 
-        LOGI("Produced: %d\n", item);
+        LOGI("Produced: %d\n", item)
 
         // 通知消费者缓冲区非空
         pthread_cond_signal(&not_empty);
@@ -64,7 +64,7 @@ void *consumer(void *arg) {
         out = (out + 1) % BUFFER_SIZE;
         count--;
 
-        LOGI("Consumed: %d\n", item);
+        LOGI("Consumed: %d\n", item)
 
         // 通知生产者缓冲区非满
         pthread_cond_signal(&not_full);
