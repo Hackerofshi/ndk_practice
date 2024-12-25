@@ -1,6 +1,10 @@
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
+        maven { url 'https://jitpack.io' }
+        maven { url 'https://maven.aliyun.com/repository/public' }
+        maven { url 'https://mirrors.huaweicloud.com/repository/maven/' }
+        maven { url 'https://repo.maven.apache.org/maven2' } // Maven Central
         google()
         mavenCentral()
         jcenter() // Warning: this repository is going to shut down soon
