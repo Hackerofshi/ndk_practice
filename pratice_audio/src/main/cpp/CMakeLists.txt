@@ -11,11 +11,11 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 link_directories(./libs/${ANDROID_ABI})
 
 # 日志输出在.cxx/cmake/debug//armeabi-v7a/build_output.txt
-message("PROJECT_SOURCE_DIR=${PROJECT_SOURCE_DIR}")
-message("ANDROID_ABI=${ANDROID_ABI}")
-message("CMAKE_SOURCE_DIR=${CMAKE_SOURCE_DIR}")
-message("CMAKE_ANDROID_ARCH_ABI=${CMAKE_ANDROID_ARCH_ABI}")
-message("CMAKE_CURRENT_SOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR}")
+#message("PROJECT_SOURCE_DIR=${PROJECT_SOURCE_DIR}")
+#message("ANDROID_ABI=${ANDROID_ABI}")
+#message("CMAKE_SOURCE_DIR=${CMAKE_SOURCE_DIR}")
+#message("CMAKE_ANDROID_ARCH_ABI=${CMAKE_ANDROID_ARCH_ABI}")
+#message("CMAKE_CURRENT_SOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR}")
 
 
 # 指定源文件目录

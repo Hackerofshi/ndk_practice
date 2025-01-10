@@ -86,7 +86,7 @@ int buffer_get(Buffer* buf) {
 
 
 // 生产者线程函数
-void* producer(void* arg) {
+void* producer1(void* arg) {
     Buffer* buf = (Buffer*)arg;
     int item;
     while (1) {
@@ -98,7 +98,7 @@ void* producer(void* arg) {
 }
 
 // 消费者线程函数
-void* consumer(void* arg) {
+void* consumer1(void* arg) {
     Buffer* buf = (Buffer*)arg;
     int item;
     while (1) {
@@ -111,7 +111,7 @@ void* consumer(void* arg) {
 }
 
 
-int main() {
+int mainp() {
     srand(time(NULL)); // 初始化随机数种子
 
     Buffer buf;
@@ -122,15 +122,15 @@ int main() {
 
     // 创建生产者线程
     for (int i = 0; i < PRODUCER_COUNT; i++) {
-        if (pthread_create(&producers[i], NULL, producer, &buf) != 0) {
-            fprintf(stderr, "Error creating producer thread\n");
+        if (pthread_create(&producers[i], NULL, producer1, &buf) != 0) {
+            fprintf(stderr, "Error creating producer1 thread\n");
             exit(EXIT_FAILURE);
         }
     }
 
     // 创建消费者线程
     for (int i = 0; i < CONSUMER_COUNT; i++) {
-        if (pthread_create(&consumers[i], NULL, consumer, &buf) != 0) {
+        if (pthread_create(&consumers[i], NULL, consumer1, &buf) != 0) {
             fprintf(stderr, "Error creating consumer thread\n");
             exit(EXIT_FAILURE);
         }

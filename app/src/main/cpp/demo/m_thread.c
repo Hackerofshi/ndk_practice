@@ -59,7 +59,7 @@ void *consumer(void *null) {
   生产者
  */
 
-void *producer(void *null) {
+void *producer1(void *null) {
     int i;
     for (i = 1; i < MAX_NUM; ++i) {
         pthread_mutex_lock(&pc_mutex);
@@ -70,7 +70,7 @@ void *producer(void *null) {
         }
         //生产
         buf.num = i;
-        printf("producer produces %d \n", buf.num);
+        printf("producer1 produces %d \n", buf.num);
         //通知
         pthread_cond_signal(&pc_condc);
         pthread_mutex_unlock(&pc_mutex);
@@ -95,8 +95,8 @@ Java_com_shixin_ndk_1practice_util_NDKUtils_testThread(JNIEnv *env, jobject thiz
     pthread_attr_init(&attr);
     pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
 
-    //producer
-    pthread_create(&thread[0], &attr, producer, NULL);
+    //producer1
+    pthread_create(&thread[0], &attr, producer1, NULL);
     //consumer
     pthread_create(&thread[1], &attr, consumer, NULL);
 

@@ -4,12 +4,12 @@ plugins {
 }
 apply plugin: 'kotlin-kapt'
 android {
-    compileSdk 29
+    compileSdk 32
 
     defaultConfig {
         applicationId "com.tech.pratice_audio"
         minSdk 21
-        targetSdk 29
+        targetSdk 32
         versionCode 1
         versionName "1.0"
 
@@ -18,12 +18,8 @@ android {
 
         externalNativeBuild {
             cmake {
-                abiFilters 'armeabi-v7a' // 指定当前项目，只编译armeabi-v7a的CPU平台架构
+                cppFlags ""
             }
-        }
-
-        ndk{
-            abiFilters 'armeabi-v7a'
         }
     }
 

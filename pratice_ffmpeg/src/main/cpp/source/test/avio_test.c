@@ -19,7 +19,6 @@
 #define BUF_SIZE 20480
 
 FILE *in_file = NULL;
-const char *TAG = "avio_test";
 struct buffer_data {
     uint8_t *ptr;
     uint8_t *ori_ptr;  // for seek file stream

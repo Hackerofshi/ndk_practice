@@ -347,7 +347,7 @@ struct AVDeviceCapabilitiesQuery;
  *    E.g., key=Author5, key=Author6. In this example, all authors must be
  *    placed in the same tag.
  * -  Metadata is flat, not hierarchical; there are no subtags. If you
- *    want to store, e.g., the email address of the child of producer Alice
+ *    want to store, e.g., the email address of the child of producer1 Alice
  *    and actor Bob, that could have key=alice_and_bobs_childs_email_address.
  * -  Several modifiers can be applied to the tag name. This is done by
  *    appending a dash character ('-') and the modifier name in the order

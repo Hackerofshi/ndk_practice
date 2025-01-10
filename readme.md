@@ -118,3 +118,10 @@ http://events.jianshu.io/p/1ba0763ba024
 
 ## ffmpeg常见名词解析
 scan_all_pmts， 扫描全部的ts流的"Program Map Table"表。
+
+
+## 记录错误
+
+Cmakelist.txt 在linux系统上需要注意大小写，否则会识别不到
+使用以下命令确认文件。
+ls -all /home/meizu/AndroidStudioProjects/ndk_practice/pratice_audio/src/main/cpp/CMakeLists.txt
