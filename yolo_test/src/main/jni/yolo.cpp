@@ -2,29 +2,16 @@
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
-#include <time.h>
 
 #include "cpu.h"
-#include <omp.h>
 
 
-#define LOG_TAG "NDK-TIMESTAMP"
-#define LOGI(...) __android_log_print(ANDROID_LOG_INFO, LOG_TAG, __VA_ARGS__)
 
+
+// 类别名称
 static const char *class_names[] = {
-        "nest",
-        "plastic",
-        "flotsam",
-        "ball",
-        "light"
+        "face"
 };
-
-// 获取当前时间戳（以纳秒为单位）
-uint64_t get_timestamp_ns() {
-    struct timespec ts;
-    clock_gettime(CLOCK_MONOTONIC, &ts); // 使用 CLOCK_MONOTONIC 获取单调递增时间
-    return ts.tv_sec * 1000000000LL + ts.tv_nsec;
-}
 
 void putKeyValueToMap(JNIEnv *env, jobject hashMapObj,
                       jclass hashMapClass,
@@ -170,7 +157,7 @@ generate_grids_and_stride(const int target_w, const int target_h, std::vector<in
 static void generate_proposals(std::vector<GridAndStride> grid_strides, const ncnn::Mat &pred,
                                float prob_threshold, std::vector<Object> &objects) {
     const int num_points = grid_strides.size();
-    const int num_class = 5;
+    const int num_class = 80;
     const int reg_max_1 = 16;
 
     for (int i = 0; i < num_points; i++) {
@@ -324,7 +311,7 @@ int Yolo::detect(const cv::Mat &rgb, std::vector<Object> &objects, float prob_th
     std::vector<Object> proposals;
 
     ncnn::Mat out;
-    ex.extract("output0", out);
+    ex.extract("output", out);
 
     std::vector<int> strides = {8, 16, 32}; // might have stride=64
     std::vector<GridAndStride> grid_strides;
@@ -374,17 +361,25 @@ int Yolo::detect(const cv::Mat &rgb, std::vector<Object> &objects, float prob_th
 }
 
 int Yolo::draw(cv::Mat &rgb, const std::vector<Object> &objects) {
-    /* static const char* class_names[] = {
-             "person", "bicycle", "car", "motorcycle", "airplane", "bus", "train", "truck", "boat", "traffic light",
-             "fire hydrant", "stop sign", "parking meter", "bench", "bird", "cat", "dog", "horse", "sheep", "cow",
-             "elephant", "bear", "zebra", "giraffe", "backpack", "umbrella", "handbag", "tie", "suitcase", "frisbee",
-             "skis", "snowboard", "sports ball", "kite", "baseball bat", "baseball glove", "skateboard", "surfboard",
-             "tennis racket", "bottle", "wine glass", "cup", "fork", "knife", "spoon", "bowl", "banana", "apple",
-             "sandwich", "orange", "broccoli", "carrot", "hot dog", "pizza", "donut", "cake", "chair", "couch",
-             "potted plant", "bed", "dining table", "toilet", "tv", "laptop", "mouse", "remote", "keyboard", "cell phone",
-             "microwave", "oven", "toaster", "sink", "refrigerator", "book", "clock", "vase", "scissors", "teddy bear",
-             "hair drier", "toothbrush"
-     };*/
+    static const char *class_names[] = {
+            "person", "bicycle", "car", "motorcycle", "airplane", "bus", "train", "truck", "boat",
+            "traffic light",
+            "fire hydrant", "stop sign", "parking meter", "bench", "bird", "cat", "dog", "horse",
+            "sheep", "cow",
+            "elephant", "bear", "zebra", "giraffe", "backpack", "umbrella", "handbag", "tie",
+            "suitcase", "frisbee",
+            "skis", "snowboard", "sports ball", "kite", "baseball bat", "baseball glove",
+            "skateboard", "surfboard",
+            "tennis racket", "bottle", "wine glass", "cup", "fork", "knife", "spoon", "bowl",
+            "banana", "apple",
+            "sandwich", "orange", "broccoli", "carrot", "hot dog", "pizza", "donut", "cake",
+            "chair", "couch",
+            "potted plant", "bed", "dining table", "toilet", "tv", "laptop", "mouse", "remote",
+            "keyboard", "cell phone",
+            "microwave", "oven", "toaster", "sink", "refrigerator", "book", "clock", "vase",
+            "scissors", "teddy bear",
+            "hair drier", "toothbrush"
+    };
 
     static const unsigned char colors[19][3] = {
             {54,  67,  244},
@@ -453,51 +448,34 @@ int Yolo::draw(cv::Mat &rgb, const std::vector<Object> &objects) {
 // 检测静态图片
 jobject Yolo::detected_static_pic(JNIEnv *env, jobject thiz, jobject bitmap) {
 
-    // 结果数据
+    //结果数据
     jclass arrayListClass = env->FindClass("java/util/ArrayList");
-    if (arrayListClass == nullptr) {
-        __android_log_print(ANDROID_LOG_ERROR, "Yolo", "Failed to find java/util/ArrayList class.");
-        return nullptr;
-    }
     jmethodID arrayListInit = env->GetMethodID(arrayListClass, "<init>", "()V");
-    if (arrayListInit == nullptr) {
-        __android_log_print(ANDROID_LOG_ERROR, "Yolo", "Failed to find ArrayList constructor.");
-        return nullptr;
-    }
     jobject arrayListObj = env->NewObject(arrayListClass, arrayListInit);
-    if (arrayListObj == nullptr) {
-        __android_log_print(ANDROID_LOG_ERROR, "Yolo", "Failed to create ArrayList object.");
-        return nullptr;
-    }
 
     // 获取Bitmap信息
     AndroidBitmapInfo info;
     if (AndroidBitmap_getInfo(env, bitmap, &info) < 0) {
-        __android_log_print(ANDROID_LOG_ERROR, "Yolo", "Failed to get bitmap info.");
         return arrayListObj;
     }
     if (info.format != ANDROID_BITMAP_FORMAT_RGB_565 &&
         info.format != ANDROID_BITMAP_FORMAT_RGBA_8888) {
-        __android_log_print(ANDROID_LOG_ERROR, "Yolo", "Unsupported bitmap format: %d",
-                            info.format);
         return arrayListObj;
     }
 
     // 锁定Bitmap像素
     void *pixels = nullptr;
     if (AndroidBitmap_lockPixels(env, bitmap, &pixels) < 0) {
-        __android_log_print(ANDROID_LOG_ERROR, "Yolo", "Failed to lock bitmap pixels.");
         return arrayListObj;
     }
-    __android_log_print(ANDROID_LOG_DEBUG, "Yolo", "AndroidBitmap_lockPixels");
-
 
     // 计算RGB数据大小
     size_t pixelCount = info.width * info.height;
     size_t rgbDataSize = pixelCount * 3; // 每个像素3个字节(RGB)
     std::vector<unsigned char> rgbData(rgbDataSize);
 
-    int64 start_time = get_timestamp_ns();
+
+
     // 提取RGB值
     uint8_t *p = static_cast<uint8_t *>(pixels);
     for (size_t i = 0; i < pixelCount; ++i) {
@@ -516,14 +494,6 @@ jobject Yolo::detected_static_pic(JNIEnv *env, jobject thiz, jobject bitmap) {
             p += 4; // ARGB_8888每像素4字节
         }
     }
-
-    // 获取结束时间
-    uint64_t end_time = get_timestamp_ns();
-
-    // 计算方法执行时间（以毫秒为单位）
-    double elapsed_time_ms = (end_time - start_time) / 1000000.0; // 转换为毫秒
-    LOGI("example_method executed in %.3f ms", elapsed_time_ms);
-
     int width = info.width;
     int height = info.height;
     // 解锁Bitmap像素
@@ -531,126 +501,84 @@ jobject Yolo::detected_static_pic(JNIEnv *env, jobject thiz, jobject bitmap) {
 
     // 确保数据量与宽度、高度匹配
     if (rgbData.size() != static_cast<size_t>(width * height * 3)) {
-        LOGI("RGB data size mismatch.");
         return arrayListObj;
     }
     cv::Mat mat(height, width, CV_8UC3, (void *) rgbData.data());
-    // 完成了数据的转换，开始检测
+    //完成了数据的转换，开始检测
     std::vector<Object> objects;
     detect(mat, objects);
-    __android_log_print(ANDROID_LOG_ERROR, "Yolo", "objects size:  %d", objects.size());
-
     draw(mat, objects);
 
+
     if (objects.size() <= 0) {
-
         return arrayListObj;
     }
 
-    // 组装数据
+    //上述步骤，可以检测出具体的框
+    //组装数据
+
     jmethodID addMethod = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
-    if (addMethod == nullptr) {
-        __android_log_print(ANDROID_LOG_ERROR, "Yolo", "Failed to find ArrayList.add method.");
-        return arrayListObj;
-    }
 
-    for (size_t i = 0; i < objects.size(); i++) {
-        int label_pos = objects[i].label;
+    if (objects.size() > 0) {
+        for (int i = 0; i < objects.size(); i++) {
+            int label_pos = objects[i].label;
 
-        if (label_pos < 0 || label_pos >= 81) {
-            __android_log_print(ANDROID_LOG_ERROR, "Yolo", "label_pos out of bounds: %d",
-                                label_pos);
-            continue; // 跳过无效的标签
-        }
-        if (class_names[label_pos] == nullptr) {
-            __android_log_print(ANDROID_LOG_ERROR, "Yolo", "class_names[%d] is null.", label_pos);
-            continue; // 跳过空的类名
-        }
+            jclass hashMapClass = env->FindClass("java/util/HashMap");
+            jmethodID hashMapInit = env->GetMethodID(hashMapClass, "<init>", "()V");
+            jobject hashMapObj = env->NewObject(hashMapClass, hashMapInit);
 
-        jclass hashMapClass = env->FindClass("java/util/HashMap");
-        if (hashMapClass == nullptr) {
-            __android_log_print(ANDROID_LOG_ERROR, "Yolo",
-                                "Failed to find java/util/HashMap class.");
-            return arrayListObj;
-        }
-        jmethodID hashMapInit = env->GetMethodID(hashMapClass, "<init>", "()V");
-        if (hashMapInit == nullptr) {
-            __android_log_print(ANDROID_LOG_ERROR, "Yolo", "Failed to find HashMap constructor.");
-            return arrayListObj;
-        }
-        jobject hashMapObj = env->NewObject(hashMapClass, hashMapInit);
-        if (hashMapObj == nullptr) {
-            __android_log_print(ANDROID_LOG_ERROR, "Yolo", "Failed to create HashMap object.");
-            return arrayListObj;
-        }
+            jstring xKeyStr = charToString(env, "x");
+            jstring xValue = intToString(env, objects[i].rect.x);
 
-        jstring xKeyStr = charToString(env, "x");
-        jstring xValue = intToString(env, objects[i].rect.x);
-        jstring yKeyStr = charToString(env, "y");
-        jstring yValue = intToString(env, objects[i].rect.y);
-        jstring wKeyStr = charToString(env, "w");
-        jstring wValue = intToString(env, objects[i].rect.width);
-        jstring hKeyStr = charToString(env, "h");
-        jstring hValue = intToString(env, objects[i].rect.height);
-        jstring labelKeyStr = charToString(env, "label");
-        jstring labelValue = intToString(env, objects[i].label);
-        jstring labelStrKeyStr = charToString(env, "label_str");
-        jstring labelStrValue = charToString(env, class_names[label_pos]);
-        jstring probKeyStr = charToString(env, "prob");
-        jstring probValue = floatToString(env, objects[i].prob);
+            jstring yKeyStr = charToString(env, "y");
+            jstring yValue = intToString(env, objects[i].rect.y);
 
-        // 检查每个转换是否成功
-        if (xKeyStr == nullptr || xValue == nullptr || yKeyStr == nullptr || yValue == nullptr ||
-            wKeyStr == nullptr || wValue == nullptr || hKeyStr == nullptr || hValue == nullptr ||
-            labelKeyStr == nullptr || labelValue == nullptr || labelStrKeyStr == nullptr ||
-            labelStrValue == nullptr || probKeyStr == nullptr || probValue == nullptr) {
-            __android_log_print(ANDROID_LOG_ERROR, "Yolo",
-                                "Failed to create one of the key/value strings.");
-            // 释放局部引用
+            jstring wKeyStr = charToString(env, "w");
+            jstring wValue = intToString(env, objects[i].rect.width);
+
+            jstring hKeyStr = charToString(env, "h");
+            jstring hValue = intToString(env, objects[i].rect.height);
+
+            jstring labelKeyStr = charToString(env, "label");
+            jstring labelValue = intToString(env, objects[i].label);
+
+            jstring labelStrKeyStr = charToString(env, "label_str");
+            jstring labelStrValue = charToString(env, class_names[label_pos]);
+
+            jstring probKeyStr = charToString(env, "prob");
+            jstring probValue = floatToString(env, objects[i].prob);
+
+            putKeyValueToMap(env, hashMapObj, hashMapClass, xKeyStr, xValue);
+            putKeyValueToMap(env, hashMapObj, hashMapClass, yKeyStr, yValue);
+            putKeyValueToMap(env, hashMapObj, hashMapClass, wKeyStr, wValue);
+            putKeyValueToMap(env, hashMapObj, hashMapClass, hKeyStr, hValue);
+            putKeyValueToMap(env, hashMapObj, hashMapClass, labelKeyStr, labelValue);
+            putKeyValueToMap(env, hashMapObj, hashMapClass, labelStrKeyStr, labelStrValue);
+            putKeyValueToMap(env, hashMapObj, hashMapClass, probKeyStr, probValue);
+
+            env->CallBooleanMethod(arrayListObj, addMethod, hashMapObj);
+
             env->DeleteLocalRef(hashMapObj);
-            continue;
+
+            env->DeleteLocalRef(xKeyStr);
+            env->DeleteLocalRef(xValue);
+            env->DeleteLocalRef(yKeyStr);
+            env->DeleteLocalRef(yValue);
+            env->DeleteLocalRef(wKeyStr);
+            env->DeleteLocalRef(wValue);
+            env->DeleteLocalRef(hKeyStr);
+            env->DeleteLocalRef(hValue);
+            env->DeleteLocalRef(labelKeyStr);
+            env->DeleteLocalRef(labelValue);
+            env->DeleteLocalRef(labelStrKeyStr);
+            env->DeleteLocalRef(labelStrValue);
+            env->DeleteLocalRef(probKeyStr);
+            env->DeleteLocalRef(probValue);
         }
-
-        putKeyValueToMap(env, hashMapObj, hashMapClass, xKeyStr, xValue);
-        putKeyValueToMap(env, hashMapObj, hashMapClass, yKeyStr, yValue);
-        putKeyValueToMap(env, hashMapObj, hashMapClass, wKeyStr, wValue);
-        putKeyValueToMap(env, hashMapObj, hashMapClass, hKeyStr, hValue);
-        putKeyValueToMap(env, hashMapObj, hashMapClass, labelKeyStr, labelValue);
-        putKeyValueToMap(env, hashMapObj, hashMapClass, labelStrKeyStr, labelStrValue);
-        putKeyValueToMap(env, hashMapObj, hashMapClass, probKeyStr, probValue);
-
-        env->CallBooleanMethod(arrayListObj, addMethod, hashMapObj);
-        if (env->ExceptionCheck()) {
-            __android_log_print(ANDROID_LOG_ERROR, "Yolo",
-                                "Exception occurred while adding to ArrayList.");
-            env->ExceptionDescribe();
-            env->ExceptionClear();
-            // 选择是否继续或返回
-            env->DeleteLocalRef(hashMapObj);
-            continue;
-        }
-
-        // 释放局部引用
-        env->DeleteLocalRef(hashMapObj);
-        env->DeleteLocalRef(xKeyStr);
-        env->DeleteLocalRef(xValue);
-        env->DeleteLocalRef(yKeyStr);
-        env->DeleteLocalRef(yValue);
-        env->DeleteLocalRef(wKeyStr);
-        env->DeleteLocalRef(wValue);
-        env->DeleteLocalRef(hKeyStr);
-        env->DeleteLocalRef(hValue);
-        env->DeleteLocalRef(labelKeyStr);
-        env->DeleteLocalRef(labelValue);
-        env->DeleteLocalRef(labelStrKeyStr);
-        env->DeleteLocalRef(labelStrValue);
-        env->DeleteLocalRef(probKeyStr);
-        env->DeleteLocalRef(probValue);
     }
 
     return arrayListObj;
 }
-
 
 
 

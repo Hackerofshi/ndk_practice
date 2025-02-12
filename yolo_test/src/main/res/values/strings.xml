@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Yolo_test</string>
+    <string name="switch_camera">Switch Camera</string>
+    <string-array name="model_array">
+        <item>n</item>
+        <item>s</item>
+    </string-array>
+    <string-array name="cpu_gpu_array">
+        <item>CPU</item>
+        <item>GPU</item>
+    </string-array>
 </resources>

@@ -65,7 +65,8 @@ static void onImageAvailable(void* context, AImageReader* reader)
     AImage_getPlaneData(image, 1, &u_data, &u_len);
     AImage_getPlaneData(image, 2, &v_data, &v_len);
 
-    if (u_data == v_data + 1 && v_data == y_data + width * height && y_pixelStride == 1 && u_pixelStride == 2 && v_pixelStride == 2 && y_rowStride == width && u_rowStride == width && v_rowStride == width)
+    if (u_data == v_data + 1 && v_data == y_data + width * height && y_pixelStride == 1 && u_pixelStride == 2 &&
+    v_pixelStride == 2 && y_rowStride == width && u_rowStride == width && v_rowStride == width)
     {
         // already nv21  :)
         ((NdkCamera*)context)->on_image((unsigned char*)y_data, (int)width, (int)height);
