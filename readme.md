@@ -125,3 +125,6 @@ scan_all_pmts， 扫描全部的ts流的"Program Map Table"表。
 Cmakelist.txt 在linux系统上需要注意大小写，否则会识别不到
 使用以下命令确认文件。
 ls -all /home/meizu/AndroidStudioProjects/ndk_practice/pratice_audio/src/main/cpp/CMakeLists.txt
+
+### org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions.setUseIR(boolean) 
+升级到：com.android.tools.build:gradle:7.0.4

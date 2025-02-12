@@ -16,6 +16,7 @@
             <option value="$PROJECT_DIR$/pratice_audio" />
             <option value="$PROJECT_DIR$/pratice_ffmpeg" />
             <option value="$PROJECT_DIR$/pratice_opencv" />
+            <option value="$PROJECT_DIR$/yolo_test" />
           </set>
         </option>
         <option name="resolveExternalAnnotations" value="false" />
